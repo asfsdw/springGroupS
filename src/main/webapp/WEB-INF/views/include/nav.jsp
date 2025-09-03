@@ -13,7 +13,9 @@
 			<button class="w3-padding-large w3-button" title="More">Study1 <i class="fa fa-caret-down"></i></button>     
 			<div class="w3-dropdown-content w3-bar-block w3-card-4">
 				<a href="${ctp}/study1/0901/Test1" class="w3-bar-item w3-button">컨트롤러 연습</a>
-				<a href="${ctp}/study1/mapping/Menu" class="w3-bar-item w3-button">Mapping</a>
+				<a href="${ctp}/study1/mapping/Menu" class="w3-bar-item w3-button">Mapping 연습</a>
+				<a href="${ctp}/study1/aop/AOPMenu" class="w3-bar-item w3-button">AOP 연습</a>
+				<a href="${ctp}/study1/xml/XMLMenu" class="w3-bar-item w3-button">XML 값 주입 연습</a>
 				<a href="#" class="w3-bar-item w3-button">AJAX Test</a>
 			</div>
 		</div>

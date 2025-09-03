@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="vo1" class="com.spring.springGroupS.vo.BMIVO">
+		<constructor-arg value="홍길동" />
+		<constructor-arg value="180" />
+		<constructor-arg value="40" />
+		<constructor-arg value="20" />
+		<constructor-arg value="정상" />
+	</bean>
+	<bean id="vo2" class="com.spring.springGroupS.vo.BMIVO">
+		<constructor-arg value="김말숙" />
+		<constructor-arg value="153.5" />
+		<constructor-arg value="48.3" />
+		<constructor-arg value="20" />
+		<constructor-arg value="정상" />
+	</bean>
+	<bean id="vo3" class="com.spring.springGroupS.vo.BMIVO">
+		<constructor-arg value="이기자" />
+		<constructor-arg value="169.8" />
+		<constructor-arg value="109.6" />
+		<constructor-arg value="20" />
+		<constructor-arg value="정상" />
+	</bean>
+
+</beans>

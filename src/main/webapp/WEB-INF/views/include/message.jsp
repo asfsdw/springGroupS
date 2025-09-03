@@ -13,9 +13,9 @@
     	let url = "";
     	if("${message}" != "") alert("${message}");
    		
-    	if("${mid}" != "") url = "${ctp}/${url}?mid=${mid}";
-    	else url = "${ctp}/${url}";
-    	location.href = url;
+    	if("${mid}" != "") url = "${url}?mid=${mid}";
+    	else url = "${url}";
+    	location.href = "${ctp}/"+url;
     </script>
   </head>
 <body>

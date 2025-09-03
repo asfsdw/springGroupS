@@ -21,6 +21,7 @@
 			if(flag == 2) myform.action = "${ctp}/study1/mapping/Test32";
 			if(flag == 3) myform.action = "${ctp}/study1/mapping/Test33";
 			if(flag == 4) myform.action = "${ctp}/study1/mapping/Test34";
+			if(flag == 5) myform.action = "${ctp}/study1/mapping/Test35";
 			
 			myform.submit();
 		}
@@ -37,17 +38,17 @@
 			<hr/>
 			<p><b>Query String방식: ?변수=값</b></p>
 			<p>
-				<a href="Test1?mid=hkd1234&pwd=1234" class="btn btn-success">test1</a> &nbsp;&nbsp;
-				<a href="Test2?mid=kms1234&pwd=1234" class="btn btn-primary">test2</a> &nbsp;&nbsp;
-				<a href="Test3?mid=ikj1234&pwd=1234" class="btn btn-secondary">test3</a> &nbsp;&nbsp;
-				<a href="Test4?mid=snm1234&pwd=1234&sex=2" class="btn btn-info">test4</a> &nbsp;&nbsp;
-				<a href="Test5?mid=snm1234&pwd=1234&name=소나무&gender=남자&age=20" class="btn btn-dark">test5</a> &nbsp;&nbsp;
+				<a href="Test01?mid=hkd1234&pwd=1234" class="btn btn-success">test01</a> &nbsp;&nbsp;
+				<a href="Test02?mid=kms1234&pwd=1234" class="btn btn-primary">test02</a> &nbsp;&nbsp;
+				<a href="Test03?mid=ikj1234&pwd=1234" class="btn btn-secondary">test03</a> &nbsp;&nbsp;
+				<a href="Test04?mid=snm1234&pwd=1234&sex=2" class="btn btn-info">test04</a> &nbsp;&nbsp;
+				<a href="Test05?mid=snm1234&pwd=1234&name=소나무&gender=남자&age=20" class="btn btn-dark">test05</a> &nbsp;&nbsp;
 				<br/>
 				<br/>
-				<a href="Test6?mid=ohn1234&pwd=1234&name=오하늘&gender=여자&age=22" class="btn btn-outline-success">test6</a> &nbsp;&nbsp;
-				<a href="Test7?mid=gid1234&pwd=1234&name=고인돌&gender=남자&age=66" class="btn btn-outline-primary">test7</a> &nbsp;&nbsp;
-				<a href="Test8?mid=atm1234&pwd=1234&name=아톰&gender=중성&age=12" class="btn btn-outline-secondary">test8</a> &nbsp;&nbsp;
-				<a href="Test9?mid=btm1234&pwd=1234&name=비톰&gender=중성&age=44" class="btn btn-outline-info">test9</a> &nbsp;&nbsp;
+				<a href="Test06?mid=ohn1234&pwd=1234&name=오하늘&gender=여자&age=22" class="btn btn-outline-success">test06</a> &nbsp;&nbsp;
+				<a href="Test07?mid=gid1234&pwd=1234&name=고인돌&gender=남자&age=66" class="btn btn-outline-primary">test07</a> &nbsp;&nbsp;
+				<a href="Test08?mid=atm1234&pwd=1234&name=아톰&gender=중성&age=12" class="btn btn-outline-secondary">test08</a> &nbsp;&nbsp;
+				<a href="Test09?mid=btm1234&pwd=1234&name=비톰&gender=중성&age=44" class="btn btn-outline-info">test09</a> &nbsp;&nbsp;
 			</p>
 			<hr/>
 			<p><b>Path Variable방식: /값1/값2</b></p>
@@ -85,16 +86,17 @@
     	  <tr>
     	    <th>성별</th>
     	    <td class="text-start">
-    	      &nbsp;&nbsp;<input type="radio" name="strGender" id="gender1" class="mr-1" value="남자"/>남자 &nbsp;&nbsp;
-    	      <input type="radio" name="strGender" id="gender2" class="mr-1" value="여자" checked />여자
+    	      &nbsp;&nbsp;<input type="radio" name="strGender" id="gender1" class="me-1" value="남자"/>남자 &nbsp;&nbsp;
+    	      <input type="radio" name="strGender" id="gender2" class="me-1" value="여자" checked />여자
     	    </td>
     	  </tr>
 				</table>
 				<p>
 					<input type="button" value="post1" onclick="postCheck(1)" class="btn btn-success" />&nbsp;&nbsp;
 					<input type="button" value="post2" onclick="postCheck(2)" class="btn btn-primary" />&nbsp;&nbsp;
-					<input type="button" value="post3" onclick="postCheck(3)" class="btn btn-secondary" />
+					<input type="button" value="post(메시지 경유로 mid만 받음)" onclick="postCheck(3)" class="btn btn-secondary" />
 					<input type="button" value="post4" onclick="postCheck(4)" class="btn btn-info" />
+					<input type="button" value="post5" onclick="postCheck(5)" class="btn btn-dark" />
 				</p>
 			</form>
 		</div>

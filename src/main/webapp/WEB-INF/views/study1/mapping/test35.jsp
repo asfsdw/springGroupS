@@ -7,18 +7,14 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>test34</title>
-	<script>
-		'use strict';
-		if("${message}" != "") alert("${message}");
-	</script>
+	<title>test35</title>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
 	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
 	<p><br/></p>
 	<div class="container">
-		<h2 class="text-center">이곳은 mapping폴더 안의 test34입니다.</h2>
+		<h2 class="text-center">이곳은 mapping폴더 안의 test35입니다.</h2>
 		<p><br/></p>
 		<div class="text-center">
 			<div>아이디: ${vo.mid}</div>

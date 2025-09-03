@@ -7,28 +7,20 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>test34</title>
-	<script>
-		'use strict';
-		if("${message}" != "") alert("${message}");
-	</script>
+	<title>XML Value Test</title>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
 	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
 	<p><br/></p>
 	<div class="container">
-		<h2 class="text-center">이곳은 mapping폴더 안의 test34입니다.</h2>
-		<p><br/></p>
+		<h2 class="text-center">XML을 통한 값 주입 연습</h2>
+		<hr/>
 		<div class="text-center">
-			<div>아이디: ${vo.mid}</div>
-			<div>비밀번호: ${vo.pwd}</div>
-			<div>성명: ${vo.name}</div>
-			<div>별명: ${vo.nickName}</div>
-			<div>성별: ${vo.strGender}</div>
-			<div>나이: ${vo.age}</div>
-			<p></p>
-			<a href="${ctp}/study1/mapping/Menu" class="btn btn-warning">돌아가기</a>
+			<a href="${ctp}/study1/xml/Test1" class="btn btn-success">성적자료주입</a>
+			<a href="${ctp}/study1/xml/Test2" class="btn btn-primary">JDBC 정보1</a>
+			<a href="${ctp}/study1/xml/Test3" class="btn btn-secondary">비만도확인</a>
+			<a href="${ctp}/study1/xml/Test4" class="btn btn-info">JDBC 정보2</a>
 		</div>
 		<p><br/></p>
 	</div>

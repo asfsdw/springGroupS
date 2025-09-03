@@ -7,30 +7,25 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-	<title>test34</title>
-	<script>
-		'use strict';
-		if("${message}" != "") alert("${message}");
-	</script>
+	<title>XML VALUE Test2</title>
 </head>
 <body>
 	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
 	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
 	<p><br/></p>
 	<div class="container">
-		<h2 class="text-center">이곳은 mapping폴더 안의 test34입니다.</h2>
-		<p><br/></p>
+		<h2 class="text-center">웹사이트 JDBC 정보</h2>
+		<hr/>
 		<div class="text-center">
-			<div>아이디: ${vo.mid}</div>
-			<div>비밀번호: ${vo.pwd}</div>
-			<div>성명: ${vo.name}</div>
-			<div>별명: ${vo.nickName}</div>
-			<div>성별: ${vo.strGender}</div>
-			<div>나이: ${vo.age}</div>
-			<p></p>
-			<a href="${ctp}/study1/mapping/Menu" class="btn btn-warning">돌아가기</a>
+			<p>드라이버: ${vo.driver}</p>
+			<p>드라이버: ${vo.url}</p>
+			<p>드라이버: ${vo.user}</p>
+			<p>드라이버: ${vo.password}</p>
 		</div>
 		<p><br/></p>
+		<p class="text-center">
+			<a href="${ctp}/study1/xml/XMLMenu" class="btn btn-warning">돌아가기</a>
+		</p>
 	</div>
 	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>

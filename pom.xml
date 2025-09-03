@@ -124,6 +124,19 @@
 	    <version>1.18.24</version>
 		</dependency>
 		
+		<!-- AOP(spring AOP, Aspect Weaver) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${org.aspectj-version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
 	</dependencies>
     <build>
         <plugins>

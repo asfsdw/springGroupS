@@ -17,7 +17,7 @@
 		<h2 class="text-center">이곳은 mapping폴더 안의 test33입니다.</h2>
 		<p><br/></p>
 		<div class="text-center">
-			<div>아이디: ${mid}</div>
+			<div>아이디: ${vo.mid}</div>
 			<div>비밀번호: ${vo.pwd}</div>
 			<div>성명: ${vo.name}</div>
 			<div>별명: ${vo.nickName}</div>

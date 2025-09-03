@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="info" class="com.spring.springGroupS.vo.SiteInfoVO">
+		<constructor-arg value="com.mysql.jdbc.Driver"/>
+		<constructor-arg value="jdbc:mysql://localhost:3306/springgroup"/>
+		<constructor-arg value="root"/>
+		<constructor-arg value="1234"/>
+	</bean>
+</beans>
