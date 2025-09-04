@@ -1,10 +1,8 @@
 package com.spring.springGroupS.vo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class BMIVO {
 	private String name;
 	private double height;
@@ -12,4 +10,8 @@ public class BMIVO {
 	
 	private double BMI;
 	private String res;
+	
+	private double low;
+	private double normal;
+	private double high;
 }

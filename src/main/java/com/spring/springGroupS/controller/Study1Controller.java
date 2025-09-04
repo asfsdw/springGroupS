@@ -280,13 +280,13 @@ public class Study1Controller {
 		AbstractApplicationContext ctx = new GenericXmlApplicationContext("xml/sungjuk.xml");
 		List<SungjukVO> vos = new ArrayList<SungjukVO>();
 		SungjukVO vo = null;
+		
 		for(int i=1; i<=ctx.getBeanDefinitionCount(); i++) {
 			vo = ctx.getBean("vo"+i, SungjukVO.class);
-			vo.setTot(study1Service.getSungjukTot(vo));
-			vo.setAvg(vo.getTot()/3.0);
-			vo.setGrade(study1Service.getSungjukGrade(vo.getAvg()));
+			study1Service.setSungjuk(vo);
 			vos.add(vo);
 		}
+		
 		model.addAttribute("vos", vos);
 		ctx.close();
 		return "study1/xml/test1";
@@ -306,12 +306,22 @@ public class Study1Controller {
 		AbstractApplicationContext ctx = new GenericXmlApplicationContext("xml/bmi.xml");
 		List<BMIVO> vos = new ArrayList<BMIVO>();
 		BMIVO vo = null;
-		for(int i=1; i<=ctx.getBeanDefinitionCount(); i++) {
+		
+		for(int i=1; i<=ctx.getBeanDefinitionCount()-1; i++) {
 			vo = ctx.getBean("vo"+i, BMIVO.class);
 			vo.setBMI(study1Service.getBMI(vo));
-			vo.setRes(study1Service.getRes(vo.getBMI()));
+			
+			// bmi 계산 결과
+			String bmiRes = "";
+			if(vo.getBMI() < vo.getLow()) bmiRes = "저체중";
+			else if(vo.getBMI() <= vo.getNormal()) bmiRes = "정상";
+			else bmiRes = "과체중";
+			vo.setRes(bmiRes);
+			
 			vos.add(vo);
 		}
+		
+		
 		model.addAttribute("vos", vos);
 		ctx.close();
 		return "study1/xml/test3";

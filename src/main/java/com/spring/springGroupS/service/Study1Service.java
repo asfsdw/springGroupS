@@ -57,39 +57,32 @@ public class Study1Service {
 		log.info("getAopServiceTest53 메소드입니다.\n while(1~100까지의 합): "+tot+"\n");
 	}
 
-	// 총점.
-	public int getSungjukTot(SungjukVO vo) {
-		System.out.println(vo.getKor());
-		int res = 0;
-		res = vo.getKor()+vo.getEng()+vo.getMat();
-		return res;
-	}
-	// 학점.
-	public String getSungjukGrade(double avg) {
-		String grade = "";
-		if(avg >= 90) grade = "A";
-		else if(avg >= 80) grade = "B";
-		else if(avg >= 70) grade = "C";
-		else if(avg >= 60) grade = "D";
-		else grade = "F";
-		return grade;
-	}
 	// 비만도 확인.
 	public double getBMI(BMIVO vo) {
 		double res = 0.0;
 		// 체중 / cm를 m로 변경한 값을 제곱한 수치.
 		res = vo.getWeight()/Math.pow((vo.getHeight()/100), 2);
 		// 소숫점 첫째자리까지 출력
-		res = Math.round(res*100)/100;
+		res = Math.round(res*10)/10.0;
+		
 		return res;
 	}
-	// 비만도 결과.
-	public String getRes(double bmi) {
-		String res = "정상";
-		if(bmi < 18.5) res = "저체중";
-		else if(18.4 < bmi && bmi < 25.0) res = "정상";
-		else res = "과체중";
-		return res;
+
+	// 학점계산.
+	public void setSungjuk(SungjukVO vo) {
+		int tot = vo.getKor()+vo.getEng()+vo.getMat();
+		double avg = tot / 3.0;
+		String grade = "";
+		
+		if(avg >= 90) grade = "A";
+		else if(avg >= 80) grade = "B";
+		else if(avg >= 70) grade = "C";
+		else if(avg >= 60) grade = "D";
+		else grade = "F";
+		
+		vo.setTot(tot);
+		vo.setAvg(avg);
+		vo.setGrade(grade);
 	}
 
 }
