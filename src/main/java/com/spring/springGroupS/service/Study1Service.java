@@ -64,7 +64,6 @@ public class Study1Service {
 		res = vo.getWeight()/Math.pow((vo.getHeight()/100), 2);
 		// 소숫점 첫째자리까지 출력
 		res = Math.round(res*10)/10.0;
-		
 		return res;
 	}
 
