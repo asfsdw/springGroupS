@@ -16,6 +16,7 @@
 				<a href="${ctp}/study1/mapping/Menu" class="w3-bar-item w3-button">Mapping 연습</a>
 				<a href="${ctp}/study1/aop/AOPMenu" class="w3-bar-item w3-button">AOP 연습</a>
 				<a href="${ctp}/study1/xml/XMLMenu" class="w3-bar-item w3-button">XML 값 주입 연습</a>
+				<a href="${ctp}/dbTest/UserList" class="w3-bar-item w3-button">DateBase 연습</a>
 				<a href="#" class="w3-bar-item w3-button">AJAX Test</a>
 			</div>
 		</div>
