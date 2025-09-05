@@ -18,6 +18,7 @@ public class DBTestController {
 	@Autowired
 	UserService userService;
 	
+	// 모든 유저 불러오기.
 	@GetMapping("UserList")
 	public String UserListGet(Model model) {
 		List<UserVO> vos = userService.getUserList();
