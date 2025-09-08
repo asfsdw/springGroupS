@@ -25,6 +25,7 @@ public class DBTestController {
 		model.addAttribute("vos", vos);
 		return "dbTest/userList";
 	}
+	// 유저 검색.
 	@PostMapping("UserList")
 	public String UserListPost(Model model, String mid) {
 		UserVO vo = userService.getUser(mid);

@@ -6,7 +6,7 @@
 	<div class="w3-bar w3-black w3-card">
 		<a class="w3-bar-item w3-button w3-padding-large w3-hide-medium w3-hide-large w3-right" href="javascript:void(0)" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
 		<a href="http://192.168.50.53:9090/springGroupS/" class="w3-bar-item w3-button w3-padding-large">HOME</a>
-		<a href="#band" class="w3-bar-item w3-button w3-padding-large w3-hide-small">방명록</a>
+		<a href="${ctp}/guest/GuestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">방명록</a>
 		<a href="#tour" class="w3-bar-item w3-button w3-padding-large w3-hide-small">게시판</a>
 		<a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">자료실</a>
 		<div class="w3-dropdown-hover w3-hide-small">
@@ -17,11 +17,13 @@
 				<a href="${ctp}/study1/aop/AOPMenu" class="w3-bar-item w3-button">AOP 연습</a>
 				<a href="${ctp}/study1/xml/XMLMenu" class="w3-bar-item w3-button">XML 값 주입 연습</a>
 				<a href="${ctp}/dbTest/UserList" class="w3-bar-item w3-button">DateBase 연습</a>
+				<a href="${ctp}/dbTest2/UserList" class="w3-bar-item w3-button">DateBase 연습2</a>
+				<%-- <a href="${ctp}/dbTest2/UserSearch" class="w3-bar-item w3-button">DateBase 연습3</a> --%>
 				<a href="#" class="w3-bar-item w3-button">AJAX Test</a>
 			</div>
 		</div>
-		<a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그인</a>
-		<a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">회원가입</a>
+		<a href="${ctp}/member/Login" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그인</a>
+		<a href="${ctp}/member/Join" class="w3-bar-item w3-button w3-padding-large w3-hide-small">회원가입</a>
 		<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
 	</div>
 </div>

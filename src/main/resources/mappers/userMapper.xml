@@ -5,6 +5,6 @@
 		SELECT * FROM user;
 	</select>
 	<select id="getUser" parameterType="String" resultType="userVO">
-		SELECT * FROM user WHERE mid = #{value};
+		SELECT * FROM user WHERE mid = #{mid};
 	</select>
 </mapper>

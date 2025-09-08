@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS.dao.User2DAO">
+	<select id="getUserList" resultType="com.spring.springGroupS.vo.UserVO">
+		SELECT * FROM user;
+	</select>
+	<select id="getUserSearch" resultType="com.spring.springGroupS.vo.UserVO">
+		SELECT * FROM user WHERE mid = #{mid};
+	</select>
+	<select id="getUser" resultType="com.spring.springGroupS.vo.UserVO">
+		SELECT * FROM user WHERE mid = #{mid} LIMIT 1;
+	</select>
+	<select id="getUserIdxSerach" resultType="com.spring.springGroupS.vo.UserVO">
+		SELECT * FROM user WHERE idx = #{idx};
+	</select>
+	
+	<insert id="setUserInput">
+		INSERT INTO user VALUES(DEFAULT, #{vo.mid}, #{vo.name}, #{vo.age}, #{vo.address});
+	</insert>
+	
+	<update id="setUserUpdate">
+		UPDATE user SET name = #{vo.name}, age = #{vo.age}, address = #{vo.address} WHERE idx = ${vo.idx};
+	</update>
+	
+	<delete id="setUserDelete">
+		DELETE FROM user WHERE idx = #{idx};
+	</delete>
+</mapper>
