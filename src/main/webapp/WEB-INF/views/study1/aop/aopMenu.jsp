@@ -10,9 +10,6 @@
 	<title>AOPMenu</title>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
-	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
-	<p><br/></p>
 	<div class="container">
 		<h2 class="text-center">service객체를 이용한 관점 지향 프로그램 연습</h2>
 		<pre>
@@ -52,6 +49,5 @@
 		</p>
 		<p><br/></p>
 	</div>
-	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>

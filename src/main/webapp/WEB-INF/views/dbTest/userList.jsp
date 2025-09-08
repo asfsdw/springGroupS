@@ -10,9 +10,6 @@
 	<title>User List</title>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
-	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
-	<p><br/></p>
 	<div class="container text-center">
 		<h2>유저 리스트</h2>
 		<hr/>
@@ -63,6 +60,5 @@
 		</c:if>
 		<p><br/></p>
 	</div>
-	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>

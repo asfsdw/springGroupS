@@ -10,9 +10,6 @@
 	<title>XML VALUE Test2</title>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
-	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
-	<p><br/></p>
 	<div class="container">
 		<h2 class="text-center">웹사이트 JDBC 정보</h2>
 		<hr/>
@@ -27,6 +24,5 @@
 			<a href="${ctp}/study1/xml/XMLMenu" class="btn btn-warning">돌아가기</a>
 		</p>
 	</div>
-	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>

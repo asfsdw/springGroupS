@@ -10,9 +10,6 @@
 	<title>XML Value Test</title>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
-	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
-	<p><br/></p>
 	<div class="container">
 		<h2 class="text-center">XML을 통한 값 주입 연습</h2>
 		<hr/>
@@ -24,6 +21,5 @@
 		</div>
 		<p><br/></p>
 	</div>
-	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>

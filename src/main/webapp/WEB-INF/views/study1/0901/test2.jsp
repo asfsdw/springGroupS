@@ -10,9 +10,6 @@
 	<title></title>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
-	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
-	<p><br/></p>
 	<div class="container">
 		<h2 class="text-center">컨트롤러 연습용입니다.</h2>
 		<p><br/></p>
@@ -22,6 +19,5 @@
 			<img src="${ctp}/images/17.png" width="400px" />
 		</div>
 	</div>
-<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>

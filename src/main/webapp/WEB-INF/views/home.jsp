@@ -15,14 +15,9 @@
 	</style>
 </head>
 <body>
-	<!-- Navbar -->
-	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
-	
 	<!-- Page content -->
 	<div class="w3-content" style="max-width:2000px;margin-top:46px">
 	
-	  <!-- Automatic Slideshow Images -->
-		<jsp:include page="/WEB-INF/views/include/slide.jsp" />
 	  <!-- The Band Section -->
 	  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
 	    <h2 class="w3-wide">THE BAND</h2>
@@ -143,7 +138,5 @@
 	<!-- Image of location/map -->
 	<img src="${ctp}/images/map.jpg" class="w3-image w3-greyscale-min" style="width:100%">
 	
-	<!-- Footer -->
-	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>

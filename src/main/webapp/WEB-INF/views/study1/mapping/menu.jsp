@@ -28,9 +28,6 @@
 	</script>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
-	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
-	<p><br/></p>
 	<div class="container">
 		<h2 class="text-center">매핑 연습</h2>
 		<p><br/></p>
@@ -102,6 +99,5 @@
 		</div>
 	</div>
 	<p><br/></p>
-	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>

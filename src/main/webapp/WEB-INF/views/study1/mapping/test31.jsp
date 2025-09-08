@@ -10,9 +10,6 @@
 	<title>test31</title>
 </head>
 <body>
-	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
-	<jsp:include page="/WEB-INF/views/include/slide2.jsp" />
-	<p><br/></p>
 	<div class="container">
 		<h2 class="text-center">이곳은 mapping폴더 안의 test31입니다.</h2>
 		<p><br/></p>
@@ -28,6 +25,5 @@
 		</div>
 		<p><br/></p>
 	</div>
-	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
 </body>
 </html>
