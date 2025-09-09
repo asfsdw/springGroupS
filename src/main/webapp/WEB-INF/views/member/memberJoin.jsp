@@ -68,7 +68,7 @@
 			let maxSize = 1024 * 1024 * 10;
 			let ext =fName.substring(fName.lastIndexOf(".")+1).toLowerCase();
 				
-			// 프로필 사진은 안 올려도 상관 없기 때문에 이미지가 맞는지만 체크.
+			// 프로필 사진은 안 올려도 상관 없기 때문에 이미지가 맞는지만 체크. 업로드 하지 않을 경우 공백이기 때문에 공백도 허용.
 			if(ext != "jpg" && ext != "jpeg" && ext != "gif" && ext != "png" && ext != "") {
 				alert("프로필 사진입니다. 그림파일만 선택해주세요.");
 				return false;
@@ -81,32 +81,65 @@
 		
 		}
   
-		// 아이디, 닉네임 중복체크 했는지 확인.
+		// 아이디 중복체크.
 		function idCheck() {
-			let mid = myform.mid.value;
-			let url = "${ctp}/study2/login/LoginIdCheck?mid="+mid;
-			
+			let mid = $("#mid").val();
 			if(mid.trim() == "") {
-				alert("아이디를 입력하세요!");
+				alert("아이디를 입력해주세요.");
 				myform.mid.focus();
+				return false;
 			}
-			else {
-				myform.mid.readOnly = true;
-				window.open(url,"nWin","width=440px,height=220px");
-				}
-		}
-		function nickCheck() {
-			let nickName = myform.nickName.value;
-			let url = "${ctp}/study2/login/LoginNickCheck?nickName="+nickName;
 			
+			$.ajax({
+				url : "${ctp}/member/MemberIdCheck",
+				type: "POST",
+				data: {"mid" : mid},
+				success : (res) => {
+					if(res == 1) {
+						alert("이미 있는 아이디입니다.");
+						$("#mid").val("");
+						$("#mid").focus();
+						return false;
+					}
+					else {
+						alert("사용 가능한 아이디입니다.");
+						myform.mid.readOnly=true;
+						$("#pwd").focus();
+						return false;
+					}
+				},
+				error :() => alert("전송오류")
+			});
+		}
+		// 닉네임 중복체크.
+		function nickCheck() {
+			let nickName = $("#nickName").val();
 			if(nickName.trim() == "") {
-				alert("닉네임을 입력하세요!");
+				alert("닉네임을 입력해주세요.");
 				myform.nickName.focus();
+				return false;
 			}
-			else {
-				myform.nickName.readOnly = true;
-				window.open(url,"nWin","width=440px,height=220px");
-			}
+			
+			$.ajax({
+				url : "${ctp}/member/MemberNickNameCheck",
+				type: "POST",
+				data: {"nickName" : nickName},
+				success : (res) => {
+					if(res == 1) {
+						alert("이미 있는 닉네임입니다.");
+						$("#nickName").val("");
+						$("#nickName").focus();
+						return false;
+					}
+					else {
+						alert("사용 가능한 닉네임입니다.");
+						myform.nickName.readOnly=true;
+						$("#name").focus();
+						return false;
+					}
+				},
+				error :() => alert("전송오류")
+			});
 		}
 		// 중복체크 버튼 클릭했는지 확인.
 		$(() => {
@@ -144,6 +177,10 @@
 			<label for="name" class="input-group-text boxWidth">성 명</label>
 			<input type="text" name="name" id="name" placeholder="성명을 입력하세요." class="form-control" required />
 		</div>
+		<div class="input-group mb-3">
+			<label for="email" class="input-group-text boxWidth">이메일</label>
+			<input type="email" name="email" id="email" placeholder="이메일을 입력하세요." required class="form-control" />
+		</div>
 		<div class="input-group mb-3 border ">
 			<span class="input-group-text boxWidth">성 별</span> &nbsp; &nbsp;
 			<div class="form-check-inline mt-2">
@@ -177,11 +214,7 @@
 			<input type="text" name="address2" id="address2" placeholder="주소를 입력하세요." class="form-control" />
 			<input type="text" name="address3" id="address3" placeholder="상세주소를 입력하세요." class="form-control" />
 			<input type="text" name="address4" id="address4" placeholder="참조주소를 입력하세요." class="form-control" />
-			<input type="button" value="주소검색" id="midBtn" class="btn btn-secondary btn-sm" onclick="addressCheck()"/>
-		</div>
-		<div class="input-group mb-3">
-			<label for="email" class="input-group-text boxWidth">이메일</label>
-			<input type="email" name="email" id="email" placeholder="이메일을 입력하세요." required class="form-control" />
+			<input type="button" value="주소검색" id="adressBtn" class="btn btn-secondary btn-sm" onclick="addressCheck()"/>
 		</div>
 		<div class="input-group mb-3">
 			<label for="homePage" class="input-group-text boxWidth">홈페이지</label>
@@ -233,7 +266,7 @@
 		<div class="text-center">
 			<button type="button" class="btn btn-success" onclick="fCheck()">회원가입</button> &nbsp;
 			<button type="button" class="btn btn-warning" onclick="location.reload()">다시작성</button> &nbsp;
-			<button type="button" class="btn btn-info" onclick="location.href='${ctp}/study2/login/Login'">돌아가기</button> &nbsp;
+			<button type="button" class="btn btn-info" onclick="location.href='${ctp}/'">돌아가기</button> &nbsp;
 		</div>
 		<input type="hidden" name="" value="" />
 	</form>

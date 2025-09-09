@@ -1,13 +1,19 @@
 package com.spring.springGroupS.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,14 +22,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.spring.springGroupS.common.ARIAUtil;
+import com.spring.springGroupS.common.SecurityUtil;
 import com.spring.springGroupS.service.Study1Service;
+import com.spring.springGroupS.service.StudyService;
 import com.spring.springGroupS.vo.BMIVO;
 import com.spring.springGroupS.vo.HoewonVO;
 import com.spring.springGroupS.vo.SiteInfoVO;
 import com.spring.springGroupS.vo.SiteInforVO;
 import com.spring.springGroupS.vo.SungjukVO;
+import com.spring.springGroupS.vo.UserVO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,6 +44,12 @@ import lombok.extern.slf4j.Slf4j;
 public class Study1Controller {
 	@Autowired
 	Study1Service study1Service;
+	
+	@Autowired
+	StudyService studyService;
+	
+	@Autowired
+	BCryptPasswordEncoder passwordEncoder;
 	
 	@GetMapping("/0901/Test1")
 	public String getTest1() {
@@ -326,7 +343,7 @@ public class Study1Controller {
 		ctx.close();
 		return "study1/xml/test3";
 	}
-//JDBC 정보확인2.
+	//JDBC 정보확인2.
 	@GetMapping("/xml/Test4")
 	public String xmlTest4Get(Model model) {
 		AbstractApplicationContext context = new GenericXmlApplicationContext("xml/siteInfoProperties.xml");
@@ -334,5 +351,124 @@ public class Study1Controller {
 		model.addAttribute("vo", vo);
 		context.close();
 		return "study1/xml/test4";
+	}
+	
+	// REST API
+	@GetMapping("/restAPI/RESTAPIForm")
+	public String RESTAPIGet() {
+		return "study1/restAPI/restAPIForm";
+	}
+	@GetMapping("/restAPI/Test1/{message}")
+	public String RestAPITest1Get(@PathVariable String message) {
+		System.out.println(message);
+		return "message: "+message;
+	}
+	@ResponseBody
+	@GetMapping("/restAPI/Test2/{message}")
+	public String RestAPITest2Get(@PathVariable String message) {
+		System.out.println(message);
+		return "message: "+message;
+	}
+	
+	// AJAX
+	@GetMapping("/ajax/AJAXForm")
+	public String AJAXFormGet() {
+		return "study1/ajax/ajaxForm";
+	}
+	@ResponseBody
+	@PostMapping("/ajax/AJAXTest1")
+	public int AJAXTest1Post(int item) {
+		return item;
+	}
+	@ResponseBody
+	@PostMapping("/ajax/AJAXTest2")
+	public String AJAXTest2Post(String item) {
+		return item;
+	}
+
+	// AJAX Object
+	@GetMapping("/ajax/AJAXObjectForm")
+	public String AJAXObjectFormGet() {
+		return "study1/ajax/ajaxObjectForm";
+	}
+	// 일반배열로 보내기.
+	@ResponseBody
+	@PostMapping("/ajax/AJAXObject1")
+	public String[] AJAXObject1Post(String dodo) {
+		return studyService.getCityStringArr(dodo);
+	}
+	// 객체배열(arrayList<String>)로 보내기.
+	@ResponseBody
+	@PostMapping("/ajax/AJAXObject2")
+	public ArrayList<String> AJAXObject2Post(String dodo) {
+		return studyService.getCityArrayList(dodo);
+	}
+	// 객체배열(map<Objcet, Object>)로 보내기.
+	@ResponseBody
+	@PostMapping("/ajax/AJAXObject3")
+	public Map<Object, Object> AJAXObject3Post(String dodo) {
+		ArrayList<String> vos = studyService.getCityArrayList(dodo);
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		map.put("city", vos);
+		return map;
+	}
+	// mid 검색해서 보내주기.
+	@PostMapping("/ajax/AJAXMidSearch")
+	public String AJAXMidSearchPost(Model model, UserVO vo, String mid) {
+		vo = studyService.getUser(mid);
+		model.addAttribute("vo", vo);
+		return "study1/ajax/ajaxObjectForm";
+	}
+	// mid 검색해서 보내주기(ajax).
+	@ResponseBody
+	@PostMapping("/ajax/AJAXMidSearch2")
+	public UserVO AJAXMidSearch2Post(String mid) {
+		return studyService.getUser(mid);
+	}
+	// mid 검색해서 보내주기(vos ajax).
+	@ResponseBody
+	@PostMapping("/ajax/AJAXMidSearch3")
+	public List<UserVO> AJAXMidSearch3Post() {
+		return studyService.getUserList();
+	}
+	// mid 검색해서 보내주기(like).
+	@ResponseBody
+	@PostMapping("/ajax/AJAXMidSearch4")
+	public List<UserVO> AJAXMidSearch4Post(String mid) {
+		return studyService.getUserListLike(mid);
+	}
+	
+	// 암호화.
+	@GetMapping("/password/PasswordForm")
+	public String PasswordFormGet() {
+		return "study1/password/passwordForm";
+	}
+	@ResponseBody
+	@PostMapping(value="/password/SHA256", produces="application/text; charset=utf8")
+	public String SHA256Post(String pwd) {
+		String salt = UUID.randomUUID().toString().substring(0, 8);
+		SecurityUtil security = new SecurityUtil();
+		String encPwd = security.encryptSHA256(salt + pwd);
+		pwd = "salt: "+salt+" / 암호화된 비밀번호: "+encPwd;
+		return pwd;
+	}
+	@ResponseBody
+	@PostMapping(value="/password/ARIA", produces="application/text; charset=utf8")
+	public String ARIAPost(String pwd) throws InvalidKeyException, UnsupportedEncodingException {
+		String salt = UUID.randomUUID().toString().substring(0, 8);
+		
+		String encPwd = ARIAUtil.ariaEncrypt(salt + pwd);
+		String decPwd = ARIAUtil.ariaDecrypt(encPwd);
+		
+		pwd = "salt: "+salt+" / 암호화된 비밀번호: "+encPwd+" / 복호화된 비밀번호: "+decPwd.substring(8);
+		return pwd;
+	}
+	@ResponseBody
+	@PostMapping(value="/password/SSC", produces="application/text; charset=utf8")
+	public String SSCPost(String pwd) throws InvalidKeyException, UnsupportedEncodingException {
+		String encPwd = passwordEncoder.encode(pwd);
+		
+		pwd = "암호화된 비밀번호: "+encPwd;
+		return pwd;
 	}
 }

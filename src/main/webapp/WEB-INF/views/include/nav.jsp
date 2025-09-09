@@ -19,11 +19,13 @@
 				<a href="${ctp}/dbTest/UserList" class="w3-bar-item w3-button">DateBase 연습</a>
 				<a href="${ctp}/dbTest2/UserList" class="w3-bar-item w3-button">DateBase 연습2</a>
 				<%-- <a href="${ctp}/dbTest2/UserSearch" class="w3-bar-item w3-button">DateBase 연습3</a> --%>
-				<a href="#" class="w3-bar-item w3-button">AJAX Test</a>
+				<a href="${ctp}/study1/restAPI/RESTAPIForm" class="w3-bar-item w3-button">REST API 연습</a>
+				<a href="${ctp}/study1/ajax/AJAXForm" class="w3-bar-item w3-button">AJAX 연습</a>
+				<a href="${ctp}/study1/password/PasswordForm" class="w3-bar-item w3-button">SSC 연습</a>
 			</div>
 		</div>
-		<a href="${ctp}/member/Login" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그인</a>
-		<a href="${ctp}/member/Join" class="w3-bar-item w3-button w3-padding-large w3-hide-small">회원가입</a>
+		<a href="${ctp}/member/memberLogin" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그인</a>
+		<a href="${ctp}/member/memberJoin" class="w3-bar-item w3-button w3-padding-large w3-hide-small">회원가입</a>
 		<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
 	</div>
 </div>

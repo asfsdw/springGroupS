@@ -6,10 +6,12 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.springGroupS.vo.UserVO;
 
-public interface UserDAO {
+public interface StudyDAO {
+
+	UserVO getUser(@Param("mid") String mid);
 
 	List<UserVO> getUserList();
 
-	UserVO getUser(@Param("mid") String mid);
-	
+	List<UserVO> getUserListLike(@Param("mid") String mid);
+
 }
