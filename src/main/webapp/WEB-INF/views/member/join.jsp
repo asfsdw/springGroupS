@@ -75,6 +75,11 @@
 			}
 			myform.submit();
 		}
+		
+		// 주소 확인(우편번호 자동 추가 예정)
+		function addressCheck() {
+		
+		}
   
 		// 아이디, 닉네임 중복체크 했는지 확인.
 		function idCheck() {
@@ -168,7 +173,11 @@
 		</div>
 		<div class="input-group mb-3">
 			<label for="address" class="input-group-text boxWidth">주 소</label>
-			<input type="text" name="address" id="address" placeholder="주소를 입력하세요." class="form-control" />
+			<input type="number" name="address1" id="address1" placeholder="우편주소" readonly class="form-control" />
+			<input type="text" name="address2" id="address2" placeholder="주소를 입력하세요." class="form-control" />
+			<input type="text" name="address3" id="address3" placeholder="상세주소를 입력하세요." class="form-control" />
+			<input type="text" name="address4" id="address4" placeholder="참조주소를 입력하세요." class="form-control" />
+			<input type="button" value="주소검색" id="midBtn" class="btn btn-secondary btn-sm" onclick="addressCheck()"/>
 		</div>
 		<div class="input-group mb-3">
 			<label for="email" class="input-group-text boxWidth">이메일</label>
