@@ -3,6 +3,9 @@
 
 <mapper namespace="com.spring.springGroupS.dao.MemberDAO">
 
+	<select id="getMemberIdFind" resultType="com.spring.springGroupS.vo.MemberVO">
+		SELECT * FROM member WHERE name = #{name};
+	</select>
 	<select id="getMemberIdSerach" resultType="com.spring.springGroupS.vo.MemberVO">
 		SELECT * FROM member WHERE mid = #{mid};
 	</select>
@@ -10,4 +13,7 @@
 		SELECT * FROM member WHERE nickName = #{nickName};
 	</select>
 	
+	<update id="setMemberTempPwd">
+		UPDATE member SET pwd = #{tempPwd} WHERE mid = #{mid};
+	</update>
 </mapper>

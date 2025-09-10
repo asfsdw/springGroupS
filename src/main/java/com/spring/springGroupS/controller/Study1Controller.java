@@ -8,11 +8,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.springGroupS.common.ARIAUtil;
@@ -31,6 +37,7 @@ import com.spring.springGroupS.service.Study1Service;
 import com.spring.springGroupS.service.StudyService;
 import com.spring.springGroupS.vo.BMIVO;
 import com.spring.springGroupS.vo.HoewonVO;
+import com.spring.springGroupS.vo.MailVO;
 import com.spring.springGroupS.vo.SiteInfoVO;
 import com.spring.springGroupS.vo.SiteInforVO;
 import com.spring.springGroupS.vo.SungjukVO;
@@ -50,6 +57,9 @@ public class Study1Controller {
 	
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	JavaMailSender mailSender;
 	
 	@GetMapping("/0901/Test1")
 	public String getTest1() {
@@ -470,5 +480,60 @@ public class Study1Controller {
 		
 		pwd = "암호화된 비밀번호: "+encPwd;
 		return pwd;
+	}
+	// 메일 인증 연습용 폼 이동.
+	@GetMapping("/mail/MailForm")
+	public String MailFormGet() {
+		return "study1/mail/mailForm";
+	}
+	// 메일 보내기.
+	@PostMapping("/mail/MailForm")
+	public String MailFormPost(MailVO vo, HttpServletRequest request) throws MessagingException {
+		String toMail = vo.getToMail();
+		String title = vo.getTitle();
+		String content = vo.getContent();
+		
+		// 메일 전송을 위한 객체: MimeMessage(), MimeMessageHelper()
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+		
+		messageHelper.setTo(toMail);
+		messageHelper.setSubject(title);
+		
+		// 메시지 보관함에 저장되는 content 변수 안에 발신자가 보여주고 싶은 정보를 추가한다.
+		content = content.replace("\n", "<br>");
+		content += "<br><hr><h3>springGroup에서 보냅니다.</h3><hr><br>";
+		content += "<p><img src=\"cid:main.jpg\" width='500px'></p>";
+		content += "<p><a href='http://192.168.50.53:9090/springGroupS/' class='btn btn-info'>방문하기</a></p>";
+		content += "<hr>";
+		// true: 예약처리 안 하고 바로 보내겠다.
+		messageHelper.setText(content, true);
+		
+		FileSystemResource file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/main.jpg"));
+		// 이미지파일 이름, 경로
+		messageHelper.addInline("main.jpg", file);
+		
+		// 첨부파일 보내기.
+		file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/02.jpg"));
+		messageHelper.addAttachment("02.jpg", file);
+		file = new FileSystemResource(request.getSession().getServletContext().getRealPath("/resources/images/03.jpg"));
+		messageHelper.addAttachment("03.jpg", file);
+		
+		// 메일 전송.
+		mailSender.send(message);
+		
+		return "redirect:/Message/mailSendOk";
+	}
+	
+	// 파일 업로드 연습용 폼 이동.
+	@GetMapping("/fileUpload/FileUploadForm")
+	public String fileUploadFormGet() {
+		return "study1/fileUpload/fileUploadForm";
+	}
+	@PostMapping("/fileUpload/FileUploadForm")
+	public String fileUploadFormPost(MultipartFile fName, String mid) {
+		int res = studyService.setFileUpload(fName, mid);
+		if(res != 0) return "redirect:/Message/fileUploadOk"; 
+		else return "redirect:/Message/fileUploadNo";
 	}
 }

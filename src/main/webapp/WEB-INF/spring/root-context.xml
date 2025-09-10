@@ -27,4 +27,21 @@
 	
 	<!-- mapper의 정버를 주입하기 위한 DAO객체의 위치 설정 -->
 	<mybatis-spring:scan base-package="com.spring.springGroupS.dao"/>
+	
+	<!-- 메일 사용을 위한 라이브러리 주입(bean 등록). -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+		<property name="username" value="gouga117@gmail.com" />
+		<property name="password" value="ruimaozopmgmciuy" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+				<prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
 </beans>
