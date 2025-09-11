@@ -9,48 +9,47 @@
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<title>Mail Form</title>
 	<script>
-    'use strict'
-    let str = "";
-    let cnt = 1;
-
-    // 주소록에 이메일 추가.
-    function emailAdd() {
-    	let emailAddress = $("#emailAddress").val();
-    	
-    	if(emailAddress.trim() == "") {
-    		alert("이메일주소를 입력해주세요.");
-    		$("#emailAddress").focus();
-    		return false;
-    	}
-    	else {
-    		// 이메일의 주인을 물어본 후, 유저가 적은 이름으로 저장.
-    		let name = prompt("저장할 이름을 입력해주세요.");
-	    	str += '<tr id="mailAddress'+cnt+'">';
-	    	str += '<td>'+cnt+'</td>';
-	    	str += '<td>'+name+'</td>';
-	    	str += '<td id="emailAddress'+cnt+'">'+emailAddress+'</td>';
-	    	// 받는 사람에 주입할 이메일을 선택한 후, 자동으로 modal 창을 닫기 위해 data-bs-dismiss="modal"를 추가해준다.
-	    	str += '<td><input type="button" value="선택" onclick="emailSelect('+cnt+')" class="btn btn-success btn-sm" data-bs-dismiss="modal" /></td>';
-	    	str += '<td><input type="button" value="삭제" onclick="emailDelete('+cnt+')" class="btn btn-danger btn-sm" /></td>';
-	    	str += '</tr>';
-    	}
-    	// 주소록에 이름과 이메일 추가.
-    	$("#jusorok").append(str);
-    	// 메일주소 입력 폼 초기화.
-    	$("#emailAddress").val("");
-    	// str 초기화.
-    	str = "";
-    	cnt++;
-    }
-    // 주소록 주입.
-    function emailSelect(selectCnt) {
-    	$("#toMail").val($("#emailAddress"+selectCnt).text());
-    }
-    // 주소록 삭제.
-    function emailDelete(deleteCnt) {
-    	$("#mailAddress"+deleteCnt).remove();
-    }
-  </script>
+		'use strict'
+		let str = "";
+		let cnt = 1;
+		
+		// 주소록에 이메일 추가.
+		function emailAdd() {
+			let emailAddress = $("#emailAddress").val();
+			if(emailAddress.trim() == "") {
+				alert("이메일주소를 입력해주세요.");
+				$("#emailAddress").focus();
+				return false;
+			}
+			else {
+				// 이메일의 주인을 물어본 후, 유저가 적은 이름으로 저장.
+				let name = prompt("저장할 이름을 입력해주세요.");
+				str += '<tr id="mailAddress'+cnt+'">';
+				str += '<td>'+cnt+'</td>';
+				str += '<td>'+name+'</td>';
+				str += '<td id="emailAddress'+cnt+'">'+emailAddress+'</td>';
+				// 받는 사람에 주입할 이메일을 선택한 후, 자동으로 modal 창을 닫기 위해 data-bs-dismiss="modal"를 추가해준다.
+				str += '<td><input type="button" value="선택" onclick="emailSelect('+cnt+')" class="btn btn-success btn-sm" data-bs-dismiss="modal" /></td>';
+				str += '<td><input type="button" value="삭제" onclick="emailDelete('+cnt+')" class="btn btn-danger btn-sm" /></td>';
+				str += '</tr>';
+			}
+			// 주소록에 이름과 이메일 추가.
+			$("#jusorok").append(str);
+			// 메일주소 입력 폼 초기화.
+			$("#emailAddress").val("");
+			// str 초기화.
+			str = "";
+			cnt++;
+		}
+		// 주소록 주입.
+		function emailSelect(selectCnt) {
+			$("#toMail").val($("#emailAddress"+selectCnt).text());
+		}
+		// 주소록 삭제.
+		function emailDelete(deleteCnt) {
+			$("#mailAddress"+deleteCnt).remove();
+		}
+	</script>
   <style>
     th {
       background-color: #eee !important;
@@ -63,36 +62,36 @@
 		<h2>이메일 인증 연습</h2>
 		<hr/>
 		<h2 class="text-center mb-3">메 일 보 내 기</h2>
-  <div class="text-end">(받는 사람의 메일주소를 정확히 입력하셔야 합니다.)</div>
-	  <form name="myform" method="post">
-	    <table class="table table-bordered">
-	      <tr>
-	        <th>받는사람</th>
-	        <td>
-	          <div class="input-group">
-	            <input type="text" name="toMail" id="toMail" placeholder="받는사람 메일주소를 입력하세요" autofocus required class="form-control" />
-	            <input type="button" value="주소록" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-success" />
-	          </div>
-	        </td>
-	      </tr>
-	      <tr>
-	        <th>메일제목</th>
-	        <td><input type="text" name="title" placeholder="메일 제목을 입력하세요" required class="form-control" /></td>
-	      </tr>
-	      <tr>
-	        <th>메일내용</th>
-	        <td><textarea rows="7" name="content" placeholder="메일 내용을 입력하세요" required class="form-control"></textarea></td>
-	      </tr>
-	      <tr>
-	        <td colspan="2" class="text-center">
-	          <input type="submit" value="메일보내기" class="btn btn-success me-2" />
-	          <input type="reset" value="다시쓰기" class="btn btn-warning" />
-	        </td>
-	      </tr>
-	    </table>
-	  </form>
-	  <hr/>
-	  <pre class="text-start">
+		<div class="text-end">(받는 사람의 메일주소를 정확히 입력하셔야 합니다.)</div>
+		<form name="myform" method="post">
+			<table class="table table-bordered">
+				<tr>
+					<th>받는사람</th>
+					<td>
+						<div class="input-group">
+							<input type="text" name="toMail" id="toMail" placeholder="받는사람 메일주소를 입력하세요" autofocus required class="form-control" />
+							<input type="button" value="주소록" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-success" />
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>메일제목</th>
+					<td><input type="text" name="title" placeholder="메일 제목을 입력하세요" required class="form-control" /></td>
+				</tr>
+				<tr>
+					<th>메일내용</th>
+					<td><textarea rows="7" name="content" placeholder="메일 내용을 입력하세요" required class="form-control"></textarea></td>
+				</tr>
+				<tr>
+					<td colspan="2" class="text-center">
+						<input type="submit" value="메일보내기" class="btn btn-success me-2" />
+						<input type="reset" value="다시쓰기" class="btn btn-warning" />
+					</td>
+				</tr>
+			</table>
+		</form>
+		<hr/>
+		<pre class="text-start">
  <font size="5">메일서버(SMTP/POP3/IMAP)</font>
  <font size="3"><b>SMPT(Simple Mail Transfer Protocol)</b></font>
   -인터넷에서 메일 주고 받기 위해 이용되는 프로토콜(규약).
@@ -122,7 +121,7 @@
    그렇게 때문에 사용자는 언제 어디서나 원하는 메일을 열람할 수 있다.
   -메일이 서버에 저장되어있기 때문에 로컬pc에 문제가 생겨도
    이메일에는 아무 영향을 미치지 않는다.
-	  </pre>
+		</pre>
 		<p><br/></p>
 	</div>
 	<!-- The Modal -->

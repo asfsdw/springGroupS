@@ -89,6 +89,7 @@
 				$("#searchMid").focus();
 				return false;
 			}
+			
 			$.ajax({
 				url : "${ctp}/member/MemberIdCheck",
 				type: "POST",
@@ -135,7 +136,7 @@
 				data: {
 					"mid" : mid,
 					"email" : email
-					},
+				},
 				success : (res) => {
 					if(res == 1) {
 						// spin 삭제.

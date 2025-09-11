@@ -93,7 +93,6 @@ public class MemberController {
 	public String memberTempPwd(String mid, String email) throws MessagingException {
 		String tempPwd = UUID.randomUUID().toString().substring(0, 4);
 		int res = memberService.setMemberTempPwd(mid, tempPwd);
-		System.out.println(res);
 		// 비밀번호를 임시비밀번호로 수정에 성공했을 때.
 		if(res != 0) {
 			mail.mailSend(email, "임시비밀번호입니다.", "임시 비밀번호: "+tempPwd);
