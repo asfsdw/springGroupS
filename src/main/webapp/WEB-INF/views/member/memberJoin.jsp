@@ -18,6 +18,8 @@
 		const regNickName = /^[가-힣0-9_]+$/;	// 닉네임은 한글, 숫자, 밑줄만 가능
 		const regName = /^[가-힣a-zA-Z]+$/;	// 이름은 한글/영문 가능
 		const regEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z.]+\.[a-zA-Z]{2,}$/; //이메일 형식 맞춰야함.
+		const regURL = /^(https?:\/\/)?([a-z\d\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$/;
+		const regTel = /\d{2,3}-\d{3,4}-\d{4}$/g;
 		
 		let idCheckSW = 0;
 		let nickCheckSW = 0;
@@ -104,6 +106,17 @@
 		
 		// 이메일 인증.
 		function emailCertification() {
+			// 아이디, 닉네임 충복체크했는지 확인.
+			if(idCheckSW == 0) {
+				alert("아이디 중복체크버튼을 눌러주세요.");
+				document.getElementById("midBtn").focus();
+				return false;
+			}
+			else if(nickCheckSW == 0) {
+				alert("닉네임 중복체크버튼을 눌러주세요.");
+				document.getElementById("nickNameBtn").focus();
+				return false;
+			}
 			// 메일 인증 전에 정보를 입력했는지 확인.
 			let mid = myform.mid.value.trim();
 			let pwd = myform.pwd.value.trim();
@@ -135,7 +148,7 @@
 			spin += "메일 발송중입니다. 잠시만 기다려주세요</div>";
 			$("#demoSpin").html(spin);
 			spin = "";
-      
+			
 			// ajax로 인증번호 발송.
 			$.ajax({
 				url : "${ctp}/member/MemberEmailCheck",
@@ -161,8 +174,9 @@
 		// 제한시간 처리.
 		// 120초.
 		let accessTime = 119;
+		let interval;
 		function timer() {
-			let interval = setInterval(() => {
+			interval = setInterval(() => {
 			$("#accessTime").html("남은 시간: "+accessTime+"초");
 				  
 			if(accessTime == 0) {
@@ -200,6 +214,7 @@
 				data: {"checkKey" : checkKey},
 				success : (res) => {
 					if(res == 1) {
+						clearInterval(interval);
 						$("#demoSpin").hide();
 						$("#addContent").show();
 					}
@@ -217,10 +232,22 @@
 			let nickName = myform.nickName.value.trim();
 			let name = myform.name.value.trim();
 			let email1 = myform.email1.value.trim();
-			let email2 = myform.email2.value.trim();
+			let email2 = myform.email2.value;
 			let email = email1+"@"+email2;
+			let homePage = myform.homePage.value;
+			let tel1 = myform.tel1.value;
+			let tel2 = myform.tel2.value.trim();
+			let tel3 = myform.tel3.value.trim();
+			let tel = tel1 + "-" + tel2 + "-" + tel3;
+			let postcode = myform.postcode.value + " ";
+			let roadAddress = myform.roadAddress.value + " ";
+			let detailAddress = myform.detailAddress.value + " ";
+			let extraAddress = myform.extraAddress.value + " ";
+			let address = postcode + "/" + roadAddress + "/" + detailAddress + "/" + extraAddress;
+			let submitFlag = 0; // 체크완료를 위한 변수.
 	  	
 			// DB에 NOT NULL 처리한 것들과 DEFAULT값이 없는 것들만 프론트에서 체크한다(입력받지 않았고 NOT NULL이 아닌 것은 백에서 DEFAULT처리).
+			// 아이디, 닉네임 중복체크 했는지 확인.
 			if(pwd.length < 4 || pwd.length > 20) {
 				alert("비밀번호는 4~20 자리로 작성해주세요.");
 				myform.pwd.focus();
@@ -236,18 +263,31 @@
 				myform.email.focus();
 				return false;
 			}
+			else if((homePage != "https://" && homePage != "")) {
+				if(!regURL.test(homePage)) {
+					alert("작성하신 홈페이지 주소가 URL 형식에 맞지않습니다.");
+					myform.homePage.focus();
+					return false;
+				}
+				else submitFlag = 1;
+			}
 			
-			// 아이디, 닉네임 중복체크 했는지 확인.
-			if(idCheckSW == 0) {
-				alert("아이디 중복체크버튼을 눌러주세요.");
-				document.getElementById("midBtn").focus();
-				return false;
+			if(tel2 != "" && tel3 != "") {
+				if(!regTel.test(tel)) {
+					alert("전화번호형식을 확인하세요.(000-0000-0000)");
+					myform.tel2.focus();
+					return false;
+				}
+				else submitFlag = 1;
 			}
-			else if(nickCheckSW == 0) {
-				alert("닉네임 중복체크버튼을 눌러주세요.");
-				document.getElementById("nickNameBtn").focus();
-				return false;
+			// 전화번호를 입력하지 않을시 DB에는 '010- - '의 형태로 저장하고자 한다.
+			else {
+				tel2 = " ";
+				tel3 = " ";
+				tel = tel1 + "-" + tel2 + "-" + tel3;
+				submitFlag = 1;
 			}
+			
 			// 올린 파일이 이미지인지 확인.
 			let fName = $("#file").val();
 			let maxSize = 1024 * 1024 * 10;
@@ -258,8 +298,18 @@
 				alert("프로필 사진입니다. 그림파일만 선택해주세요.");
 				return false;
 			}
+			else submitFlag = 1;
 			
-			myform.submit();
+			if(submitFlag != 1) {
+				alert("체크하지 않은 항목이 있습니다.");
+				return false;
+			}
+			else {
+				$("#email").val(email);
+				$("#tel").val(tel);
+				$("#address").val(address);
+				myform.submit();
+			}
 		}
 	</script>
 	<style>
@@ -335,21 +385,17 @@
 				<span class="input-group-text">-</span>
 				<input type="text" name="tel3" id="tel3" size=4 maxlength=4 class="form-control" />
 			</div>
-			<div class="row mb-2">
-	      <div class="col-2">
-	      	<label for="address" class="input-group-text bg-secondary-subtle border-secondary-subtle">주소</label>
-	      </div>
-				<div class="col-10">
-					<div class="input-group mb-1">
-						<input type="text" name="postcode" id="sample6_postcode" placeholder="우편번호" class="form-control">
-						<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-secondary btn-sm">
-					</div>
-					<div class="mb-1"><input type="text" name="roadAddress" id="sample6_address" size="50" placeholder="주소" class="form-control mb-1"></div>
-					<div class="input-group mb-1">
-						<input type="text" name="detailAddress" id="sample6_detailAddress" placeholder="상세주소" class="form-control me-2">
-						<input type="text" name="extraAddress" id="sample6_extraAddress" placeholder="참고항목" class="form-control">
-					</div>
-				</div>
+			<div class="input-group mb-3 col" >
+	     	<label for="address" class="input-group-text boxWidth">주 소</label>
+				<input type="text" name="postcode" id="sample6_postcode" placeholder="우편번호" class="form-control">
+				<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-secondary btn-sm">
+			</div>
+			<div class="input-group mb-3">
+				<input type="text" name="roadAddress" id="sample6_address" size="50" placeholder="주소" class="form-control mb-1">
+			</div>
+			<div class="input-group mb-3">
+				<input type="text" name="detailAddress" id="sample6_detailAddress" placeholder="상세주소" class="form-control me-2">
+				<input type="text" name="extraAddress" id="sample6_extraAddress" placeholder="참고항목" class="form-control">
 			</div>
 			<div class="input-group mb-3">
 				<label for="homePage" class="input-group-text boxWidth">홈페이지</label>
@@ -404,7 +450,9 @@
 			<button type="button" class="btn btn-warning" onclick="location.reload()">다시작성</button>&nbsp;
 			<button type="button" class="btn btn-info" onclick="location.href='${ctp}/'">돌아가기</button>&nbsp;
 		</div>
-		<input type="hidden" name="" value="" />
+		<input type="hidden" name="email" id="email" value="" />
+		<input type="hidden" name="tel" id="tel" value="" />
+		<input type="hidden" name="address" id="address" value="" />
 	</form>
 </div>
 <p><br/></p>

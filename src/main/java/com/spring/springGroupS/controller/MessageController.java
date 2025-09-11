@@ -1,5 +1,7 @@
 package com.spring.springGroupS.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller()
 public class MessageController {
 	@RequestMapping(value = "/Message/{msgFlag}", method = RequestMethod.GET)
-	public String MessageGet(Model model,
+	public String MessageGet(Model model, HttpSession session,
 			@PathVariable String msgFlag,
 			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
 			@RequestParam(name="idx", defaultValue = "", required = false) String idx) {
@@ -89,6 +91,59 @@ public class MessageController {
 		else if(msgFlag.equals("fileUploadNo")) {
 			model.addAttribute("message", "파일 업로드에 실패했습니다.");
 			model.addAttribute("url", "/study1/fileUpload/FileUploadForm");
+		}
+		else if(msgFlag.equals("memberIdCheckNo")) {
+			model.addAttribute("message", "이미 사용중인 아이디입니다.\\n아이디를 확인 후, 다시 회원가입해주세요.");
+			model.addAttribute("url", "/member/MemberJoin");
+		}
+		else if(msgFlag.equals("memberNickNameCheckNo")) {
+			model.addAttribute("message", "이미 사용중인 닉네임입니다.\\n닉네임을 확인 후, 다시 회원가입해주세요.");
+			model.addAttribute("url", "/member/MemberJoin");
+		}
+		else if(msgFlag.equals("memberJoinOk")) {
+			model.addAttribute("message", "회원가입에 성공했습니다.");
+			model.addAttribute("url", "/member/MemberLogin");
+		}
+		else if(msgFlag.equals("memberJoinNo")) {
+			model.addAttribute("message", "회원가입에 실패했습니다.");
+			model.addAttribute("url", "/member/MemberJoin");
+		}
+		else if(msgFlag.equals("memberLoginOk")) {
+			model.addAttribute("message", mid+"님 로그인 되었습니다.");
+			model.addAttribute("url", "/member/MemberMain");
+		}
+		else if(msgFlag.equals("memberLoginNo")) {
+			model.addAttribute("message", "로그인에 실패했습니다.");
+			model.addAttribute("url", "/member/MemberLogin");
+		}
+		else if(msgFlag.equals("memberLogoutOk")) {
+			model.addAttribute("message", mid+"님 로그아웃 되었습니다.");
+			model.addAttribute("url", "/member/MemberLogin");
+		}
+		else if(msgFlag.equals("adminNo")) {
+			model.addAttribute("message", "관리자 전용 메뉴입니다.");
+			model.addAttribute("url", "/member/MemberMain");
+		}
+		else if(msgFlag.equals("levelNo")) {
+			model.addAttribute("message", "등급이 부족합니다.");
+			model.addAttribute("url", "/member/MemberMain");
+		}
+		else if(msgFlag.equals("loginNo")) {
+			model.addAttribute("message", "로그인 해주세요.");
+			model.addAttribute("url", "/member/MemberLogin");
+		}
+		else if(msgFlag.equals("pwdChangeOk")) {
+			session.invalidate();
+			model.addAttribute("message", "비밀번호가 변경되었습니다.");
+			model.addAttribute("url", "/member/MemberLogin");
+		}
+		else if(msgFlag.equals("pwdChangeNo")) {
+			model.addAttribute("message", "비밀번호가 변경되지 않았습니다.\\n다시 시도해주세요.");
+			model.addAttribute("url", "/member/MemberPwdCheck");
+		}
+		else if(msgFlag.equals("levelUp")) {
+			model.addAttribute("message", "정회원이 되셨습니다.");
+			model.addAttribute("url", "/member/MemberMain");
 		}
 		return "include/message";
 	}

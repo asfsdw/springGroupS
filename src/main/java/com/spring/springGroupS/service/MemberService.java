@@ -14,4 +14,16 @@ public interface MemberService {
 
 	int setMemberTempPwd(String mid, String tempPwd);
 
+	int setMemberJoin(MemberVO vo);
+
+	void setLastDateUpdate(String mid);
+
+	void setPoint(String mid, int point);
+
+	void setVisitCnt(String mid, int i);
+
+	void setTodayCnt(String mid, int i);
+
+	void setMemberLevelUp(String mid, int i);
+
 }

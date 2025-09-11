@@ -1,5 +1,9 @@
 package com.spring.springGroupS.common;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.UUID;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
@@ -11,9 +15,10 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class Mail {
+public class ProjectProvide {
 	@Autowired
 	JavaMailSender mailSender;
 	
@@ -46,5 +51,29 @@ public class Mail {
 		mailSender.send(message);
 		
 		return "1";
+	}
+
+	// 파일 업로드 후, 서버에 저장된 이름 반환.
+	public String fileUpload(MultipartFile fName, String mid, String part) {
+		String oFileName = fName.getOriginalFilename();
+		String sFileName = mid+"_"+(UUID.randomUUID().toString().substring(0, 4))+"_"+oFileName;
+		try {
+			writeFile(fName, sFileName, part);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return sFileName;
+	}
+
+	private void writeFile(MultipartFile fName, String sFileName, String part) throws IOException {
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+part+"/");
+		FileOutputStream fos = new FileOutputStream(realPath + sFileName);
+		
+		if(fName.getBytes().length != -1) fos.write(fName.getBytes());
+		fos.flush();
+		
+		fos.close();
 	}
 }

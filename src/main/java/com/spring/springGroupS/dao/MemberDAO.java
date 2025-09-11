@@ -16,4 +16,16 @@ public interface MemberDAO {
 
 	int setMemberTempPwd(@Param("mid") String mid, @Param("tempPwd") String tempPwd);
 
+	int setMemberJoin(@Param("vo") MemberVO vo);
+
+	void setLastDateUpdate(@Param("mid") String mid);
+
+	void setPoint(@Param("mid") String mid, @Param("point") int point);
+
+	void setVisitCnt(@Param("mid") String mid, @Param("i") int i);
+
+	void setTodayCnt(@Param("mid") String mid, @Param("i") int i);
+
+	void setMemberLevelUp(@Param("mid") String mid, @Param("i") int i);
+
 }

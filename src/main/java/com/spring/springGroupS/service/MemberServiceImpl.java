@@ -33,4 +33,34 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.setMemberTempPwd(mid, tempPwd);
 	}
 
+	@Override
+	public int setMemberJoin(MemberVO vo) {
+		return memberDAO.setMemberJoin(vo);
+	}
+
+	@Override
+	public void setLastDateUpdate(String mid) {
+		memberDAO.setLastDateUpdate(mid);
+	}
+
+	@Override
+	public void setPoint(String mid, int point) {
+		memberDAO.setPoint(mid, point);
+	}
+
+	@Override
+	public void setVisitCnt(String mid, int i) {
+		memberDAO.setVisitCnt(mid, i);
+	}
+
+	@Override
+	public void setTodayCnt(String mid, int i) {
+		memberDAO.setTodayCnt(mid, i);
+	}
+
+	@Override
+	public void setMemberLevelUp(String mid, int i) {
+		memberDAO.setMemberLevelUp(mid, i);
+	}
+
 }

@@ -13,7 +13,32 @@
 		SELECT * FROM member WHERE nickName = #{nickName};
 	</select>
 	
+	
+	
+	<insert id="setMemberJoin">
+		INSERT INTO member VALUES(DEFAULT,#{vo.mid},#{vo.pwd},#{vo.nickName},#{vo.name},#{vo.email},
+			#{vo.gender},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.homePage},#{vo.job},#{vo.hobby},#{vo.photo},
+			#{vo.content},#{vo.userInfor},DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
+	</insert>
+	
+	
+	
 	<update id="setMemberTempPwd">
 		UPDATE member SET pwd = #{tempPwd} WHERE mid = #{mid};
+	</update>
+	<update id="setLastDateUpdate">
+		UPDATE member SET lastDate = now() WHERE mid = #{mid};
+	</update>
+	<update id="setPoint">
+		UPDATE member SET point = point + #{point} WHERE mid = #{mid};
+	</update>
+	<update id="setVisitCnt">
+		UPDATE member SET visitCnt = visitCnt + #{i} WHERE mid = #{mid};
+	</update>
+	<update id="setTodayCnt">
+		UPDATE member SET todayCnt = todayCnt + #{i} WHERE mid = #{mid};
+	</update>
+	<update id="setMemberLevelUp">
+		UPDATE member SET level = level - #{i} WHERE mid = #{mid};
 	</update>
 </mapper>

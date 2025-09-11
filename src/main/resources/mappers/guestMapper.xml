@@ -8,6 +8,10 @@
 	<select id="getTotRecCnt" resultType="int">
 		SELECT count(idx) FROM guest;
 	</select>
+	<select id="getMemberGuestCnt" resultType="int">
+		SELECT count(*) FROM guest WHERE name = #{mid} or name = #{nickName} or name = #{name};
+	</select>
+	
 	<select id="getUserSearch" resultType="com.spring.springGroupS.vo.UserVO">
 		SELECT * FROM user WHERE mid = #{mid};
 	</select>
@@ -18,13 +22,19 @@
 		SELECT * FROM user WHERE idx = #{idx};
 	</select>
 	
+	
+	
 	<insert id="setGuestInput">
 		INSERT INTO guest VALUES(DEFAULT, #{vo.name}, #{vo.content}, #{vo.email}, #{vo.homePage}, DEFAULT, #{vo.hostIP});
 	</insert>
 	
+	
+	
 	<update id="setUserUpdate">
 		UPDATE user SET name = #{vo.name}, age = #{vo.age}, address = #{vo.address} WHERE idx = ${vo.idx};
 	</update>
+	
+	
 	
 	<delete id="setGuestDelete">
 		DELETE FROM guest WHERE idx = #{idx};
