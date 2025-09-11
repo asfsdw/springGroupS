@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="vo1" class="com.spring.springGroupS.vo.SungjukVO">
+		<property name="name" value="홍길동" />
+		<property name="kor" value="100" />
+		<property name="eng" value="90" />
+		<property name="mat" value="80" />
+	</bean>
+	<bean id="vo2" class="com.spring.springGroupS.vo.SungjukVO">
+		<property name="name" value="김말숙" />
+		<property name="kor" value="90" />
+		<property name="eng" value="80" />
+		<property name="mat" value="70" />
+	</bean>
+	<bean id="vo3" class="com.spring.springGroupS.vo.SungjukVO">
+		<property name="name" value="이기자" />
+		<property name="kor" value="80" />
+		<property name="eng" value="70" />
+		<property name="mat" value="60" />
+	</bean>
+</beans>

@@ -154,21 +154,22 @@ public class MemberController {
 			memberService.setLastDateUpdate(vo.getMid());
 			
 			// 로그인 포인트 처리.
-			// 현재 날짜.
-			String today = LocalDate.now().toString();
+			// 오늘 날짜 세션 없으면 생성.
+			if(session.getAttribute("sToday") == null) session.setAttribute("sToday", LocalDate.now().toString());
 			// 최대 포인트 제한을 위한 cnt세션.
 			int cnt = session.getAttribute("sCnt"+vo.getMid())== null ? 1 : (Integer)session.getAttribute("sCnt"+vo.getMid());
 			
 			// 첫 방문시 총 방문 횟수+1.
 			if(vo.getVisitCnt() == 0) memberService.setVisitCnt(vo.getMid(), 1);
-			
 			// 오늘 날짜와 마지막 로그인 날짜가 다르면.
-			if(!today.equals(session.getAttribute("sLastDate").toString().substring(0,10))) {
+			if(!session.getAttribute("sToday").equals(session.getAttribute("sLastDate").toString().substring(0, 10))) {
 				// cnt 초기화, cnt세션 삭제.
 				cnt = 1;
 				session.removeAttribute("sCnt"+vo.getMid());
 				// 오늘 처음 방문시 총 방문 횟수+1.
 				memberService.setVisitCnt(vo.getMid(), 1);
+				// 오늘 날짜 세션 업데이트
+				session.setAttribute("sToday", LocalDate.now().toString());
 			}
 			// cnt가 6보다 작으면.
 			if(cnt < 6) {
