@@ -12,7 +12,7 @@ public interface MemberDAO {
 
 	MemberVO getMemberNickNameSerach(@Param("nickName") String nickName);
 
-	List<MemberVO> getMemberIdFind(@Param("name") String name);
+	List<MemberVO> getMemberIdFind(@Param("email") String email);
 
 	int setMemberTempPwd(@Param("mid") String mid, @Param("tempPwd") String tempPwd);
 
@@ -27,5 +27,15 @@ public interface MemberDAO {
 	void setTodayCnt(@Param("mid") String mid, @Param("i") int i);
 
 	void setMemberLevelUp(@Param("mid") String mid, @Param("i") int i);
+
+	void setTodayClear(@Param("mid") String mid, @Param("i") int i);
+
+	int setmemberUpdate(@Param("vo") MemberVO vo);
+
+	int setMemberDelete(@Param("mid") String mid);
+
+	List<MemberVO> getMemberList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("level") int level);
+
+	int getTotRecCnt();
 
 }

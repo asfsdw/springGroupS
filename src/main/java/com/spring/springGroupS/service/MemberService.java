@@ -10,7 +10,7 @@ public interface MemberService {
 
 	MemberVO getMemberNickNameSerach(String nickName);
 
-	List<MemberVO> getMemberIdFind(String name);
+	List<MemberVO> getMemberIdFind(String email);
 
 	int setMemberTempPwd(String mid, String tempPwd);
 
@@ -25,5 +25,15 @@ public interface MemberService {
 	void setTodayCnt(String mid, int i);
 
 	void setMemberLevelUp(String mid, int i);
+
+	void setTodayClear(String mid, int i);
+
+	int setmemberUpdate(MemberVO vo);
+
+	int setMemberDelete(String mid);
+
+	List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level);
+
+	int getTotRecCnt();
 
 }

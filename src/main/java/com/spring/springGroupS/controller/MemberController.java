@@ -15,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -153,30 +154,41 @@ public class MemberController {
 			session.setAttribute("sLastDate", vo.getLastDate());
 			memberService.setLastDateUpdate(vo.getMid());
 			
-			// 로그인 포인트 처리.
 			// 오늘 날짜 세션 없으면 생성.
-			if(session.getAttribute("sToday") == null) session.setAttribute("sToday", LocalDate.now().toString());
-			// 최대 포인트 제한을 위한 cnt세션.
-			int cnt = session.getAttribute("sCnt"+vo.getMid())== null ? 1 : (Integer)session.getAttribute("sCnt"+vo.getMid());
-			
+			if(session.getAttribute("sToday"+vo.getMid()) == null) session.setAttribute("sToday"+vo.getMid(), LocalDate.now().toString());
 			// 첫 방문시 총 방문 횟수+1.
 			if(vo.getVisitCnt() == 0) memberService.setVisitCnt(vo.getMid(), 1);
+			
+			int cnt = session.getAttribute("sCnt"+vo.getMid())== null ? 1 : (Integer)session.getAttribute("sCnt"+vo.getMid());
+			
+			// 준회원의 오늘 방문일 처리 하루 5회 제한.
+			if((Integer)session.getAttribute("sLevel") == 3 && cnt < 6) {
+				memberService.setTodayCnt(vo.getMid(), 1);
+				cnt++;
+			}
+			
+			// 최대 포인트 제한을 위한 cnt세션.
 			// 오늘 날짜와 마지막 로그인 날짜가 다르면.
-			if(!session.getAttribute("sToday").equals(session.getAttribute("sLastDate").toString().substring(0, 10))) {
-				// cnt 초기화, cnt세션 삭제.
-				cnt = 1;
+			if(!session.getAttribute("sToday"+vo.getMid()).equals(session.getAttribute("sLastDate").toString().substring(0, 10))) {
+				// cnt세션 삭제.
 				session.removeAttribute("sCnt"+vo.getMid());
 				// 오늘 처음 방문시 총 방문 횟수+1.
 				memberService.setVisitCnt(vo.getMid(), 1);
-				// 오늘 날짜 세션 업데이트
-				session.setAttribute("sToday", LocalDate.now().toString());
+				// 오늘 날짜 세션 업데이트.
+				session.setAttribute("sToday"+vo.getMid(), LocalDate.now().toString());
+				// 오늘 방문 횟수 초기화.
+				memberService.setTodayClear(vo.getMid(), 0);
 			}
-			// cnt가 6보다 작으면.
-			if(cnt < 6) {
-				// 포인트 10 적립, 오늘 방문 횟수+1.
-				memberService.setPoint(vo.getMid(), 10);
-				memberService.setTodayCnt(vo.getMid(), 1);
-				cnt++;
+			
+			// 정회원 이상 로그인 포인트 처리.
+			if((Integer)session.getAttribute("sLevel") < 3) {
+				// cnt가 6보다 작으면.
+				if(cnt < 6) {
+					// 포인트 10 적립, 오늘 방문 횟수+1.
+					memberService.setPoint(vo.getMid(), 10);
+					memberService.setTodayCnt(vo.getMid(), 1);
+					cnt++;
+				}
 			}
 			// 세션+mid로 세션에 cnt 저장.
 			session.setAttribute("sCnt"+vo.getMid(), cnt);
@@ -225,8 +237,8 @@ public class MemberController {
 	// 이름으로 아이디 찾기.
 	@ResponseBody
 	@PostMapping("/MemberIdFind")
-	public List<MemberVO> memberIdFindPost(String name) {
-		return memberService.getMemberIdFind(name);
+	public List<MemberVO> memberIdFindPost(String email) {
+		return memberService.getMemberIdFind(email);
 	}
 	
 	// 이메일로 임시비밀번호 발송.
@@ -244,8 +256,9 @@ public class MemberController {
 	}
 	
 	// 비밀번호 변경.
-	@GetMapping("/MemberPwdCheck")
-	public String memberPwdCheckGet(HttpSession session) {
+	@GetMapping("/MemberPwdCheck/{flag}")
+	public String memberPwdCheckGet(Model model, @PathVariable String flag) {
+		model.addAttribute("flag", flag);
 		return "member/memberPwdCheck";
 	}
 	// 비밀번호 확인.
@@ -263,6 +276,36 @@ public class MemberController {
 		int res = memberService.setMemberTempPwd(mid, newPwd);
 		if(res != 0) return "redirect:/Message/pwdChangeOk";
 		else return "redirect:/Message/pwdChangeNo";
+	}
+	
+	// 회원정보 수정 폼 이동.
+	@GetMapping("/MemberUpdate")
+	public String memberUpdateGet(Model model, String mid) {
+		MemberVO vo = memberService.getMemberIdSerach(mid);
+		model.addAttribute("vo", vo);
+		return "member/memberUpdate";
+	}
+	// 회원정보 수정
+	@PostMapping("/MemberUpdate")
+	public String memberUpdatePost(HttpSession session, MultipartFile fName, MemberVO vo) {
+		String nickName = session.getAttribute("sNickName").toString();
+
+		if(memberService.getMemberNickNameSerach(vo.getNickName()) != null && !nickName.equals(vo.getNickName())) {
+			return "redirect:/Message/memberNickNameCheckNo?mid="+vo.getMid();
+		}
+		
+		// 프로필 사진 수정했을 때.
+		if(fName.getOriginalFilename() != null && !fName.getOriginalFilename().equals("")) {
+			if(!vo.getPhoto().equals("noimage.jpg")) projectProvide.fileDelete(vo.getPhoto(), "member");
+			vo.setPhoto(projectProvide.fileUpload(fName, vo.getMid(), "member"));
+		}
+		
+		int res = memberService.setmemberUpdate(vo);
+		if(res != 0) {
+			session.setAttribute("sNickName", vo.getNickName());
+			return "redirect:/Message/memberUpdateOk";
+		}
+		else return "redirect:/Message/memberUpdateNo?mid="+vo.getMid();
 	}
 	
 	// 멤버 전용방.
@@ -283,6 +326,47 @@ public class MemberController {
 		return "member/memberMain";
 	}
 	
+	// 회원 리스트.
+	@GetMapping("/MemberList")
+	public String memberListGet(Model model, HttpSession session,
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize,
+			@RequestParam(name="level", defaultValue = "99", required = false) int level) {
+		int totRecCnt = memberService.getTotRecCnt();
+		int totPage = (int)Math.ceil((double)totRecCnt/pageSize);
+		int startIndexNo = (pag-1) * pageSize;
+		int curScrStartNo = totRecCnt - startIndexNo;
+		
+		int blockSize = 3;
+		int curBlock = (pag - 1) / blockSize;
+		int lastBlock = (totPage - 1) / blockSize;
+		
+		List<MemberVO> vos = memberService.getMemberList(startIndexNo, pageSize, level);
+		
+		model.addAttribute("vos", vos);
+		return "member/memberList";
+	}
+	
+	// 회원탈퇴.
+	@ResponseBody
+	@PostMapping("/MemberDelete")
+	public String memberDeletePost(HttpSession session) {
+		String mid = session.getAttribute("sMid").toString();
+		int res = memberService.setMemberDelete(mid);
+		System.out.println(res);
+		if(res != 0) {
+			session.removeAttribute("sMid");
+			session.removeAttribute("sNickName");
+			session.removeAttribute("sLevel");
+			session.removeAttribute("sStrLevel");
+			session.removeAttribute("sLastDate");
+			session.removeAttribute("sEmailKey");
+			session.removeAttribute("sToday"+mid);
+			session.removeAttribute("sCnt"+mid);
+			return "1";
+		}
+		else return "0";
+	}
 	// 로그아웃.
 	@GetMapping("/MemberLogout")
 	public String memberLogoutGet(HttpSession session) {

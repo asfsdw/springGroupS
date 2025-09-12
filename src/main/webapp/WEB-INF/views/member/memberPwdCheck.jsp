@@ -27,9 +27,14 @@
 					"pwd" : pwd
 				},
 				success : (res) => {
-					if(res != 0) {
-						$("#myform").hide();
-						$("#yourform").show();
+					if(res != "0") {
+						if("${flag}" == "p") {
+							$("#myform").hide();
+							$("#yourform").show();
+						}
+						else {
+							location.href = "${ctp}/member/MemberUpdate?mid=${sMid}";
+						}
 					}
 					else {
 						alert("비밀번호가 틀렸습니다.\n비밀번호를 확인해주세요.");

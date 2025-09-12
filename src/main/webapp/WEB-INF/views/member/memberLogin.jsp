@@ -22,7 +22,7 @@
 				// 이전 str 내용 초기화.
 				str = '';
 				str += '<div class="input-group mb-3">';
-				str += '<input type="text" id="name" placeholder="성함을 입력해주세요." class="form-control" />';
+				str += '<input type="text" id="email" placeholder="가입시 입력한 이메일을 입력해주세요." class="form-control" />';
 				str += '<input type="button" value="아이디찾기" onclick="memberIdFind()" class="btn btn-success" />';
 				str += '</div>';
 				$("#modal-body").html(str);
@@ -43,20 +43,26 @@
 				$('#myModal').modal('show');
 			});
 		});
-  	
+ 		
+		const regEmail = /^[a-zA-Z0-9-_]+@[a-zA-Z.]+\.[a-zA-Z]{2,}$/;
 		// 아이디 찾기.
 		function memberIdFind() {
-			let name = $("#name").val();
+			let email = $("#email").val();
 			if(name.trim() == ""){
 				alert("성함을 입력해주세요.");
-				$("#name").focus();
+				$("#email").focus();
+				return false;
+			}
+			else if(!regEmail(email)) {
+				alert("이메일을 아이디@메일주소.도메인으로 입력해주세요.");
+				$("#email").focus();
 				return false;
 			}
 			
 			$.ajax({
 				url : "${ctp}/member/MemberIdFind",
 				type: "POST",
-				data: {"name" : name},
+				data: {"email" : email},
 				success : (res) => {
 					//이전 str2의 내용 초기화.
 					str2 = "";

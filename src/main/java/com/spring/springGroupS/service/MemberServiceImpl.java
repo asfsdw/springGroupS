@@ -24,8 +24,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MemberVO> getMemberIdFind(String name) {
-		return memberDAO.getMemberIdFind(name);
+	public List<MemberVO> getMemberIdFind(String email) {
+		return memberDAO.getMemberIdFind(email);
 	}
 
 	@Override
@@ -61,6 +61,31 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void setMemberLevelUp(String mid, int i) {
 		memberDAO.setMemberLevelUp(mid, i);
+	}
+
+	@Override
+	public void setTodayClear(String mid, int i) {
+		memberDAO.setTodayClear(mid, i);
+	}
+
+	@Override
+	public int setmemberUpdate(MemberVO vo) {
+		return memberDAO.setmemberUpdate(vo);
+	}
+
+	@Override
+	public int setMemberDelete(String mid) {
+		return memberDAO.setMemberDelete(mid);
+	}
+
+	@Override
+	public List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level) {
+		return memberDAO.getMemberList(startIndexNo, pageSize, level);
+	}
+
+	@Override
+	public int getTotRecCnt() {
+		return memberDAO.getTotRecCnt();
 	}
 
 }

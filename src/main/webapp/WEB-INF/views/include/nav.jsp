@@ -1,6 +1,29 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"></c:set>
+<script>
+	function userDeleteCheck() {
+		let ans = confirm("회원탈퇴를 하시겠습니까?");
+		if(ans) {
+			ans = confirm("탈퇴하시면 1개월간 같은 아이디로는 다시 가입하실 수 없습니다.\n그래도 탈퇴하시겠습니까?");
+			if(ans) {
+				$.ajax({
+					url : "${ctp}/member/MemberDelete",
+					type: "POST",
+					success : (res) => {
+						console.log(res);
+						if(res != "0") {
+							alert("회원탈퇴되었습니다.");
+							location.href = "${ctp}/";
+						}
+						else alert("회원탈퇴에 실패했습니다.\n다시 시도해주세요.");
+					},
+					error : () => alert("전송오류")
+				});
+			}
+		}
+	}
+</script>
 <!-- Navbar -->
 <div class="w3-top">
 	<div class="w3-bar w3-black w3-card">
@@ -39,16 +62,16 @@
 				<button class="w3-padding-large w3-button" title="More">MyPage <i class="fa fa-caret-down"></i></button>     
 				<div class="w3-dropdown-content w3-bar-block w3-card-4">
 					<a href="${ctp}/member/MemberList" class="w3-bar-item w3-button">회원 리스트</a>
-					<a href="${ctp}/member/MemberUpdate" class="w3-bar-item w3-button">회원정보 수정</a>
-					<a href="${ctp}/member/MemberPwdCheck" class="w3-bar-item w3-button">비밀번호 변경</a>
-					<a href="#" class="w3-bar-item w3-button">회원탈퇴</a>
+					<a href="${ctp}/member/MemberPwdCheck/u" class="w3-bar-item w3-button">회원정보 수정</a>
+					<a href="${ctp}/member/MemberPwdCheck/p" class="w3-bar-item w3-button">비밀번호 변경</a>
+					<a href="javascript:userDeleteCheck()" class="w3-bar-item w3-button">회원탈퇴</a>
 					<c:if test="${sLevel < 3}">
 						<a href="#" class="w3-bar-item w3-button">일정관리</a>
 						<a href="#" class="w3-bar-item w3-button">웹메시지</a>
 						<a href="#" class="w3-bar-item w3-button">사진첩</a>
 					</c:if>
 					<c:if test="${sLevel == 0}">
-						<a href="#" class="w3-bar-item w3-button">관리자 메뉴</a>
+						<a href="${ctp}/admin/AdminMain" class="w3-bar-item w3-button">관리자 메뉴</a>
 					</c:if>
 				</div>
 			</c:if>

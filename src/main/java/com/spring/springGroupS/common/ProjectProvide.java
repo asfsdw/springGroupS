@@ -1,5 +1,6 @@
 package com.spring.springGroupS.common;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
@@ -65,7 +66,7 @@ public class ProjectProvide {
 		
 		return sFileName;
 	}
-
+	// 파일 업로드.
 	private void writeFile(MultipartFile fName, String sFileName, String part) throws IOException {
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+part+"/");
@@ -75,5 +76,14 @@ public class ProjectProvide {
 		fos.flush();
 		
 		fos.close();
+	}
+	// 파일 삭제.
+	public void fileDelete(String fileName, String part) {
+		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+part+"/");
+		File file = new File(realPath+fileName);
+		
+		// 파일이 존재하면, 삭제.
+		if(file.exists()) file.delete();
 	}
 }

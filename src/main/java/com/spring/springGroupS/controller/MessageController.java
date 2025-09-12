@@ -100,6 +100,10 @@ public class MessageController {
 			model.addAttribute("message", "이미 사용중인 닉네임입니다.\\n닉네임을 확인 후, 다시 회원가입해주세요.");
 			model.addAttribute("url", "/member/MemberJoin");
 		}
+		else if(msgFlag.equals("memberNickCheckNo")) {
+			model.addAttribute("message", "이미 사용중인 닉네임입니다.\\n닉네임을 확인 후, 다시 수정해주세요.");
+			model.addAttribute("url", "/member/MemberUpdate?mid="+mid);
+		}
 		else if(msgFlag.equals("memberJoinOk")) {
 			model.addAttribute("message", "회원가입에 성공했습니다.");
 			model.addAttribute("url", "/member/MemberLogin");
@@ -144,6 +148,14 @@ public class MessageController {
 		else if(msgFlag.equals("levelUp")) {
 			model.addAttribute("message", "정회원이 되셨습니다.");
 			model.addAttribute("url", "/member/MemberMain");
+		}
+		else if(msgFlag.equals("memberUpdateOk")) {
+			model.addAttribute("message", "정보가 수정되었습니다.");
+			model.addAttribute("url", "/member/MemberMain");
+		}
+		else if(msgFlag.equals("memberUpdateNo")) {
+			model.addAttribute("message", "정보 수정에 실패했습니다.");
+			model.addAttribute("url", "/member/MemberUpdate?mid="+mid);
 		}
 		return "include/message";
 	}

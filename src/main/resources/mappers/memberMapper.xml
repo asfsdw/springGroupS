@@ -4,13 +4,19 @@
 <mapper namespace="com.spring.springGroupS.dao.MemberDAO">
 
 	<select id="getMemberIdFind" resultType="com.spring.springGroupS.vo.MemberVO">
-		SELECT * FROM member WHERE name = #{name};
+		SELECT * FROM member WHERE email = #{email};
 	</select>
 	<select id="getMemberIdSerach" resultType="com.spring.springGroupS.vo.MemberVO">
 		SELECT * FROM member WHERE mid = #{mid};
 	</select>
 	<select id="getMemberNickNameSerach" resultType="com.spring.springGroupS.vo.MemberVO">
 		SELECT * FROM member WHERE nickName = #{nickName};
+	</select>
+	<select id="getMemberList" resultType="com.spring.springGroupS.vo.MemberVO">
+		SELECT * FROM member <if test="level != 99">WHERE level = #{level}</if> ORDER BY mid LIMIT #{startIndexNo}, #{pageSize};
+	</select>
+	<select id="getTotRecCnt" resultType="int">
+		SELECT count(idx) FROM member;
 	</select>
 	
 	
@@ -38,7 +44,19 @@
 	<update id="setTodayCnt">
 		UPDATE member SET todayCnt = todayCnt + #{i} WHERE mid = #{mid};
 	</update>
+	<update id="setTodayClear">
+		UPDATE member SET todayCnt = todayCnt = #{i} WHERE mid = #{mid};
+	</update>
 	<update id="setMemberLevelUp">
 		UPDATE member SET level = level - #{i} WHERE mid = #{mid};
+	</update>
+	<update id="setmemberUpdate">
+		UPDATE member SET nickName = #{vo.nickName}, name = #{vo.name}, email = #{vo.email},
+			gender = #{vo.gender}, birthday = #{vo.birthday}, tel = #{vo.tel}, address = #{vo.address}, homePage = #{vo.homePage}, job = #{vo.job},
+			hobby = #{vo.hobby}, photo = #{vo.photo}, content = #{vo.content}, userInfor = #{vo.userInfor}
+			where mid = #{vo.mid};
+	</update>
+	<update id="setMemberDelete">
+		UPDATE member SET level = 999, userDel = 'OK', lastDate = now() WHERE mid = #{mid};
 	</update>
 </mapper>
