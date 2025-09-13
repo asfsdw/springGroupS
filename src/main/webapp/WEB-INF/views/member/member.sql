@@ -1,5 +1,6 @@
 show tables;
 DESC member;
+SELECT * from member;
 
 DROP TABLE member;
 
@@ -32,3 +33,10 @@ CREATE TABLE member(
 );
 
 INSERT INTO member VALUES(DEFAULT,'admin','1234','관리맨','관리자',DEFAULT,DEFAULT,'010-0000-0000','서울','admin@naver.com','https://','관리자','관리',DEFAULT,'관리자입니다.',DEFAULT,DEFAULT,DEFAULT,0,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
+UPDATE member SET level = level = 0 WHERE mid = 'admin';
+SELECT *, 
+		(SELECT count(*) FROM member 
+		WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))) AS newCount FROM member, 
+		(SELECT count(*) FROM member 
+		WHERE level = 999) AS cancleMember FROM member
+		WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7));

@@ -26,7 +26,7 @@ public interface MemberDAO {
 
 	void setTodayCnt(@Param("mid") String mid, @Param("i") int i);
 
-	void setMemberLevelUp(@Param("mid") String mid, @Param("i") int i);
+	int setMemberLevelUp(@Param("mid") String mid, @Param("level") int level);
 
 	void setTodayClear(@Param("mid") String mid, @Param("i") int i);
 
@@ -36,6 +36,8 @@ public interface MemberDAO {
 
 	List<MemberVO> getMemberList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("level") int level);
 
-	int getTotRecCnt();
+	int getTotRecCnt(@Param("flag") String flag);
+
+	List<MemberVO> getNewMemberList(@Param("flag") String flag);
 
 }

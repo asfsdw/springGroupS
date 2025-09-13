@@ -24,8 +24,8 @@ public class GuestServiceImpl implements GuestService {
 	}
 
 	@Override
-	public int getTotRecCnt() {
-		return guestDAO.getTotRecCnt();
+	public int getTotRecCnt(String flag) {
+		return guestDAO.getTotRecCnt(flag);
 	}
 
 	@Override
@@ -36,5 +36,10 @@ public class GuestServiceImpl implements GuestService {
 	@Override
 	public int getMemberGuestCnt(String mid, String nickName, String name) {
 		return guestDAO.getMemberGuestCnt(mid, nickName, name);
+	}
+
+	@Override
+	public List<GuestVO> getNewGuestList(String flag) {
+		return guestDAO.getNewGuestList(flag);
 	}
 }

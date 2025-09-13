@@ -225,8 +225,8 @@ public class MemberController {
 		MemberVO vo = memberService.getMemberIdSerach(mid);
 		// 준회원이면.
 		if(vo.getLevel() == 3) {
-			// level -1.
-			memberService.setMemberLevelUp(vo.getMid(), 1);
+			// level = 2.
+			memberService.setMemberLevelUp(vo.getMid(), 2);
 			// 멤버 등급 세션 수정.
 			session.setAttribute("sStrLevel", "정회원");
 		}
@@ -329,13 +329,13 @@ public class MemberController {
 	// 회원 리스트.
 	@GetMapping("/MemberList")
 	public String memberListGet(Model model, HttpSession session,
+			String flag,
 			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize,
-			@RequestParam(name="level", defaultValue = "99", required = false) int level) {
-		int totRecCnt = memberService.getTotRecCnt();
+			@RequestParam(name="level", defaultValue = "100", required = false) int level) {
+		int totRecCnt = memberService.getTotRecCnt(flag);
 		int totPage = (int)Math.ceil((double)totRecCnt/pageSize);
 		int startIndexNo = (pag-1) * pageSize;
-		int curScrStartNo = totRecCnt - startIndexNo;
 		
 		int blockSize = 3;
 		int curBlock = (pag - 1) / blockSize;
@@ -344,6 +344,14 @@ public class MemberController {
 		List<MemberVO> vos = memberService.getMemberList(startIndexNo, pageSize, level);
 		
 		model.addAttribute("vos", vos);
+		
+		model.addAttribute("pag", pag);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("totPage", totPage);
+		model.addAttribute("blockSize", blockSize);
+		model.addAttribute("curBlock", curBlock);
+		model.addAttribute("lastBlock", lastBlock);
+		
 		return "member/memberList";
 	}
 	

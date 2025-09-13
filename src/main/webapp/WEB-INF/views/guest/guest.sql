@@ -18,3 +18,6 @@ CREATE TABLE guest (
 );
 
 INSERT INTO guest VALUES (DEFAULT, '관리자', '방명록 서비스를 시작합니다.', 'solra@daum.net', 'github.com/asfsdw', DEFAULT, '192.168.50.53');
+
+SELECT * FROM guest WHERE concat(year(vDate),'-',month(vDate),'-',day(vDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7));
+SELECT *, (SELECT count(*) FROM guest WHERE concat(year(vDate),'-',month(vDate),'-',day(vDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))) AS newCount FROM guest WHERE concat(year(vDate),'-',month(vDate),'-',day(vDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7)) LIMIT 1;

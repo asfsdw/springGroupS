@@ -12,10 +12,12 @@ public interface GuestDAO {
 
 	int setGuestInput(@Param("vo") GuestVO vo);
 
-	int getTotRecCnt();
+	int getTotRecCnt(@Param("flag") String flag);
 
 	int setGuestDelete(@Param("idx") int idx);
 
 	int getMemberGuestCnt(@Param("mid") String mid, @Param("nickName") String nickName, @Param("name") String name);
+
+	List<GuestVO> getNewGuestList(@Param("flag") String flag);
 
 }

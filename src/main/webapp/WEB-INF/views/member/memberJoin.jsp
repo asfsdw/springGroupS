@@ -433,10 +433,6 @@
 				<input type="checkbox" name="hobby" value="기타" class="form-check-input mt-2" />&nbsp;<span class="mt-1 me-2">기타</span>
 			</div>
 			<div class="input-group mb-3">
-				<label for="photo" class="input-group-text boxWidth">프로필 사진</label>
-				<input type="file" name="fName" id="file" class="form-control" />
-			</div>
-			<div class="input-group mb-3">
 				<label for="content" class="input-group-text boxWidth">자기소개</label>
 				<textarea rows="6" name="content" id="content" placeholder="자기소개를 입력해주세요." class="form-control"></textarea>
 			</div>
@@ -451,6 +447,16 @@
 					<label class="form-check-label">
 						<input type="radio" class="form-check-input" name="userInfor" value="비공개" > 비공개
 					</label>
+				</div>
+			</div>
+			<div class="input-group mb-3">
+				<label for="photo" class="input-group-text boxWidth">프로필 사진</label>
+				<input type="file" name="fName" id="file" class="form-control" />
+			</div>
+			<div class="input-group mb-3">
+				<label for="photo" class="input-group-text boxWidth">프로필 사진 미리보기</label>
+				<div class="d-flex" style="flex-grow: 1; justify-content: flex-end;">
+					<img src="${ctp}/member/${vo.photo}" width="200px" />
 				</div>
 			</div>
 		</div>

@@ -13,10 +13,20 @@
 		SELECT * FROM member WHERE nickName = #{nickName};
 	</select>
 	<select id="getMemberList" resultType="com.spring.springGroupS.vo.MemberVO">
-		SELECT * FROM member <if test="level != 99">WHERE level = #{level}</if> ORDER BY mid LIMIT #{startIndexNo}, #{pageSize};
+		SELECT * FROM member <if test="level != 100">WHERE level = #{level}</if> ORDER BY mid LIMIT #{startIndexNo}, #{pageSize};
+	</select>
+	<select id="getNewMemberList" resultType="com.spring.springGroupS.vo.MemberVO">
+		SELECT *, 
+		(SELECT count(*) FROM member 
+		WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))) AS newCount, 
+		(SELECT count(*) FROM member 
+		WHERE level = 999) AS cancelMember FROM member
+		WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7)) 
+		<if test="flag == null">LIMIT 1</if>;
 	</select>
 	<select id="getTotRecCnt" resultType="int">
-		SELECT count(idx) FROM member;
+		SELECT count(idx) FROM member 
+		<if test="flag == 'new'">WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))</if>;
 	</select>
 	
 	
@@ -45,10 +55,10 @@
 		UPDATE member SET todayCnt = todayCnt + #{i} WHERE mid = #{mid};
 	</update>
 	<update id="setTodayClear">
-		UPDATE member SET todayCnt = todayCnt = #{i} WHERE mid = #{mid};
+		UPDATE member SET todayCnt = #{i} WHERE mid = #{mid};
 	</update>
 	<update id="setMemberLevelUp">
-		UPDATE member SET level = level - #{i} WHERE mid = #{mid};
+		UPDATE member SET level = #{level} <if test="level == 999">, userDel = 'OK'</if><if test="level != 999">, userDel = 'NO'</if> WHERE mid = #{mid};
 	</update>
 	<update id="setmemberUpdate">
 		UPDATE member SET nickName = #{vo.nickName}, name = #{vo.name}, email = #{vo.email},

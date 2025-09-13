@@ -10,10 +10,12 @@ public interface GuestService {
 
 	int setGuestInput(GuestVO vo);
 
-	int getTotRecCnt();
+	int getTotRecCnt(String flag);
 
 	int setGuestDelete(int idx);
 
 	int getMemberGuestCnt(String mid, String nickName, String name);
+
+	List<GuestVO> getNewGuestList(String flag);
 
 }

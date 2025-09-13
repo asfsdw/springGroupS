@@ -24,7 +24,7 @@ public interface MemberService {
 
 	void setTodayCnt(String mid, int i);
 
-	void setMemberLevelUp(String mid, int i);
+	int setMemberLevelUp(String mid, int level);
 
 	void setTodayClear(String mid, int i);
 
@@ -34,6 +34,8 @@ public interface MemberService {
 
 	List<MemberVO> getMemberList(int startIndexNo, int pageSize, int level);
 
-	int getTotRecCnt();
+	int getTotRecCnt(String flag);
+
+	List<MemberVO> getNewMemberList(String flag);
 
 }

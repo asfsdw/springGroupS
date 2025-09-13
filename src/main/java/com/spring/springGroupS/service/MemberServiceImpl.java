@@ -59,8 +59,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public void setMemberLevelUp(String mid, int i) {
-		memberDAO.setMemberLevelUp(mid, i);
+	public int setMemberLevelUp(String mid, int level) {
+		return memberDAO.setMemberLevelUp(mid, level);
 	}
 
 	@Override
@@ -84,8 +84,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int getTotRecCnt() {
-		return memberDAO.getTotRecCnt();
+	public int getTotRecCnt(String flag) {
+		return memberDAO.getTotRecCnt(flag);
+	}
+
+	@Override
+	public List<MemberVO> getNewMemberList(String flag) {
+		return memberDAO.getNewMemberList(flag);
 	}
 
 }
