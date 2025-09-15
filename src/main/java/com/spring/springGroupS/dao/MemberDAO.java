@@ -26,7 +26,7 @@ public interface MemberDAO {
 
 	void setTodayCnt(@Param("mid") String mid, @Param("i") int i);
 
-	int setMemberLevelUp(@Param("mid") String mid, @Param("level") int level);
+	int setMemberLevelUp(@Param("idx") int idx, @Param("level") int level);
 
 	void setTodayClear(@Param("mid") String mid, @Param("i") int i);
 

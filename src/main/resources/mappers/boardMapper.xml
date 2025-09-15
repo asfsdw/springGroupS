@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS.dao.BoardDAO">
+	<select id="getBoardList" resultType="com.spring.springGroupS.vo.BoardVO">
+		SELECT *, timestampdiff(hour, wDate, now()) AS hourDiff, datediff(now(), wDate) AS dateDiff FROM board ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
+	</select>
+	<select id="getTotRecCnt" resultType="int">
+		SELECT count(idx) FROM board 
+		<if test="flag == 'new'">WHERE concat(year(wDate),'-',month(wDate),'-',day(wDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))</if>;
+	</select>
+	<select id="getBoardContent" resultType="com.spring.springGroupS.vo.BoardVO">
+		SELECT * FROM board WHERE idx = #{idx};
+	</select>
+	
+	
+	
+	<insert id="setBoardInput">
+		INSERT INTO board VALUES(DEFAULT, #{vo.mid}, #{vo.nickName}, #{vo.title}, #{vo.content}, #{vo.hostIP}, #{vo.openSW}, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+	</insert>
+</mapper>

@@ -157,6 +157,14 @@ public class MessageController {
 			model.addAttribute("message", "정보 수정에 실패했습니다.");
 			model.addAttribute("url", "/member/MemberUpdate?mid="+mid);
 		}
+		else if(msgFlag.equals("boardInputOk")) {
+			model.addAttribute("message", "게시글이 작성되었습니다.");
+			model.addAttribute("url", "/board/BoardList");
+		}
+		else if(msgFlag.equals("boardInputNo")) {
+			model.addAttribute("message", "게시글 작성에 실패했습니다.");
+			model.addAttribute("url", "/board/BoardInput");
+		}
 		return "include/message";
 	}
 }

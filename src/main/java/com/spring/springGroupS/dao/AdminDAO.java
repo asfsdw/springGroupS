@@ -1,5 +1,9 @@
 package com.spring.springGroupS.dao;
 
-public interface AdminDAO {
+import org.apache.ibatis.annotations.Param;
 
+public interface AdminDAO {
+	int setMemberLevelSelectChange(@Param("idx") int idx, @Param("level") int levelSelect);
+
+	int memberDeleteGet(@Param("idx") int idx);
 }

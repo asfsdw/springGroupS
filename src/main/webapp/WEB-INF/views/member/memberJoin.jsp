@@ -415,11 +415,11 @@
 				<label for="job" class="input-group-text boxWidth">직 업</label>
 				<select name="job" id="job" class="form-control">
 					<option value="none">직업</option>
-					<option value="student">학생</option>
-					<option value="business">회사원</option>
-					<option value="self">자영업자</option>
-					<option value="official">공무원</option>
-					<option value="etc">기타</option>
+					<option>학생</option>
+					<option>회사원</option>
+					<option>자영업자</option>
+					<option>공무원</option>
+					<option>기타</option>
 				</select>
 			</div>
 			<div class="input-group mb-3">

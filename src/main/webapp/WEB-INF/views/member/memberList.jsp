@@ -51,15 +51,20 @@
 				<th>성별</th>
 				<th>최종방문일</th>
 			</tr>
-			<c:forEach var="vo" items="${vos}">
+			<c:forEach var="vo" items="${vos}" varStatus="st">
 				<tr>
-					<td>${vo.idx}</td>
-					<td>${vo.mid}</td>
+					<td>${st.count}</td>
+					<c:if test="${vo.userInfor=='공개'}"><td>${vo.mid}</td></c:if>
+					<c:if test="${vo.userInfor!='공개'}"><td>비공개</td></c:if>
 					<td>${vo.nickName}</td>
-					<td>${vo.name}</td>
-					<td>${fn:substring(vo.birthday,0,10)}</td>
-					<td>${vo.gender}</td>
-					<td>${fn:substring(vo.lastDate,0,16)}</td>
+					<c:if test="${vo.userInfor=='공개'}"><td>${vo.name}</td></c:if>
+					<c:if test="${vo.userInfor!='공개'}"><td>비공개</td></c:if>
+					<c:if test="${vo.userInfor=='공개'}"><td>${fn:substring(vo.birthday,0,10)}</td></c:if>
+					<c:if test="${vo.userInfor!='공개'}"><td>비공개</td></c:if>
+					<c:if test="${vo.userInfor=='공개'}"><td>${vo.gender}</td></c:if>
+					<c:if test="${vo.userInfor!='공개'}"><td>비공개</td></c:if>
+					<c:if test="${vo.userInfor=='공개'}"><td>${fn:substring(vo.lastDate,0,16)}</td></c:if>
+					<c:if test="${vo.userInfor!='공개'}"><td>비공개</td></c:if>
 				</tr>
 			</c:forEach>
 		</table>

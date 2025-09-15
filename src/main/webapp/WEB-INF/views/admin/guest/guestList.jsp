@@ -124,11 +124,11 @@
 		<p><br/></p>
 		<span class="d-flex me-2" style="flex-grow: 1; justify-content: flex-end;">한 페이지에 최대:&nbsp;&nbsp;
 			<select name="viewPageCnt" id="viewPageCnt" onchange="viewPageCheck()">
-				<option value="5" ${pageSize==5 ? 'selected' : ''}>5개씩 보기</option>
-				<option value="10"<c:if test="${pageSize == 10}">selected</c:if>>10개씩 보기</option>
-				<option value="15"<c:if test="${pageSize == 15}">selected</c:if>>15개씩 보기</option>
-				<option value="20"<c:if test="${pageSize == 20}">selected</c:if>>20개씩 보기</option>
-				<option value="30"<c:if test="${pageSize == 30}">selected</c:if>>30개씩 보기</option>
+				<option value="5" ${gVO.pageSize==5 ? 'selected' : ''}>5개씩 보기</option>
+				<option value="10"<c:if test="${gVO.pageSize == 10}">selected</c:if>>10개씩 보기</option>
+				<option value="15"<c:if test="${gVO.pageSize == 15}">selected</c:if>>15개씩 보기</option>
+				<option value="20"<c:if test="${gVO.pageSize == 20}">selected</c:if>>20개씩 보기</option>
+				<option value="30"<c:if test="${gVO.pageSize == 30}">selected</c:if>>30개씩 보기</option>
 			</select>
 		</span>
 		<hr/>
@@ -136,7 +136,8 @@
 			<div id="${vo.idx}demo"></div>
 			<table class="table table-borderless m-0 p-0">
 				<tr>
-					<td>번호: ${curScrStartNo} &nbsp;&nbsp;
+					<!-- jstl에서는 PageVO에 담긴 값을 바꿀 수 없기 때문에 index(0,1,2...)로 빼준다. -->
+					<td>번호: ${gVO.curScrStartNo-st.index} &nbsp;&nbsp;
 						<a href="javascript:guestUpdate(${vo.idx})" class="btn btn-info btn-sm">수정</a>
 						<a href="javascript:guestDelete(${vo.idx})" class="btn btn-danger btn-sm">삭제</a>
 					</td>
@@ -153,18 +154,23 @@
 				<tr>
 					<th>이메일</th>
 					<td colspan="3">
-						<c:if test="${empty vo.email || fn:length(vo.email) < 6 || fn:indexOf(vo.email, '@') == -1 || fn:indexOf(vo.email, '.') == -1}"> - 없음 -</c:if>
-						<c:if test="${!empty vo.email && fn:length(vo.email) >= 6 && fn:indexOf(vo.email, '@') != -1 && fn:indexOf(vo.email, '.') != -1}">${vo.email}</c:if>
+						<c:if test="${empty vo.email || fn:length(vo.email) < 6 || fn:indexOf(vo.email, '@') == -1 
+							|| fn:indexOf(vo.email, '.') == -1}"> - 없음 -</c:if>
+						<c:if test="${!empty vo.email && fn:length(vo.email) >= 6 && fn:indexOf(vo.email, '@') != -1 
+							&& fn:indexOf(vo.email, '.') != -1}">${vo.email}</c:if>
 					</td>
 				</tr>
 				<tr>
 					<th>홈페이지</th>
 					<td colspan="3">
-						<c:if test="${empty vo.homePage || fn:length(vo.homePage) < 11 || fn:indexOf(vo.homePage, '.') == -1}"> - 없음 -</c:if>
-						<c:if test="${!empty vo.homePage && fn:length(vo.homePage) >= 11 && fn:indexOf(vo.homePage, '.') != -1 && fn:indexOf(vo.homePage, 'https://') == -1}">
+						<c:if test="${empty vo.homePage || fn:length(vo.homePage) < 11 
+							|| fn:indexOf(vo.homePage, '.') == -1}"> - 없음 -</c:if>
+						<c:if test="${!empty vo.homePage && fn:length(vo.homePage) >= 11 
+							&& fn:indexOf(vo.homePage, '.') != -1 && fn:indexOf(vo.homePage, 'https://') == -1}">
 							<a href="https://${vo.homePage}" target="_blank">https://${vo.homePage}</a>
 						</c:if>
-						<c:if test="${!empty vo.homePage && fn:length(vo.homePage) >= 11 && fn:indexOf(vo.homePage, '.') != -1 && fn:indexOf(vo.homePage, 'https://') != -1}">
+						<c:if test="${!empty vo.homePage && fn:length(vo.homePage) >= 11 
+							&& fn:indexOf(vo.homePage, '.') != -1 && fn:indexOf(vo.homePage, 'https://') != -1}">
 							<a href="${vo.homePage}" target="_blank">${vo.homePage}</a>
 						</c:if>
 					</td>
@@ -175,22 +181,25 @@
 				</tr>
 			</table>
 			<br/>
-			<c:set var="curScrStartNo" value="${curScrStartNo - 1}" />
 		</c:forEach>
 		<!-- 블록페이지 시작 -->
 		<div class="pagination justify-content-center">
-			<c:if test="${pag > 1}"><a href="${ctp}/admin/guest/GuestList?pag=1&pageSize=${pageSize}" class="page-item page-link">첫 페이지</a></c:if>
-			<c:if test="${curBlock > 0}"><a href="${ctp}/admin/guest/GuestList?pag=${(curBlock - 1) * blockSize + 1}&pageSize=${pageSize}" class="page-item page-link">이전 블록</a></c:if>
-			<c:forEach var="i" begin="${(curBlock * blockSize) + 1}" end="${(curBlock * blockSize) + blockSize}" varStatus="st">
-				<c:if test="${i <= totPage && i == pag}">
+			<c:if test="${gVO.pag > 1}"><a href="${ctp}/admin/guest/GuestList?pag=1&pageSize=${gVO.pageSize}" 
+				class="page-item page-link">첫 페이지</a></c:if>
+			<c:if test="${gVO.curBlock > 0}"><a href="${ctp}/admin/guest/GuestList?pag=${(gVO.curBlock - 1) * gVO.blockSize + 1}&pageSize=${gVO.pageSize}" 
+				class="page-item page-link">이전 블록</a></c:if>
+			<c:forEach var="i" begin="${(gVO.curBlock * gVO.blockSize) + 1}" end="${(gVO.curBlock * gVO.blockSize) + gVO.blockSize}" varStatus="st">
+				<c:if test="${i <= gVO.totPage && i == gVO.pag}">
 					<span class="page-item active page-link">${i}</span>
 				</c:if>
-				<c:if test="${i <= totPage && i != pag}">
-					<a href="${ctp}/admin/guest/GuestList?pag=${i}&pageSize=${pageSize}" class="page-item page-link">${i}</a>
+				<c:if test="${i <= gVO.totPage && i != gVO.pag}">
+					<a href="${ctp}/admin/guest/GuestList?pag=${i}&pageSize=${gVO.pageSize}" class="page-item page-link">${i}</a>
 				</c:if>
 			</c:forEach>
-			<c:if test="${curBlock < lastBlock}"><a href="${ctp}/admin/guest/GuestList?pag=${(curBlock + 1) * blockSize + 1}&pageSize=${pageSize}" class="page-item page-link">다음 블록</a></c:if>
-			<c:if test="${pag < totPage}"><a href="${ctp}/admin/guest/GuestList?pag=${totPage}&pageSize=${pageSize}" class="page-item page-link">마지막 페이지</a></c:if>
+			<c:if test="${gVO.curBlock < gVO.lastBlock}"><a href="${ctp}/admin/guest/GuestList?pag=${(gVO.curBlock + 1) * gVO.blockSize + 1}&pageSize=${gVO.pageSize}" 
+				class="page-item page-link">다음 블록</a></c:if>
+			<c:if test="${gVO.pag < gVO.totPage}"><a href="${ctp}/admin/guest/GuestList?pag=${gVO.totPage}&pageSize=${gVO.pageSize}" 
+				class="page-item page-link">마지막 페이지</a></c:if>
 		</div>
 		<!-- 블록페이지 끝 -->
 	</div>

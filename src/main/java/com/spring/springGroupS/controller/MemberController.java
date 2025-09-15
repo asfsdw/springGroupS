@@ -226,7 +226,7 @@ public class MemberController {
 		// 준회원이면.
 		if(vo.getLevel() == 3) {
 			// level = 2.
-			memberService.setMemberLevelUp(vo.getMid(), 2);
+			memberService.setMemberLevelUp(vo.getIdx(), 2);
 			// 멤버 등급 세션 수정.
 			session.setAttribute("sStrLevel", "정회원");
 		}

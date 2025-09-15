@@ -40,3 +40,5 @@ SELECT *,
 		(SELECT count(*) FROM member 
 		WHERE level = 999) AS cancleMember FROM member
 		WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7));
+		
+SELECT *, to_days(now()) - to_days(lastDate) AS cancelDate FROM member ORDER BY mid;

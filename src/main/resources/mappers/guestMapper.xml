@@ -9,6 +9,7 @@
 		(SELECT count(*) FROM guest 
 		WHERE concat(year(vDate),'-',month(vDate),'-',day(vDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))) AS newCount FROM guest 
 		WHERE concat(year(vDate),'-',month(vDate),'-',day(vDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7)) 
+		ORDER BY idx DESC 
 		<if test="flag == null">LIMIT 1</if>;
 	</select>
 	<select id="getUserSearch" resultType="com.spring.springGroupS.vo.UserVO">

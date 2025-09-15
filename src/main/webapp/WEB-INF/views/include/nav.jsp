@@ -34,7 +34,7 @@
 		</c:if>
 		<a href="${ctp}/guest/GuestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">방명록</a>
 		<c:if test="${sLevel < 4}">
-			<a href="#tour" class="w3-bar-item w3-button w3-padding-large w3-hide-small">게시판</a>
+			<a href="${ctp}/board/BoardList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">게시판</a>
 		</c:if>
 		<c:if test="${sLevel < 3}">
 			<a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">자료실</a>

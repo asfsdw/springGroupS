@@ -59,8 +59,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int setMemberLevelUp(String mid, int level) {
-		return memberDAO.setMemberLevelUp(mid, level);
+	public int setMemberLevelUp(int idx, int level) {
+		return memberDAO.setMemberLevelUp(idx, level);
 	}
 
 	@Override

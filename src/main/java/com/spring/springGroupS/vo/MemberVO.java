@@ -30,4 +30,5 @@ public class MemberVO {
 	
 	private int newCount;
 	private int cancelMember;
+	private int cancelDate;
 }

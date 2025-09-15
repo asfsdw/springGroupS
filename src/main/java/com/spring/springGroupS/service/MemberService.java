@@ -24,7 +24,7 @@ public interface MemberService {
 
 	void setTodayCnt(String mid, int i);
 
-	int setMemberLevelUp(String mid, int level);
+	int setMemberLevelUp(int idx, int level);
 
 	void setTodayClear(String mid, int i);
 
