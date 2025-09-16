@@ -6,11 +6,11 @@
 	</select>
 	<select id="getNewGuestList" resultType="com.spring.springGroupS.vo.GuestVO">
 		SELECT *, 
-		(SELECT count(*) FROM guest 
-		WHERE concat(year(vDate),'-',month(vDate),'-',day(vDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))) AS newCount FROM guest 
-		WHERE concat(year(vDate),'-',month(vDate),'-',day(vDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7)) 
-		ORDER BY idx DESC 
-		<if test="flag == null">LIMIT 1</if>;
+			(SELECT count(*) FROM guest 
+			WHERE vDate >= date_add(now(), interval -7 day)) AS newCount FROM guest 
+			WHERE vDate >= date_add(now(), interval -7 day) 
+			ORDER BY idx DESC 
+			<if test="flag == ''">LIMIT 1</if>;
 	</select>
 	<select id="getUserSearch" resultType="com.spring.springGroupS.vo.UserVO">
 		SELECT * FROM user WHERE mid = #{mid};
@@ -23,8 +23,9 @@
 	</select>
 	
 	<select id="getTotRecCnt" resultType="int">
-		SELECT count(idx) FROM guest 
-		<if test="flag == 'new'">WHERE concat(year(vDate),'-',month(vDate),'-',day(vDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))</if>;
+		SELECT count(idx) FROM guest <if test="flag != '' or search != ''">WHERE </if>
+			<if test="flag == 'new'">vDate >= date_add(now(), interval -7 day)</if>
+			<if test="search != ''">${search} LIKE concat('%'#{searchStr}'%')</if>;
 	</select>
 	<select id="getMemberGuestCnt" resultType="int">
 		SELECT count(*) FROM guest WHERE name = #{mid} or name = #{nickName} or name = #{name};

@@ -14,5 +14,9 @@ public class PageVO {
 	private int curBlock;
 	private int lastBlock;
 	
-	private String flag;
+	private String section;		// 방명록, 게시판, 자료실 어떤 곳에서 쓰는지.
+	private String part;			// 학습, 여행, 음식 등 말머리.
+	private String search;		// 글제목, 글쓴이, 글내용 등
+	private String searchStr;	// 검색어.
+	private String flag;			// flag는 totRecCnt에서 조건을 줄 때 사용한다(7일 이내 새글 등).
 }

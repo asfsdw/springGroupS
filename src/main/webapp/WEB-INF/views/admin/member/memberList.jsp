@@ -1,6 +1,8 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%pageContext.setAttribute("CRLF","\r\n");%>
+<%pageContext.setAttribute("LF","\n");%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"></c:set>
 <!DOCTYPE html>
 <html>
@@ -250,8 +252,10 @@
 							${st.count}
 						</td>
 						<td>
+							<!-- CRLF, LF 모두 바꿔야 해결할 수 있다. -->
+							<c:set var="content" value="${fn:replace(fn:replace(vo.content,CRLF,'<br/>'),LF,'<br/>')}" />
 							<a href="" onclick="modal('${vo.idx}','${vo.mid}','${vo.nickName}','${vo.email}','${vo.gender}','${vo.birthday}','${vo.tel}',
-								'${vo.address}','${vo.homePage}','${vo.job}','${vo.hobby}','${vo.photo}','${vo.content}','${vo.userInfor}','${vo.userDel}',
+								'${vo.address}','${vo.homePage}','${vo.job}','${vo.hobby}','${vo.photo}','${content}','${vo.userInfor}','${vo.userDel}',
 								'${vo.point}','${vo.level}','${vo.visitCnt}','${vo.todayCnt}','${vo.startDate}','${vo.lastDate}')" 
 								data-bs-toggle="modal" data-bs-target="#myModal" class="link-primary">${vo.mid}</a>
 						</td>
@@ -264,7 +268,9 @@
 						<td>
 							<c:if test="${vo.userDel == 'NO'}">활동중</c:if>
 							<c:if test="${vo.userDel == 'OK'}">탈퇴대기중
-								<c:if test="${vo.cancelDate >= 30}"><font color="red"><br/>(<a href="javascript:memberDelete('${vo.idx}')">${vo.cancelDate}</a>일)</font></c:if>
+								<c:if test="${vo.cancelDate >= 30}">
+									<font color="red"><br/>(<a href="javascript:memberDelete('${vo.idx}')">${vo.cancelDate}</a>일)</font>
+								</c:if>
 								<c:if test="${vo.cancelDate < 30}"><br/>(${vo.cancelDate}일)</c:if>
 							</c:if>
 						</td>

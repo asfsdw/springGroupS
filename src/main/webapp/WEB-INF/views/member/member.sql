@@ -34,11 +34,15 @@ CREATE TABLE member(
 
 INSERT INTO member VALUES(DEFAULT,'admin','1234','관리맨','관리자',DEFAULT,DEFAULT,'010-0000-0000','서울','admin@naver.com','https://','관리자','관리',DEFAULT,'관리자입니다.',DEFAULT,DEFAULT,DEFAULT,0,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
 UPDATE member SET level = level = 0 WHERE mid = 'admin';
+SELECT *, (SELECT count(idx) FROM member WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now())-7)) AS newCount FROM member;
+
 SELECT *, 
-		(SELECT count(*) FROM member 
-		WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))) AS newCount FROM member, 
-		(SELECT count(*) FROM member 
-		WHERE level = 999) AS cancleMember FROM member
-		WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7));
-		
+			(SELECT count(*) FROM member 
+			WHERE startDate >= date_add(now(), interval -7 day)) AS newCount, 
+			(SELECT count(*) FROM member 
+			WHERE level = 999) AS cancelMember FROM member
+			WHERE startDate >= date_add(now(), interval -7 day);
+			
 SELECT *, to_days(now()) - to_days(lastDate) AS cancelDate FROM member ORDER BY mid;
+
+SELECT *, concat(year(startDate),'-',month(startDate),'-',day(startDate)) AS 가입일, concat(year(now()),'-',month(now()),'-',day(now())-7) AS 오늘날짜 FROM member;

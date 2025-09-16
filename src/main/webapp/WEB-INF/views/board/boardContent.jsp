@@ -50,7 +50,7 @@
 			// 게시글 삭제.
 			function deleteCheck() {
 				let ans = confirm("게시글을 삭제하시겠습니까?");
-				if(ans) location.href = "BoardDelete?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}";
+				if(ans) location.href = "BoardDelete?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}";
 			}
 			// 댓글 입력.
 			function replyCheck() {
@@ -150,11 +150,11 @@
 			${vo.title}
 			/
 			<!-- 한 번 누른 좋아요, 싫어요를 누른 게시글에서는 좋아요, 싫어요를 누르지 못하게 한다. -->
-			<c:if test="${!fn:contains(sContentIdx, 'boardGood'+=vo.idx)}">
-				<a href="javascript:goodCheckPlus()" title="좋아요" class="text-decoration-none text-dark link-primary">👍</a>
-				<a href="javascript:goodCheckMinus()" title="싫어요" class="text-decoration-none text-dark link-primary">👎</a>
+			<c:if test="${!fn:contains(sContentIdx, 'boardGood'+=sMid+=vo.idx)}">
+				<a href="javascript:goodCheckPlus()" title="좋아요" class="text-decoration-none">👍</a>
+				<a href="javascript:goodCheckMinus()" title="싫어요" class="text-decoration-none">👎</a>
 			</c:if>
-			<c:if test="${fn:contains(sContentIdx, 'boardGood'+=vo.idx)}">
+			<c:if test="${fn:contains(sContentIdx, 'boardGood'+=sMid+=vo.idx)}">
 				<a>👌</a>
 			</c:if>
 		</h2>
@@ -194,9 +194,9 @@
 				</td>
 				<td class="text-end">
 					<c:if test="${vo.mid == sMid}">
-						<input type="button" value="수정" onclick="location.href='${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}';" class="btn btn-warning" />
+						<input type="button" value="수정" onclick="location.href='${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}';" class="btn btn-warning" />
 					</c:if>
-					<c:if test="${vo.mid == sMid || sAdmin == 'adminOK'}">
+					<c:if test="${vo.mid == sMid || sLevel == 0}">
 						<input type="button" value="삭제" onclick="deleteCheck()" class="btn btn-danger" />
 					</c:if>
 				</td>
@@ -258,7 +258,7 @@
 							비밀글입니다.
 						</c:if>
 						<c:if test="${nextVO.openSW != 'NO'}">
-							👆<a href="${ctp}/board/BoardContent?idx=${nextVO.idx}&pag=${pag}&pageSize=${pageSize}">다음글: ${nextVO.title}</a>
+							👆<a href="${ctp}/board/BoardContent?idx=${nextVO.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}">다음글: ${nextVO.title}</a>
 						</c:if>
 					</c:if>
 				</td>
@@ -270,7 +270,7 @@
 							비밀글입니다.
 						</c:if>
 						<c:if test="${preVO.openSW != 'NO'}">
-							👇<a href="${ctp}/board/BoardContent?idx=${preVO.idx}&pag=${pag}&pageSize=${pageSize}">이전글: ${preVO.title}</a>
+							👇<a href="${ctp}/board/BoardContent?idx=${preVO.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}">이전글: ${preVO.title}</a>
 						</c:if>
 					</c:if>
 				</td>

@@ -10,7 +10,7 @@ public interface GuestService {
 
 	int setGuestInput(GuestVO vo);
 
-	int getTotRecCnt(String flag);
+	int getTotRecCnt(String flag, String search, String searchStr);
 
 	int setGuestDelete(int idx);
 

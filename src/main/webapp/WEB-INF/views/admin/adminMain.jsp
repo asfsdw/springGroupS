@@ -25,7 +25,7 @@
 			</tr>
 			<tr>
 				<th>게시판 새글</th>
-				<td>건</td>
+				<td><a href="${ctp}/admin/board/BoardList?flag=new"><font color="blue">${boardNewCount}건</font></a></td>
 			</tr>
 			<tr>
 				<th>신고글 새글</th>

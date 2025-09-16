@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.springGroupS.common.Pagination;
 import com.spring.springGroupS.service.AdminService;
+import com.spring.springGroupS.service.BoardService;
 import com.spring.springGroupS.service.GuestService;
 import com.spring.springGroupS.service.MemberService;
+import com.spring.springGroupS.vo.BoardVO;
 import com.spring.springGroupS.vo.GuestVO;
 import com.spring.springGroupS.vo.MemberVO;
 import com.spring.springGroupS.vo.PageVO;
@@ -30,26 +32,35 @@ public class AdminController {
 	MemberService memberService;
 	@Autowired
 	GuestService guestService;
+	@Autowired
+	BoardService boardService;
 	
+	// 관리자 메뉴.
 	@GetMapping("/AdminMain")
 	public String adminMainGet(Model model, String flag) {
 		// flag != null이면 limit 1이 mapper에서 안 보이는 구조(if).
 		List<GuestVO> gVOS = guestService.getNewGuestList(flag);
 		List<MemberVO> mVOS = memberService.getNewMemberList(flag);
+		List<BoardVO> bVOS = boardService.getNewBoardList(flag);
 		
 		int memberNewCount = 0;
 		int cancelMember = 0;
-		// adminMain에서 건 수 보여주기 위해 newCount만 뽑아서 보낸다.
-		int guestNewCount = gVOS.get(0).getNewCount();
+		int guestNewCount = 0;
+		int boardNewCount = 0;
+		guestNewCount = gVOS.get(0).getNewCount();
+		// gVOS의 검색결과가 있으면 건 수 갱신.
+		if(!gVOS.isEmpty()) guestNewCount = mVOS.get(0).getNewCount();
 		// mVOS의 검색결과가 있으면 건 수 갱신.
 		if(!mVOS.isEmpty()) {
 			memberNewCount = mVOS.get(0).getNewCount();
 			// 탈퇴대기중인 회원 건 수.
 			cancelMember = mVOS.get(0).getCancelMember();
 		}
+		if(!bVOS.isEmpty()) boardNewCount = bVOS.get(0).getNewCount();
 		model.addAttribute("guestNewCount", guestNewCount);
 		model.addAttribute("memberNewCount", memberNewCount);
 		model.addAttribute("cancelMember", cancelMember);
+		model.addAttribute("boardNewCount", boardNewCount);
 		
 		return "admin/adminMain";
 	}
@@ -67,11 +78,12 @@ public class AdminController {
 	// pagination 사용자 정의 메소드 부를 때 방명록 목록에서 주는 값(pag, pageSize 등)을 넣어주기 위해 PageVO로 받는다.
 	public String guestListGet(Model model, PageVO vo) {
 		// pagination 처리.
-		vo = pagination.pagination(vo, "guest");
+		vo.setSection("guest");
+		vo = pagination.pagination(vo);
 		
 		// flag가 null이거나 공백이면 전체 리스트를 vos에 담는다. flag가 null이 아니면 최근 7일의 리스트를 vos에 담는다.
 		List<GuestVO> vos = null;
-		if(vo.getFlag() == null || vo.getFlag().equals("")) vos = guestService.getGuestList(vo.getStartIndexNo(), vo.getPageSize());
+		if(vo.getFlag().equals("")) vos = guestService.getGuestList(vo.getStartIndexNo(), vo.getPageSize());
 		else vos = guestService.getNewGuestList(vo.getFlag());
 		
 		model.addAttribute("gVO", vo);
@@ -82,34 +94,18 @@ public class AdminController {
 
 	// 관리자 메뉴에서 회원 리스트 보여주기.
 	@GetMapping("/member/MemberList")
-	public String memberListGet(Model model, String flag,
-			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
-			@RequestParam(name="pageSize", defaultValue = "10", required = false) int pageSize,
-			@RequestParam(name="level", defaultValue = "100", required = false) int level) {
-		// 7일 이내에 가입한 사람만 보여줄 때의 페이징처리를 위해 flag변수 사용.
-		int totRecCnt = memberService.getTotRecCnt(flag);
-		int totPage = (int)Math.ceil((double)totRecCnt/pageSize);
-		int startIndexNo = (pag-1) * pageSize;
-		
-		int blockSize = 3;
-		int curBlock = (pag - 1) / blockSize;
-		int lastBlock = (totPage - 1) / blockSize;
+	public String memberListGet(Model model, PageVO vo,
+			@RequestParam(name = "level", defaultValue = "100", required = false) int level) {
+		vo.setSection("member");
+		vo = pagination.pagination(vo);
 		
 		List<MemberVO> vos = null;
-		// flag가 null이거나 공백이면 전체 리스트를 vos에 담는다. flag가 null이 아니면 최근 7일의 리스트를 vos에 담는다.
-		if(flag == null || flag.equals("")) vos = memberService.getMemberList(startIndexNo, pageSize, level);
-		else vos = memberService.getNewMemberList(flag);
+		// flag가 공백이면 전체 리스트를 vos에 담는다. flag가 공백이 아니면 최근 7일의 리스트를 vos에 담는다.
+		if(vo.getFlag().equals("")) vos = memberService.getMemberList(vo.getStartIndexNo(), vo.getPageSize(), level);
+		else vos = memberService.getNewMemberList(vo.getFlag());
 		
 		model.addAttribute("vos", vos);
-		
-		model.addAttribute("flag", flag);
-		model.addAttribute("level", level);
-		model.addAttribute("pag", pag);
-		model.addAttribute("pageSize", pageSize);
-		model.addAttribute("totPage", totPage);
-		model.addAttribute("blockSize", blockSize);
-		model.addAttribute("curBlock", curBlock);
-		model.addAttribute("lastBlock", lastBlock);
+		model.addAttribute("mVO", vo);
 		
 		return "admin/member/memberList";
 	}
@@ -130,5 +126,21 @@ public class AdminController {
 	@PostMapping("/member/MemberDelete")
 	public int memberDeletePost(int idx) {
 		return adminService.memberDeleteGet(idx);
+	}
+	
+	// 관리자 메뉴에서 게시판 보여주기.
+	@GetMapping("/board/BoardList")
+	public String boardListGet(Model model, PageVO vo) {
+		vo.setSection("board");
+		vo = pagination.pagination(vo);
+		
+		List<BoardVO> vos = null;
+		if(vo.getFlag().equals("")) vos = boardService.getBoardList(vo.getStartIndexNo(), vo.getPageSize());
+		else vos = boardService.getNewBoardList(vo.getFlag());
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("bVO", vo);
+		
+		return "admin/board/BoardList";
 	}
 }

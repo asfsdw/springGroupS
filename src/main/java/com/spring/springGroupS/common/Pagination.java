@@ -17,13 +17,27 @@ public class Pagination {
 	@Autowired
 	BoardService boardService;
 	
-	public PageVO pagination(PageVO vo, String part) {
+	public PageVO pagination(PageVO vo) {
+		vo.setSection(vo.getSection());
+		vo.setPart(vo.getPart());
+		vo.setSearch(vo.getSearch());
+		vo.setSearchStr(vo.getSearchStr());
+		vo.setFlag(vo.getFlag() == null ? "" : vo.getFlag());
+		
 		// 아무 값도 안 줬을 때 기본값이 0이기 때문에 삼항연산자의 조건을 0으로 준다.
 		vo.setPag((Integer)vo.getPag()==0 ? 1 : vo.getPag());
 		vo.setPageSize((Integer)vo.getPageSize()==0 ? 10 : vo.getPageSize());
-		if(part.equals("member")) vo.setTotRecCnt(memberService.getTotRecCnt(vo.getFlag()));
-		else if(part.equals("guest")) vo.setTotRecCnt(guestService.getTotRecCnt(vo.getFlag()));
-		else if(part.equals("board")) vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag()));
+		
+		if(vo.getSection().equals("member")) vo.setTotRecCnt(memberService.getTotRecCnt(vo.getFlag()));
+		else if(vo.getSection().equals("guest")) {
+			if(vo.getSearch() == null) vo.setTotRecCnt(guestService.getTotRecCnt(vo.getFlag(), "", ""));
+			else vo.setTotRecCnt(guestService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
+		}
+		else if(vo.getSection().equals("board")) {
+			if(vo.getSearch() == null) vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), "", ""));
+			else vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), vo.getSearch(),vo.getSearchStr()));
+		}
+		
 		vo.setTotPage((int)Math.ceil((double)vo.getTotRecCnt()/vo.getPageSize()));
 		vo.setStartIndexNo((vo.getPag()-1) * vo.getPageSize());
 		vo.setCurScrStartNo(vo.getTotRecCnt() - vo.getStartIndexNo());
@@ -32,8 +46,6 @@ public class Pagination {
 		vo.setCurBlock((vo.getPag()-1)/vo.getBlockSize());
 		vo.setLastBlock((vo.getTotPage()-1)/vo.getBlockSize());
 		
-		// flag는 7일 이내의 글만 불러올 때 사용한다.
-		vo.setFlag(vo.getFlag());
 		return vo;
 	}
 }

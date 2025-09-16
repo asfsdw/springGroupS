@@ -2,19 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS.dao.BoardDAO">
 	<select id="getBoardList" resultType="com.spring.springGroupS.vo.BoardVO">
-		SELECT *, timestampdiff(hour, wDate, now()) AS hourDiff, datediff(now(), wDate) AS dateDiff FROM board ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
+		SELECT *, timestampdiff(hour, wDate, now()) AS hourDiff, datediff(now(), wDate) AS dateDiff 
+			FROM board ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
 	</select>
 	<select id="getTotRecCnt" resultType="int">
-		SELECT count(idx) FROM board 
-		<if test="flag == 'new'">WHERE concat(year(wDate),'-',month(wDate),'-',day(wDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))</if>;
+		SELECT count(idx) FROM board <if test="flag != '' or search != ''">WHERE </if>
+			<if test="flag == 'new'">wDate >= date_add(now(), interval -7 day)</if>
+			<if test="search != ''">${search} LIKE concat('%'#{searchStr}'%')</if>;
 	</select>
 	<select id="getBoardContent" resultType="com.spring.springGroupS.vo.BoardVO">
 		SELECT * FROM board WHERE idx = #{idx};
 	</select>
-	
+	<select id="getNewBoardList" resultType="com.spring.springGroupS.vo.BoardVO">
+		SELECT *, 
+			(SELECT count(*) FROM board 
+			WHERE wDate >= date_add(now(), interval -7 day)) AS newCount FROM board 
+			WHERE wDate >= date_add(now(), interval -7 day) 
+			ORDER BY idx DESC 
+			<if test="flag == ''">LIMIT 1</if>;
+	</select>
+	<select id="getPreNextSearch" resultType="com.spring.springGroupS.vo.BoardVO">
+		SELECT idx, title FROM board WHERE 
+			<if test="str == 'preVO'"><![CDATA[idx < #{idx}]]> ORDER BY idx DESC</if>
+			<if test="str != 'preVO'"><![CDATA[idx > #{idx}]]> ORDER BY idx</if> 
+			LIMIT 1;
+	</select>
 	
 	
 	<insert id="setBoardInput">
-		INSERT INTO board VALUES(DEFAULT, #{vo.mid}, #{vo.nickName}, #{vo.title}, #{vo.content}, #{vo.hostIP}, #{vo.openSW}, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
+		INSERT INTO board VALUES(DEFAULT, #{vo.mid}, #{vo.nickName}, #{vo.title}, #{vo.content}, #{vo.hostIP}, 
+			#{vo.openSW}, DEFAULT, DEFAULT, DEFAULT, DEFAULT);
 	</insert>
+	
+	
+	
+	<update id="setBoardReadNum">
+		UPDATE board SET readNum = readNum + 1 WHERE idx = #{idx};
+	</update>
+	<update id="setBoardGood">
+		UPDATE board SET good = good + #{goodCnt} WHERE idx = #{idx};
+	</update>
+	<update id="setBoardUpdate">
+		UPDATE board SET title = #{vo.title}, content = #{vo.content}, hostIP = #{vo.hostIP}, openSW = #{vo.openSW}, wDate = now() WHERE idx = #{vo.idx};
+	</update>
 </mapper>

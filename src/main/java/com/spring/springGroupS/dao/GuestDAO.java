@@ -12,7 +12,7 @@ public interface GuestDAO {
 
 	int setGuestInput(@Param("vo") GuestVO vo);
 
-	int getTotRecCnt(@Param("flag") String flag);
+	int getTotRecCnt(@Param("flag") String flag, @Param("search") String search, @Param("searchStr") String searchStr);
 
 	int setGuestDelete(@Param("idx") int idx);
 

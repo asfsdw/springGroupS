@@ -24,8 +24,8 @@ public class GuestServiceImpl implements GuestService {
 	}
 
 	@Override
-	public int getTotRecCnt(String flag) {
-		return guestDAO.getTotRecCnt(flag);
+	public int getTotRecCnt(String flag, String search, String searchStr) {
+		return guestDAO.getTotRecCnt(flag, search, searchStr);
 	}
 
 	@Override

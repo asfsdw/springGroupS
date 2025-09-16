@@ -18,15 +18,15 @@
 	<select id="getNewMemberList" resultType="com.spring.springGroupS.vo.MemberVO">
 		SELECT *, 
 			(SELECT count(*) FROM member 
-			WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))) AS newCount, 
+			WHERE startDate >= date_add(now(), interval -7 day)) AS newCount, 
 			(SELECT count(*) FROM member 
 			WHERE level = 999) AS cancelMember FROM member
-			WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7)) 
-			<if test="flag == null">LIMIT 1</if>;
+			WHERE startDate >= date_add(now(), interval -7 day) 
+			<if test="flag == ''">LIMIT 1</if>;
 	</select>
 	<select id="getTotRecCnt" resultType="int">
 		SELECT count(idx) FROM member 
-		<if test="flag == 'new'">WHERE concat(year(startDate),'-',month(startDate),'-',day(startDate)) >= concat(year(now()),'-',month(now()),'-',day(now()-7))</if>;
+		<if test="flag == 'new'">WHERE startDate >= date_add(now(), interval -7 day)</if>;
 	</select>
 	
 	

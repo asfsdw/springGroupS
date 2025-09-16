@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.spring.springGroupS.vo.PageVO;
+
 @Controller()
 public class MessageController {
 	@RequestMapping(value = "/Message/{msgFlag}", method = RequestMethod.GET)
-	public String MessageGet(Model model, HttpSession session,
+	public String MessageGet(Model model, HttpSession session, PageVO pVO,
 			@PathVariable String msgFlag,
 			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
 			@RequestParam(name="idx", defaultValue = "", required = false) String idx) {
@@ -164,6 +166,14 @@ public class MessageController {
 		else if(msgFlag.equals("boardInputNo")) {
 			model.addAttribute("message", "게시글 작성에 실패했습니다.");
 			model.addAttribute("url", "/board/BoardInput");
+		}
+		else if(msgFlag.equals("boardUpdateOk")) {
+			model.addAttribute("message", "게시글을 수정했습니다.");
+			model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
+		}
+		else if(msgFlag.equals("boardUpdateNo")) {
+			model.addAttribute("message", "게시글 수정에 실패했습니다.");
+			model.addAttribute("url", "/board/BoardUpdate?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
 		}
 		return "include/message";
 	}

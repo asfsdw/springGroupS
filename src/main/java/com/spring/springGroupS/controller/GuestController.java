@@ -27,8 +27,8 @@ public class GuestController {
 			String flag,
 			@RequestParam(name = "pag", defaultValue = "1", required = false) int pag,
 			@RequestParam(name = "pageSize", defaultValue = "10", required = false) int pageSize) {
-		int totRecCnt = guestService.getTotRecCnt(flag);
-//		int totPage = (int)Math.ceil((double)totRecCnt/pageSize);
+		int totRecCnt = guestService.getTotRecCnt(flag, "", "");
+		// int totPage = (int)Math.ceil((double)totRecCnt/pageSize);
 		int totPage = (totRecCnt % pageSize) == 0 ? totRecCnt/pageSize : (totRecCnt/pageSize) + 1;
 		int startIndexNo = (pag-1) * pageSize;
 		int curScrStartNo = totRecCnt - startIndexNo;
