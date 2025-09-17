@@ -32,8 +32,8 @@
 						<script>
 							CKEDITOR.replace("content", {
 								height : 500,
-								filebrowserUploadUrl : "${ctp}/ImageUpload",
-								uploadUrl : "${ctp}/ImageUpload"
+								filebrowserUploadUrl : "${ctp}/ImageUpload",	// 이미지, 동영상을 서버로 전송버튼을 누를 때 사용.
+								uploadUrl : "${ctp}/ImageUpload"	// 업로드할 이미지를 드래그&드롭으로 한꺼번에 넣을 때 사용.
 							});
 						</script>
 					</td>

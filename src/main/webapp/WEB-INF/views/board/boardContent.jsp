@@ -50,15 +50,17 @@
 			// 게시글 삭제.
 			function deleteCheck() {
 				let ans = confirm("게시글을 삭제하시겠습니까?");
-				if(ans) location.href = "BoardDelete?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}";
+				if(ans) location.href = "BoardDelete?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}";
 			}
 			// 댓글 입력.
 			function replyCheck() {
 				let content = $("#content").val();
+				
 				if(content.trim() == "") {
 					alert("내용을 입력해주세요.");
 					return false;
 				}
+				
 				let query = {
 					"boardIdx" : "${vo.idx}",
 					"mid" : "${sMid}",
@@ -66,6 +68,7 @@
 					"content" : content,
 					"hostIP" : "${pageContext.request.remoteAddr}"
 				};
+				
 				$.ajax ({
 					url : "BoardReplyInput",
 					type : "POST",
@@ -101,29 +104,34 @@
 			}
 			// 댓글 수정.
 			function replyUpdate(replyIdx) {
+				$("[id^=demo]").html("");
+				
 				let str = "";
-				str += '<td colspan="4" id="demo${replyVO.idx}">';
+				str += '<td colspan="8" id="replyContent">';
 				str += '<table class="table">';
 				str += '<tr>';
-				str += '<td colspan="2">';
+				str += '<td colspan="4">';
 				str += '<textarea rows="4" name="content'+replyIdx+'" id="content'+replyIdx+'" class="form-control"></textarea>';
 				str += '</td>';
 				str += '<tr>';
-				str += '<td>';
+				str += '<td colspan="2">';
 				str += '<span>작성자: ${sNickName}</span>';
 				str += '</td>';
-				str += '<td class="text-end">';
-				str += '<span><input type="button" value="댓글수정" id="replyUpdateOk" class="btn btn-warning btn-sm" /></span>';
+				str += '<td colspan="2" class="text-end">';
+				str += '<span><input type="button" value="댓글수정" id="replyUpdateOk" class="btn btn-info btn-sm me-1" /></span>';
+				str += '<span><input type="button" value="닫기" onclick="replyClose('+replyIdx+')" class="btn btn-warning btn-sm" /></span>';
 				str += '</td>';
 				str += '</tr>';
 				str += '</table>';
 				str += '</td>';
 				$("#demo"+replyIdx).html(str);
+				
 				$(() => {
 					$("#replyUpdateOk").on("click", () => {
 						let query = {
-							"replyIdx" : replyIdx,
-							"replyContent" : $("#content"+replyIdx).val()
+							"idx" : replyIdx,
+							"content" : $("#content"+replyIdx).val(),
+							"hostIP" : "${pageContext.request.remoteAddr}"
 						};
 						$.ajax({
 							url : "BoardReplyUpdate",
@@ -135,6 +143,68 @@
 									location.reload();
 								}
 								else alert("댓글 수정에 실패했습니다.");
+							},
+							error : () => alert("전송오류")
+						});
+					});
+				});
+			}
+			// 댓글 수정창 닫기.
+			function replyClose(idx) {
+				$("#demo"+idx).html("");
+			}
+			
+			// 대댓글 창 열기.
+			function boardRereplyInputPost(replyIdx, boardIdx, re_step, re_order) {
+				$("[id^=demo]").html("");
+				
+				let str = "";
+				str += '<td colspan="8" id="replyContent">';
+				str += '<table class="table">';
+				str += '<tr>';
+				str += '<td colspan="4">';
+				str += '<textarea rows="4" name="content'+replyIdx+'" id="content'+replyIdx+'" class="form-control"></textarea>';
+				str += '</td>';
+				str += '<tr>';
+				str += '<td colspan="2">';
+				str += '<span>작성자: ${sNickName}</span>';
+				str += '</td>';
+				str += '<td colspan="2" class="text-end">';
+				str += '<span><input type="button" value="대댓글달기" id="reReplyInput" class="btn btn-info btn-sm me-1" /></span>';
+				str += '<span><input type="button" value="닫기" onclick="replyClose('+replyIdx+')" class="btn btn-warning btn-sm" /></span>';
+				str += '</td>';
+				str += '</tr>';
+				str += '</table>';
+				str += '</td>';
+				$("#demo"+replyIdx).html(str);
+				
+				$(() => {
+					$("#reReplyInput").on("click", () => {
+						let query = {
+							"replyIdx" : replyIdx,
+							"boardIdx" : boardIdx,
+							"mid" : "${sMid}",
+							"nickName" : "${sNickName}",
+							"content" : $("#content"+replyIdx).val(),
+							"hostIP" : "${pageContext.request.remoteAddr}",
+							"flag" : "reReply"
+						};
+						if($("#content"+replyIdx).val().trim() == "") {
+							alert("댓글 내용을 입력해주세요.");
+							$("#content"+replyIdx).focus();
+							return false;
+						}
+						
+						$.ajax({
+							url : "${ctp}/board/BoardReplyInput",
+							type : "POST",
+							data : query,
+							success : (res) => {
+								if(res != 0) {
+									alert("대댓글이 입력되었습니다.");
+									location.reload();
+								}
+								else alert("대댓글 입력에 실패했습니다.");
 							},
 							error : () => alert("전송오류")
 						});
@@ -182,19 +252,19 @@
 			<table class="table table-borderless">
 			<tr>
 				<td class="text-start">
-					<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList';" class="btn btn-info" />
-					<%-- 
-					<c:if test="${search == ''}">
-						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList?pag=${pag}&pageSize=${pageSize}';" class="btn btn-info" />
+					<%-- <input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList';" class="btn btn-info" /> --%>
+					
+					<c:if test="${empty pVO.search}">
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList?pag=${pVO.pag}&pageSize=${pVO.pageSize}';" class="btn btn-info" />
 					</c:if>
-					<c:if test="${search != ''}">
-						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardSearchList?search=${search}&searchString=${searchString}';" class="btn btn-info" />
+					<c:if test="${!empty pVO.search}">
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardSearchList?search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-info" />
 					</c:if>
-					 --%>
+					
 				</td>
 				<td class="text-end">
 					<c:if test="${vo.mid == sMid}">
-						<input type="button" value="수정" onclick="location.href='${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}';" class="btn btn-warning" />
+						<input type="button" value="수정" onclick="location.href='${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-warning" />
 					</c:if>
 					<c:if test="${vo.mid == sMid || sLevel == 0}">
 						<input type="button" value="삭제" onclick="deleteCheck()" class="btn btn-danger" />
@@ -205,25 +275,32 @@
 		<hr/>
 		<!-- 댓글 시작 -->
 		<p>댓글</p>
-		<table class="table table-hover text-center">
+		<table class="table table-hover text-start">
 			<tr>
 				<th>작성자</th>
-				<th>댓글내용</th>
+				<th colspan="2">댓글내용</th>
 				<th>댓글일자</th>
 				<th>작성자IP</th>
+				<th>대댓글/수정/삭제</th>
 			</tr>
 			<c:forEach var="replyVO" items="${replyVOS}" varStatus="st">
 				<tr>
-					<td>${replyVO.nickName}
+					<td>
+					<c:if test="${replyVO.re_step > 1}">
+						<c:forEach var="i" begin="1" end="${replyVO.re_step}"> &nbsp;&nbsp;</c:forEach>
+						↪️
+					</c:if>
+					${replyVO.nickName}</td>
+					<td colspan="2">${fn:replace(replyVO.content, newLine, "<br/>")}</td>
+					<td class="text-center">${replyVO.WDate}</td>
+					<td class="text-center">${replyVO.hostIP}</td>
+					<td class="text-center">
+						<a href="javascript:boardRereplyInputPost(${replyVO.idx},${replyVO.boardIdx},${replyVO.re_step},${replyVO.re_order})" title="대댓글" class="text-decoration-none">💬</a>
 						<c:if test="${replyVO.nickName == sNickName || sAdmin == 'adminOK'}">
-							<a href="javascript:replyDelete(${replyVO.idx})" title="삭제" class="text-decoration-none">🗑️</a>
-							<a href="javascript:replyUpdate(${replyVO.idx})" title="수정" class="text-decoration-none">✏️</a>
+							<a href="javascript:replyUpdate(${replyVO.idx})" title="수정" class="text-decoration-none">/✏️</a>
+							<a href="javascript:replyDelete(${replyVO.idx})" title="삭제" class="text-decoration-none">/🗑️</a>
 						</c:if>
 					</td>
-					<td>${fn:replace(replyVO.content, newLine, "<br/>")}</td>
-					<td>${replyVO.WDate}</td>
-					<td>${replyVO.hostIP}</td>
-					<c:if test="${sMid == replyVO.mid}"><a href="javascript:replyDelete(${replyVO.idx})" title="삭제"></a></c:if>
 				</tr>
 				<tr id="demo${replyVO.idx}">
 				</tr>

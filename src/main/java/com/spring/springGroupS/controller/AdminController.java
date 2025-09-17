@@ -135,7 +135,7 @@ public class AdminController {
 		vo = pagination.pagination(vo);
 		
 		List<BoardVO> vos = null;
-		if(vo.getFlag().equals("")) vos = boardService.getBoardList(vo.getStartIndexNo(), vo.getPageSize());
+		if(vo.getFlag().equals("")) vos = boardService.getBoardList(vo.getStartIndexNo(), vo.getPageSize(), "", "");
 		else vos = boardService.getNewBoardList(vo.getFlag());
 		
 		model.addAttribute("vos", vos);

@@ -14,6 +14,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.spring.springGroupS.dao.BoardDAO;
+import com.spring.springGroupS.vo.BoardReplyVO;
 import com.spring.springGroupS.vo.BoardVO;
 
 @Service
@@ -22,8 +23,8 @@ public class BoardServiceImpl implements BoardService {
 	BoardDAO boardDAO;
 
 	@Override
-	public List<BoardVO> getBoardList(int startIndexNo, int pageSize) {
-		return boardDAO.getBoardList(startIndexNo, pageSize);
+	public List<BoardVO> getBoardList(int startIndexNo, int pageSize, String search, String searchStr) {
+		return boardDAO.getBoardList(startIndexNo, pageSize, search, searchStr);
 	}
 
 	@Override
@@ -140,8 +141,8 @@ public class BoardServiceImpl implements BoardService {
 	public void imgDelete(String content) {
 //							 1				 2				 3				 4
 //		 012345678901234567890123456789012345678901234567890
-//<img src="/springGroupS/data/ckeditor/250915174330_01.jpg" style="height:225px; width:300px" />
 //<img src="/springGroupS/data/board/250915174330_01.jpg" style="height:225px; width:300px" />
+//<img src="/springGroupS/data/ckeditor/250915174330_01.jpg" style="height:225px; width:300px" />
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/");
 		
@@ -163,5 +164,50 @@ public class BoardServiceImpl implements BoardService {
 	private void fileDelete(String oFilePath) {
 		File delFile = new File(oFilePath);
 		if(delFile.exists()) delFile.delete();
+	}
+
+	@Override
+	public int setBoardDelete(int idx) {
+		return boardDAO.setBoardDelete(idx);
+	}
+
+	@Override
+	public List<BoardReplyVO> getBoardReplyList(int boardIdx) {
+		return boardDAO.getBoardReplyList(boardIdx);
+	}
+
+	@Override
+	public BoardReplyVO getBoardParentReplyCheck(int boardIdx) {
+		return boardDAO.getBoardParentReplyCheck(boardIdx);
+	}
+
+	@Override
+	public int setBoardReplyInput(BoardReplyVO replyVO) {
+		return boardDAO.setBoardReplyInput(replyVO);
+	}
+
+	@Override
+	public void setBoardReplyOrderUp(int boardIdx, int re_order) {
+		boardDAO.setBoardReplyOrderUp(boardIdx, re_order);
+	}
+
+	@Override
+	public BoardReplyVO getBoardParentReplyIdxCheck(int idx) {
+		return boardDAO.getBoardParentReplyIdxCheck(idx);
+	}
+
+	@Override
+	public int setBoardReplyDelete(int idx) {
+		return boardDAO.setBoardReplyDelete(idx);
+	}
+
+	@Override
+	public int setBoardReplyUpdate(BoardReplyVO replyVO) {
+		return boardDAO.setBoardReplyUpdate(replyVO);
+	}
+
+	@Override
+	public void setBoardReplyOrderBy(int boardIdx, int ref, int re_order) {
+		boardDAO.setBoardReplyOrderBy(boardIdx, ref, re_order);
 	}
 }

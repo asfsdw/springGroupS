@@ -59,6 +59,12 @@ public class HomeController {
 		
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/ckeditor/");
 		String oFileName = upload.getOriginalFilename();
+		
+		// 확장자 제한처리(이미지파일(jpg,gif,png) + 동영상파일(mp4))
+		String regExt = "(jpg|jpeg|gif|png|mp4|webm|ogv)";
+		String ext = oFileName.substring(oFileName.lastIndexOf(".")+1);
+		if(!ext.matches(regExt)) return;
+		
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
 		oFileName = sdf.format(date)+"_"+oFileName;

@@ -1,5 +1,8 @@
 package com.spring.springGroupS.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.springGroupS.common.Pagination;
 import com.spring.springGroupS.service.BoardService;
+import com.spring.springGroupS.vo.BoardReplyVO;
 import com.spring.springGroupS.vo.BoardVO;
 import com.spring.springGroupS.vo.PageVO;
 
@@ -33,12 +38,32 @@ public class BoardController {
 		pVO.setSection("board");
 		pVO = paginatino.pagination(pVO);
 		
-		List<BoardVO> vos = boardService.getBoardList(pVO.getStartIndexNo(), pVO.getPageSize());
+		List<BoardVO> vos = boardService.getBoardList(pVO.getStartIndexNo(), pVO.getPageSize(), "", "");
 		
 		model.addAttribute("vos", vos);
 		model.addAttribute("pVO", pVO);
 		
 		return "board/boardList";
+	}
+	
+	// 게시글 검색.
+	@GetMapping("/BoardSearchList")
+	public String boardSearchListPost(Model model, PageVO pVO) {
+		pVO.setSection("board");
+		pVO = paginatino.pagination(pVO);
+		
+		List<BoardVO> vos = boardService.getBoardList(pVO.getStartIndexNo(), pVO.getPageSize(), pVO.getSearch(), pVO.getSearchStr());
+		
+		String search = "";
+		if(pVO.getSearch().equals("title")) search = "글제목";
+		else if(pVO.getSearch().equals("nickName")) search = "닉네임";
+		else if(pVO.getSearch().equals("content")) search = "글내용";
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("pVO", pVO);
+		model.addAttribute("search", search);
+		
+		return "board/boardSearchList";
 	}
 	
 	// 게시글 쓰기 폼 이동.
@@ -84,8 +109,12 @@ public class BoardController {
 		BoardVO preVO = boardService.getPreNextSearch(idx, "preVO");
 		BoardVO nextVO = boardService.getPreNextSearch(idx, "nextVO");
 		
+		// 댓글 가져오기.
+		List<BoardReplyVO> replyVOS = boardService.getBoardReplyList(idx);
+		
 		model.addAttribute("vo", vo);
 		model.addAttribute("pVO", pVO);
+		model.addAttribute("replyVOS", replyVOS);
 		model.addAttribute("preVO", preVO);
 		model.addAttribute("nextVO", nextVO);
 		
@@ -107,6 +136,51 @@ public class BoardController {
 		}
 		return "0";
 	}
+
+	
+  // 댓글 처리.
+  @ResponseBody
+  @PostMapping("/BoardReplyInput") public int boardReplyInputPost(BoardReplyVO replyVO,
+  		@RequestParam(name="replyIdx",defaultValue = "0", required = false) int replyIdx) {
+  	replyVO.setRef(1);
+  	replyVO.setRe_step(1);
+  	replyVO.setRe_order(1);
+	  // 부모댓글은 re_step=1, re_order=1. 단, 대댓글의 경우는 부모댓글보다 큰 re_order전부 +1, 자신은 부모댓글의 re_step, re_order +1처리.
+	  BoardReplyVO replyParentVO = boardService.getBoardParentReplyCheck(replyVO.getBoardIdx());
+	  
+	  // 대댓글이면 re_step, re_order +1.
+	  if(replyVO.getFlag() != null) {
+		  // 대댓글의 부모 idx를 받아와서 설정.
+		  BoardReplyVO parentReplyVO = boardService.getBoardParentReplyIdxCheck(replyIdx);
+		  
+		  replyVO.setRef(parentReplyVO.getRef()+1);
+		  // 부모의 re_order보다 큰 re_order +1. 단, 같은 boardIdx에 한해서.
+		  boardService.setBoardReplyOrderUp(parentReplyVO.getBoardIdx(), parentReplyVO.getRe_order());
+		  
+		  // 자기 re_step, re_order는 부모 +1.
+		  replyVO.setRe_step(parentReplyVO.getRe_step()+1);
+		  if(replyVO.getRef() >= 2) replyVO.setRe_order(replyVO.getRef());
+		  else replyVO.setRe_order(parentReplyVO.getRe_order()+1);
+	  }
+	  // 첫댓글이면 re_order =1.
+	  else if(replyParentVO != null) replyVO.setRe_order(replyParentVO.getRe_order()+1);
+	  
+	  return boardService.setBoardReplyInput(replyVO);
+  }
+	 
+	// 댓글 삭제.
+	@ResponseBody
+	@PostMapping("/BoardReplyDelete")
+	public int boardReplyDeletePost(int idx) {
+		return boardService.setBoardReplyDelete(idx);
+	}
+	// 댓글 수정.
+	@ResponseBody
+	@PostMapping("/BoardReplyUpdate")
+	public int boardReplyUpdatePost(BoardReplyVO replyVO) {
+		return boardService.setBoardReplyUpdate(replyVO);
+	}
+	
 	
 	// 게시글 수정 폼 이동.
 	@GetMapping("/BoardUpdate")
@@ -125,10 +199,10 @@ public class BoardController {
 	}
 	// 게시글 수정.
 	@PostMapping("/BoardUpdate")
-	public String boardUpdatePost(Model model, PageVO pVO, BoardVO vo) {
+	public String boardUpdatePost(Model model, PageVO pVO, BoardVO vo) throws UnsupportedEncodingException {
 		pVO.setSection("board");
 		pVO = paginatino.pagination(pVO);
-		
+
 		// 수정된 content가 원본자료와 완전히 동일하다면 이미지를 수정할 필요가 없다.
 		BoardVO originVO = boardService.getBoardContent(vo.getIdx());
 		if(!vo.getContent().equals(originVO.getContent())) {
@@ -147,7 +221,42 @@ public class BoardController {
 		
 		int res = boardService.setBoardUpdate(vo);
 		
-		if(res != 0) return "redirect:/Message/boardUpdateOk?idx="+vo.getIdx()+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize();
-		else return "redirect:/Message/boardUpdateNo?idx="+vo.getIdx()+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize();
+		if(res != 0) {
+			String search = URLEncoder.encode(pVO.getSearch(), StandardCharsets.UTF_8.toString());
+			String searchStr = URLEncoder.encode(pVO.getSearchStr(), StandardCharsets.UTF_8.toString());
+			if(pVO.getSearch() != null) return "redirect:/Message/boardUpdateOk?idx="+vo.getIdx()+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+search+"&searchStr="+searchStr;
+			else return "redirect:/Message/boardUpdateOk?idx="+vo.getIdx()+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize();
+		}
+		else {
+			String search = URLEncoder.encode(pVO.getSearch(), StandardCharsets.UTF_8.toString());
+			String searchStr = URLEncoder.encode(pVO.getSearchStr(), StandardCharsets.UTF_8.toString());
+			if(pVO.getSearch() != null) return "redirect:/Message/boardUpdateNo?idx="+vo.getIdx()+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+search+"&searchStr="+searchStr;
+			else return "redirect:/Message/boardUpdateNo?idx="+vo.getIdx()+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize();
+		}
+	}
+	
+	// 게시글 삭제.
+	@GetMapping("/BoardDelete")
+	public String boardDeleteGet(PageVO pVO, BoardVO vo) throws UnsupportedEncodingException {
+		vo = boardService.getBoardContent(vo.getIdx());
+		
+		// 게시글에 src가 존재하면 삭제.
+		if(vo.getContent().indexOf("src=\"/") != -1) boardService.imgDelete(vo.getContent());
+		
+		// src를 삭제한 후, DB에서 게시글 삭제.
+		int res = boardService.setBoardDelete(vo.getIdx());
+		
+		if(res != 0) {
+			String search = URLEncoder.encode(pVO.getSearch(), StandardCharsets.UTF_8.toString());
+			String searchStr = URLEncoder.encode(pVO.getSearchStr(), StandardCharsets.UTF_8.toString());
+			if(pVO.getSearch() != null) return "redirect:/Message/boardDeleteOk?pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+search+"&searchStr="+searchStr;
+			else return "redirect:/Message/boardDeleteOk?pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize();
+		}
+		else {
+			String search = URLEncoder.encode(pVO.getSearch(), StandardCharsets.UTF_8.toString());
+			String searchStr = URLEncoder.encode(pVO.getSearchStr(), StandardCharsets.UTF_8.toString());
+			if(pVO.getSearch() != null) return "redirect:/Message/boardDeleteNo?idx="+vo.getIdx()+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+search+"&searchStr="+searchStr;
+			else return "redirect:/Message/boardDeleteNo?idx="+vo.getIdx()+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize();
+		}
 	}
 }

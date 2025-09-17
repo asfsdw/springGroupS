@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.springGroupS.vo.BoardReplyVO;
 import com.spring.springGroupS.vo.BoardVO;
 
 public interface BoardDAO {
 
-	List<BoardVO> getBoardList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+	List<BoardVO> getBoardList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("search") String search, @Param("searchStr") String searchStr);
 
 	int getTotRecCnt(@Param("flag") String flag, @Param("search") String search, @Param("searchStr") String searchStr);
 
@@ -25,5 +26,23 @@ public interface BoardDAO {
 	BoardVO getPreNextSearch(@Param("idx") int idx, @Param("str") String str);
 
 	int setBoardUpdate(@Param("vo") BoardVO vo);
+
+	int setBoardDelete(@Param("idx") int idx);
+
+	List<BoardReplyVO> getBoardReplyList(@Param("boardIdx") int boardIdx);
+
+	BoardReplyVO getBoardParentReplyCheck(@Param("boardIdx") int boardIdx);
+
+	int setBoardReplyInput(@Param("replyVO") BoardReplyVO replyVO);
+
+	void setBoardReplyOrderUp(@Param("boardIdx") int boardIdx, @Param("re_order") int re_order);
+
+	BoardReplyVO getBoardParentReplyIdxCheck(@Param("idx") int idx);
+
+	int setBoardReplyDelete(@Param("idx") int idx);
+
+	int setBoardReplyUpdate(@Param("replyVO") BoardReplyVO replyVO);
+
+	void setBoardReplyOrderBy(@Param("boardIdx") int boardIdx, @Param("ref") int ref, @Param("re_order") int re_order);
 
 }

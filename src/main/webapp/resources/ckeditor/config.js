@@ -38,4 +38,6 @@ CKEDITOR.editorConfig = function( config ) {
 	
 	config.versionCheck = false;
 	
+	// 동영상 업로드.
+	config.extraPlugins = 'html5video,widget,widgetselection,clipboard,lineutils';
 };

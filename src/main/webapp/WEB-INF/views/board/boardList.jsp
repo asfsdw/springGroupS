@@ -15,7 +15,7 @@
 			// 게시글 x개 표시하기.
 			$(() => {
 				$("#viewPageCnt").on("change", () => {
-					let startIndexNo = ${startIndexNo};
+					let startIndexNo = ${pVO.startIndexNo};
 					let pageSize = $("#viewPageCnt").val();
 					// 페이지 도중에 바꿨을 때, 가장 위에 글이 포함된 페이지로 이동.
 					let pag = Math.floor(startIndexNo / pageSize) + 1;
@@ -66,8 +66,8 @@
 						</c:if>
 						<c:if test="${vo.openSW != 'NO'}">
 							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
-								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}
-								<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if></a>
+								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
+								<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
 						<c:if test="${vo.hourDiff <= 24}"><img src="${ctp}/images/new.gif" /></c:if>
 					</td>
@@ -101,7 +101,7 @@
 					<a href="${ctp}/board/BoardList?pag=${(pVO.curBlock + 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">다음 블록</a>
 				</c:if>
 				<c:if test="${pVO.pag < pVO.totPage}">
-					<a href="${ctp}/board/BoardList?pag=${pVO.totPage}&pageSize=${pVO.pageSize}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">마지막 페이지</a>
+					<a href="${ctp}/board/BoardList?pag=${pVO.totPage}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">마지막 페이지</a>
 				</c:if>
 			</div>
 		</div>
@@ -109,14 +109,14 @@
 		<!-- 블록페이지 끝 -->
 		<!-- 검색기 시작 -->
 		<div class="text-center">
-			<form name="searchForm" method="post">
+			<form name="searchForm" method="get" action="BoardSearchList">
 				<b>검색:</b>
 				<select name="search" id="search">
 					<option value="title">글제목</option>
 					<option value="nickName">글쓴이</option>
 					<option value="content">글내용</option>
 				</select>
-				<input type="text" name="searchString" id="searchString" required />
+				<input type="text" name="searchStr" id="searchStr" required />
 				<input type="submit" value="검색버튼" class="btn btn-info btn-sm" />
 			</form>
 		</div>

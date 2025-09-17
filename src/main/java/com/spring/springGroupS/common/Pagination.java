@@ -35,7 +35,7 @@ public class Pagination {
 		}
 		else if(vo.getSection().equals("board")) {
 			if(vo.getSearch() == null) vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), "", ""));
-			else vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), vo.getSearch(),vo.getSearchStr()));
+			else vo.setTotRecCnt(boardService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
 		}
 		
 		vo.setTotPage((int)Math.ceil((double)vo.getTotRecCnt()/vo.getPageSize()));

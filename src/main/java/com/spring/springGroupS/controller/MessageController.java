@@ -1,5 +1,7 @@
 package com.spring.springGroupS.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
@@ -17,7 +19,7 @@ public class MessageController {
 	public String MessageGet(Model model, HttpSession session, PageVO pVO,
 			@PathVariable String msgFlag,
 			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
-			@RequestParam(name="idx", defaultValue = "", required = false) String idx) {
+			@RequestParam(name="idx", defaultValue = "0", required = false) int idx) throws UnsupportedEncodingException {
 		if(msgFlag.equals("hoewonInputOk")) {
 			model.addAttribute("message", mid+"님 회원가입되었습니다.");
 			model.addAttribute("url", "study1/mapping/Test35?mid="+mid);
@@ -169,11 +171,23 @@ public class MessageController {
 		}
 		else if(msgFlag.equals("boardUpdateOk")) {
 			model.addAttribute("message", "게시글을 수정했습니다.");
-			model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
+			if(pVO.getSearch() != null) model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+pVO.getSearch()+"&searchStr="+pVO.getSearchStr());
+			else model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
 		}
 		else if(msgFlag.equals("boardUpdateNo")) {
 			model.addAttribute("message", "게시글 수정에 실패했습니다.");
-			model.addAttribute("url", "/board/BoardUpdate?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
+			if(pVO.getSearch() != null) model.addAttribute("url", "/board/BoardUpdate?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+pVO.getSearch()+"&searchStr="+pVO.getSearchStr());
+			else model.addAttribute("url", "/board/BoardUpdate?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
+		}
+		else if(msgFlag.equals("boardDeleteOk")) {
+			model.addAttribute("message", "게시글을 삭제했습니다.");
+			if(pVO.getSearch() != null) model.addAttribute("url", "/board/BoardSearchList?&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+pVO.getSearch()+"&searchStr="+pVO.getSearchStr());
+			else model.addAttribute("url", "/board/BoardList?&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
+		}
+		else if(msgFlag.equals("boardDeleteNo")) {
+			model.addAttribute("message", "게시글 삭제에 실패했습니다.");
+			if(pVO.getSearch() != null) model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+pVO.getSearch()+"&searchStr="+pVO.getSearchStr());
+			else model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
 		}
 		return "include/message";
 	}
