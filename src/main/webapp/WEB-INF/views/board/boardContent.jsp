@@ -103,7 +103,7 @@
 				}
 			}
 			// 댓글 수정.
-			function replyUpdate(replyIdx) {
+			function replyUpdate(replyIdx, replyContent) {
 				$("[id^=demo]").html("");
 				
 				let str = "";
@@ -111,7 +111,7 @@
 				str += '<table class="table">';
 				str += '<tr>';
 				str += '<td colspan="4">';
-				str += '<textarea rows="4" name="content'+replyIdx+'" id="content'+replyIdx+'" class="form-control"></textarea>';
+				str += '<textarea rows="4" name="content'+replyIdx+'" id="content'+replyIdx+'" class="form-control">'+replyContent+'</textarea>';
 				str += '</td>';
 				str += '<tr>';
 				str += '<td colspan="2">';
@@ -211,6 +211,52 @@
 					});
 				});
 			}
+			
+			// modal 창에서 신고 시, 기타 항목을 선택했을 때 textarea 보여주기.
+			function etcShow() {
+				$("#etcTxt").show();
+			}
+			$(() => {
+				$("[id^=complaint]").on("change", () => {
+					$("#etcTxt").hide();
+				});
+			});
+			
+			// 게시글 신고 처리.
+			function complaintCheck() {
+				if(!$("input[type='radio'][name='complaint']:checked").is(':checked')) {
+					alert("신고항목을 선택해주세요.");
+					return false;
+				}
+				if($("input[type='radio']:checked").val() == '기타' && $("#etcTxt").val() == "") {
+					alert("사유를 입력해주세요.");
+					return false;
+				}
+				
+				let cpContent = modalForm.complaint.value;
+				if(cpContent == "기타") cpContent += "/"+$("#etcTxt").val();
+				
+				let query = {
+						"part" : "board",
+						"partIdx" : ${vo.idx},
+						"cpMid" : "${sMid}",
+						"cpContent" : cpContent
+				}
+				
+				$.ajax({
+					url : "${ctp}/board/BoardComplaintInput",
+					type: "post",
+					data: query,
+					success : (res) => {
+						if(res != 0) {
+							alert("신고되었습니다.");
+							location.reload();
+						}
+						else alert("신고되지 않았습니다.");
+					},
+					error : () => alert("전송오류")
+				});
+			}
 		</script>
 	</head>
 <body>
@@ -252,22 +298,25 @@
 			<table class="table table-borderless">
 			<tr>
 				<td class="text-start">
-					<%-- <input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList';" class="btn btn-info" /> --%>
-					
 					<c:if test="${empty pVO.search}">
 						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardList?pag=${pVO.pag}&pageSize=${pVO.pageSize}';" class="btn btn-info" />
 					</c:if>
 					<c:if test="${!empty pVO.search}">
-						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardSearchList?search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-info" />
+						<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/BoardSearchList?pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-info" />
 					</c:if>
-					
 				</td>
 				<td class="text-end">
-					<c:if test="${vo.mid == sMid}">
+					<c:if test="${vo.mid == sMid && vo.complaint != 'NO'}">
 						<input type="button" value="수정" onclick="location.href='${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-warning" />
 					</c:if>
-					<c:if test="${vo.mid == sMid || sLevel == 0}">
+					<c:if test="${vo.mid == sMid || sLevel == 0 && vo.complaint != 'NO'}">
 						<input type="button" value="삭제" onclick="deleteCheck()" class="btn btn-danger" />
+					</c:if>
+					<c:if test="${vo.complaint != 'OK'}">
+						<input type="button" value="신고" data-bs-toggle="modal" data-bs-target="#myModal" class="btn btn-secondary" />
+					</c:if>
+					<c:if test="${vo.complaint == 'OK'}">
+						<font color="red">신고 중</font>
 					</c:if>
 				</td>
 			</tr>
@@ -297,7 +346,7 @@
 					<td class="text-center">
 						<a href="javascript:boardRereplyInputPost(${replyVO.idx},${replyVO.boardIdx},${replyVO.re_step},${replyVO.re_order})" title="대댓글" class="text-decoration-none">💬</a>
 						<c:if test="${replyVO.nickName == sNickName || sAdmin == 'adminOK'}">
-							<a href="javascript:replyUpdate(${replyVO.idx})" title="수정" class="text-decoration-none">/✏️</a>
+							<a href="javascript:replyUpdate('${replyVO.idx}','${fn:replace(replyVO.content, newLine, '<br/>')}')" title="수정" class="text-decoration-none">/✏️</a>
 							<a href="javascript:replyDelete(${replyVO.idx})" title="삭제" class="text-decoration-none">/🗑️</a>
 						</c:if>
 					</td>
@@ -355,5 +404,36 @@
 		</table>
 	</div>
 	<p><br/></p>
+	<div class="modal fade" id="myModal">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">현재 게시글을 신고합니다.</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<b>신고사유 선택</b>
+					<hr class="border border-secondary">
+					<form name="modalForm">
+						<div><input type="radio" name="complaint" id="complaint1" value="광고,홍보,영리목적"/> 광고,홍보,영리목적</div>
+						<div><input type="radio" name="complaint" id="complaint2" value="욕설,비방,차별,혐오"/> 욕설,비방,차별,혐오</div>
+						<div><input type="radio" name="complaint" id="complaint3" value="불법정보"/> 불법정보</div>
+						<div><input type="radio" name="complaint" id="complaint4" value="음란,청소년유해"/> 음란,청소년유해</div>
+						<div><input type="radio" name="complaint" id="complaint5" value="개인정보노출,유포,거래"/> 개인정보노출,유포,거래</div>
+						<div><input type="radio" name="complaint" id="complaint6" value="도배,스팸"/> 도배,스팸</div>
+						<div><input type="radio" name="complaint" value="기타" onclick="etcShow()"/> 기타</div>
+						<div id="etc"><textarea rows="2" id="etcTxt" class="form-control" style="display:none"></textarea></div>
+						<hr class="border border-secondary">
+						<input type="button" value="신고하기" onclick="complaintCheck()" class="btn btn-success form-control" />
+					</form>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

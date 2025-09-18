@@ -4,14 +4,14 @@
 	<select id="getBoardList" resultType="com.spring.springGroupS.vo.BoardVO">
 		SELECT *, timestampdiff(hour, wDate, now()) AS hourDiff, datediff(now(), wDate) AS dateDiff, 
 			(SELECT count(*) FROM boardReply WHERE boardIdx = board.idx) AS replyCnt
-			FROM board 
-			<if test="search != ''">WHERE ${search} LIKE concat("%"#{searchStr}"%")</if> 
+			FROM board WHERE complaint != 'DE' 
+			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if> 
 			ORDER BY idx DESC LIMIT #{startIndexNo}, #{pageSize};
 	</select>
 	<select id="getTotRecCnt" resultType="int">
-		SELECT count(idx) FROM board <if test="flag != '' or search != ''">WHERE </if>
-			<if test="flag == 'new'">wDate >= date_add(now(), interval -7 day)</if>
-			<if test="search != ''">${search} LIKE concat("%"#{searchStr}"%")</if>;
+		SELECT count(idx) FROM board WHERE complaint != 'DE' 
+			<if test="flag == 'new'">AND wDate >= date_add(now(), interval -7 day)</if>
+			<if test="search != ''">AND ${search} LIKE concat("%"#{searchStr}"%")</if>;
 	</select>
 	<select id="getBoardContent" resultType="com.spring.springGroupS.vo.BoardVO">
 		SELECT * FROM board WHERE idx = #{idx};
@@ -25,9 +25,9 @@
 			<if test="flag == ''">LIMIT 1</if>;
 	</select>
 	<select id="getPreNextSearch" resultType="com.spring.springGroupS.vo.BoardVO">
-		SELECT idx, title FROM board WHERE 
-			<if test="str == 'preVO'"><![CDATA[idx < #{idx}]]> ORDER BY idx DESC</if>
-			<if test="str != 'preVO'"><![CDATA[idx > #{idx}]]> ORDER BY idx</if> 
+		SELECT idx, title FROM board WHERE complaint != 'DE' 
+			<if test="str == 'preVO'">AND <![CDATA[idx < #{idx}]]> ORDER BY idx DESC</if>
+			<if test="str != 'preVO'">AND <![CDATA[idx > #{idx}]]> ORDER BY idx</if> 
 			LIMIT 1;
 	</select>
 	

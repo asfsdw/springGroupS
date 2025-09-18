@@ -17,6 +17,7 @@ import com.spring.springGroupS.service.BoardService;
 import com.spring.springGroupS.service.GuestService;
 import com.spring.springGroupS.service.MemberService;
 import com.spring.springGroupS.vo.BoardVO;
+import com.spring.springGroupS.vo.ComplaintVO;
 import com.spring.springGroupS.vo.GuestVO;
 import com.spring.springGroupS.vo.MemberVO;
 import com.spring.springGroupS.vo.PageVO;
@@ -42,11 +43,14 @@ public class AdminController {
 		List<GuestVO> gVOS = guestService.getNewGuestList(flag);
 		List<MemberVO> mVOS = memberService.getNewMemberList(flag);
 		List<BoardVO> bVOS = boardService.getNewBoardList(flag);
+		List<ComplaintVO> cVOS = adminService.getNewBoardList(flag);
 		
 		int memberNewCount = 0;
 		int cancelMember = 0;
 		int guestNewCount = 0;
 		int boardNewCount = 0;
+		int complaintNewCount = 0;
+		
 		guestNewCount = gVOS.get(0).getNewCount();
 		// gVOS의 검색결과가 있으면 건 수 갱신.
 		if(!gVOS.isEmpty()) guestNewCount = mVOS.get(0).getNewCount();
@@ -57,10 +61,13 @@ public class AdminController {
 			cancelMember = mVOS.get(0).getCancelMember();
 		}
 		if(!bVOS.isEmpty()) boardNewCount = bVOS.get(0).getNewCount();
+		if(!cVOS.isEmpty()) complaintNewCount = cVOS.get(0).getNewCount();
+		
 		model.addAttribute("guestNewCount", guestNewCount);
 		model.addAttribute("memberNewCount", memberNewCount);
 		model.addAttribute("cancelMember", cancelMember);
 		model.addAttribute("boardNewCount", boardNewCount);
+		model.addAttribute("complaintNewCount", complaintNewCount);
 		
 		return "admin/adminMain";
 	}
@@ -142,5 +149,64 @@ public class AdminController {
 		model.addAttribute("bVO", vo);
 		
 		return "admin/board/BoardList";
+	}
+	
+	// 신고글 목록.
+	@GetMapping("/complaint/ComplaintList")
+	public String complaintListGet(Model model, PageVO pVO, ComplaintVO vo) {
+		pVO.setSection("admin");
+		pVO = pagination.pagination(pVO);
+		
+		List<ComplaintVO> vos = adminService.getComplaintList(pVO.getStartIndexNo(), pVO.getPageSize());
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("pVO", pVO);
+		
+		return "admin/complaint/complaintList";
+	}
+	// 신고글 내용보기.
+	@GetMapping("/complaint/ComplaintContent")
+	public String complaintContentGet(Model model, PageVO pVO, ComplaintVO vo) {
+		pVO.setSection("admin");
+		pVO = pagination.pagination(pVO);
+		
+		vo = adminService.getComplaintContent(vo.getPartIdx());
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("pVO", pVO);
+		
+		return "admin/complaint/complaintContent";
+	}
+	// 신고 처리.
+	@ResponseBody
+	@PostMapping("/complaint/ComplaintProgress")
+	public int complaintProgressPost(Model model, PageVO pVO, ComplaintVO vo) {
+		pVO.setSection("admin");
+		pVO = pagination.pagination(pVO);
+		
+		int res = 0;
+		
+		if(vo.getComplaintSW().equals("D")) {
+			res = adminService.setComplaintDelete(vo.getPart(), vo.getPartIdx());
+			vo.setComplaintSW("처리완료(D)");
+		}
+		else if(vo.getComplaintSW().equals("H")) {
+			res = adminService.setComplaintPrgress(vo.getPart(), vo.getPartIdx(), "HI");
+			vo.setComplaintSW("처리중(H)");
+		}
+		else if(vo.getComplaintSW().equals("M")) {
+			res = adminService.setComplaintPrgress(vo.getPart(), vo.getPartIdx(), "DE");
+			vo.setComplaintSW("처리중(M)");
+		}
+		else {
+			res = adminService.setComplaintPrgress(vo.getPart(), vo.getPartIdx(), "NO");
+			vo.setComplaintSW("처리완료(S)");
+		}
+		if(res != 0) adminService.setComplaintProgressOk(vo.getIdx(), vo.getComplaintSW());
+		
+		model.addAttribute("vo", vo);
+		model.addAttribute("pVO", pVO);
+		
+		return res;
 	}
 }

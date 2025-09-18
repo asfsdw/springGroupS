@@ -54,20 +54,30 @@
 				<tr>
 					<td>${pVO.curScrStartNo-st.index}</td>
 					<td class="text-start">
-						<c:if test="${vo.openSW == 'NO'}">
-							<c:if test="${vo.mid == sMid || sAdmin == 'adminOK'}">
+						<!-- 글이 신고되어 감추어졌으며(HI) 관리자가 아닐 때 -->
+						<c:if test="${vo.complaint == 'HI' && sMid != 'admin'}">
+							신고된 글입니다.
+						</c:if>
+						<!-- 감추어진 글이며 관리자라면 제목(신고글) 열람가능 -->
+						<c:if test="${vo.complaint == 'HI' && sMid == 'admin'}">
+							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
+									class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
+							<font color="red">(신고글) </font>
+							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
+						</c:if>
+						<c:if test="${vo.openSW == 'NO' && vo.complaint != 'HI'}">
+							<c:if test="${vo.mid == sMid || sMid == 'admin'}">
 								<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
-									class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">
-									<c:if test="${sAdmin == 'adminOK'}"><font color="red">(비밀글) </font></c:if>${vo.title}
-									<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
-								</a>
+									class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover"></a>
+								<c:if test="${sMid == 'admin'}"><font color="red">(비밀글) </font></c:if>${vo.title}
+								<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 							</c:if>
 							<c:if test="${vo.mid != sMid && sAdmin != 'adminOK'}">비밀글입니다.</c:if>
 						</c:if>
-						<c:if test="${vo.openSW != 'NO'}">
+						<c:if test="${vo.openSW != 'NO' && vo.complaint != 'HI'}">
 							<a href="${ctp}/board/BoardContent?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}"
 								class="text-primary link-secondary link-underline-opacity-0 link-underline-opacity-100-hover">${vo.title}</a>
-								<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
+							<c:if test="${vo.replyCnt != 0}">(${vo.replyCnt})</c:if>
 						</c:if>
 						<c:if test="${vo.hourDiff <= 24}"><img src="${ctp}/images/new.gif" /></c:if>
 					</td>
@@ -86,7 +96,7 @@
 			<div class="pagination">
 				<!-- pag와 pageSize를 BoardList에 보내준다. -->
 				<c:if test="${pVO.pag > 1}"><a href="${ctp}/board/BoardList?pag=1&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">첫 페이지</a></c:if>
-				<c:if test="${curBlock > 0}">
+				<c:if test="${pVO.curBlock > 0}">
 					<a href="${ctp}/board/BoardList?pag=${(pVO.curBlock - 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">이전 블록</a>
 				</c:if>
 				<c:forEach var="i" begin="${(pVO.curBlock * pVO.blockSize) + 1}" end="${(pVO.curBlock * pVO.blockSize) + pVO.blockSize}" varStatus="st">

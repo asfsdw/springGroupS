@@ -55,7 +55,7 @@
 			<div class="main ms-3 mb-2"><b>회원관리</b></div>
 			<div class="sub">
 				<p><a href="${ctp}/admin/member/MemberList">회원리스트</a></p>
-				<p><a href="${ctp}/admin/board/BoardList">신고리스트</a></p>
+				<p><a href="${ctp}/admin/complaint/ComplaintList">신고리스트</a></p>
 			</div>
 			<hr/>
 			<div class="main ms-3 mb-2"><b>일정관리</b></div>

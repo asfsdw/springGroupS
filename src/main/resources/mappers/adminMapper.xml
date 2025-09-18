@@ -1,12 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS.dao.AdminDAO">
+	<select id="getComplaintList" resultType="com.spring.springGroupS.vo.ComplaintVO">
+		SELECT c.*, b.title AS title, b.nickName AS nickName, b.mid AS mid, b.content AS content, b.complaint AS complaint 
+		FROM complaint c LEFT JOIN board b ON c.partIdx = b.idx ORDER BY c.idx DESC LIMIT #{startIndexNo}, #{pageSize}
+	</select>
+	<select id="getComplaintContent" resultType="com.spring.springGroupS.vo.ComplaintVO">
+		SELECT c.*, b.title AS title, b.nickName AS nickName, b.mid AS mid, b.content AS content, b.complaint AS complaint 
+		FROM complaint c LEFT JOIN board b ON c.partIdx = b.idx WHERE b.idx = #{partIdx};
+	</select>
+	<select id="getNewBoardList" resultType="com.spring.springGroupS.vo.ComplaintVO">
+		SELECT *, 
+			(SELECT count(*) FROM complaint 
+			WHERE cpDate >= date_add(now(), interval -7 day)) AS newCount FROM complaint 
+			WHERE cpDate >= date_add(now(), interval -7 day) 
+			ORDER BY idx DESC 
+			<if test="flag == ''">LIMIT 1</if>;
+	</select>
+
+
+
+	<insert id="setBoardComplaintInput">
+		INSERT INTO complaint VALUES(DEFAULT,#{vo.part},#{vo.partIdx},#{vo.cpMid},#{vo.cpContent},DEFAULT,DEFAULT);
+	</insert>
+
+
 
 	<update id="setMemberLevelSelectChange">
 		UPDATE member SET level = #{level} <if test="level == 999">, userDel = 'OK'</if><if test="level != 999">, userDel = 'NO'</if> WHERE idx = #{idx};
 	</update>
+	<update id="setBoardTableComplaintOk">
+		UPDATE board SET complaint = 'OK' WHERE idx = #{partIdx};
+	</update>
+	<update id="setComplaintPrgress">
+		UPDATE ${part} SET complaint = #{flag} WHERE idx = #{partIdx};
+	</update>
+	<update id="setComplaintProgressOk">
+		UPDATE complaint SET progress = #{flag} WHERE idx = #{idx};
+	</update>
+
+
 
 	<delete id="memberDeleteGet">
-		DELETE from member WHERE idx = #{idx};
+		DELETE FROM member WHERE idx = #{idx};
+	</delete>
+	<delete id="setComplaintDelete">
+		DELETE FROM ${part} WHERE idx = #{partIdx};
 	</delete>
 </mapper>

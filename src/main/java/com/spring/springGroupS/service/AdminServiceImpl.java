@@ -1,9 +1,12 @@
 package com.spring.springGroupS.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS.dao.AdminDAO;
+import com.spring.springGroupS.vo.ComplaintVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -24,5 +27,45 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int memberDeleteGet(int idx) {
 		return adminDAO.memberDeleteGet(idx);
+	}
+
+	@Override
+	public int setBoardComplaintInput(ComplaintVO vo) {
+		return adminDAO.setBoardComplaintInput(vo);
+	}
+
+	@Override
+	public void setBoardTableComplaintOk(int partIdx) {
+		adminDAO.setBoardTableComplaintOk(partIdx);
+	}
+
+	@Override
+	public List<ComplaintVO> getComplaintList(int startIndexNo, int pageSize) {
+		return adminDAO.getComplaintList(startIndexNo, pageSize);
+	}
+
+	@Override
+	public ComplaintVO getComplaintContent(int partIdx) {
+		return adminDAO.getComplaintContent(partIdx);
+	}
+
+	@Override
+	public List<ComplaintVO> getNewBoardList(String flag) {
+		return adminDAO.getNewBoardList(flag);
+	}
+
+	@Override
+	public int setComplaintDelete(String part, int partIdx) {
+		return adminDAO.setComplaintDelete(part, partIdx);
+	}
+
+	@Override
+	public int setComplaintPrgress(String part, int partIdx, String flag) {
+		return adminDAO.setComplaintPrgress(part, partIdx, flag);
+	}
+
+	@Override
+	public void setComplaintProgressOk(int idx, String flag) {
+		adminDAO.setComplaintProgressOk(idx, flag);
 	}
 }

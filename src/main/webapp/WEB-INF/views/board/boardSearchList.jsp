@@ -14,7 +14,7 @@
 	<p><br/></p>
 	<div class="container">
 		<h3 class="text-center">
-			<font color="red">${search}</font>을(를) <font color="blue">${pVO.searchStr}</font>(으)로 검색한 결과를 출력합니다.(<font color="green">${pVO.totRecCnt}</font> 건)
+			<font color="red">${pVO.searchKr}</font>을(를) <font color="blue">${pVO.searchStr}</font>(으)로 검색한 결과를 출력합니다.(<font color="green">${pVO.totRecCnt}</font> 건)
 		</h3>
 		<table class="table table-bordeless m-0 p-0">
 			<tr>

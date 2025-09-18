@@ -24,6 +24,12 @@ public class Pagination {
 		vo.setSearchStr(vo.getSearchStr());
 		vo.setFlag(vo.getFlag() == null ? "" : vo.getFlag());
 		
+		if(vo.getSearch() != null) {
+			if(vo.getSearch().equals("title")) vo.setSearchKr("글제목");
+			else if(vo.getSearch().equals("nickName")) vo.setSearchKr("닉네임");
+			else if(vo.getSearch().equals("content")) vo.setSearchKr("글내용");
+		}
+		
 		// 아무 값도 안 줬을 때 기본값이 0이기 때문에 삼항연산자의 조건을 0으로 준다.
 		vo.setPag((Integer)vo.getPag()==0 ? 1 : vo.getPag());
 		vo.setPageSize((Integer)vo.getPageSize()==0 ? 10 : vo.getPageSize());
