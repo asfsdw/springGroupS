@@ -1,6 +1,9 @@
 package com.spring.springGroupS.controller;
 
+import java.io.File;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -98,44 +101,8 @@ public class AdminController {
 		
 		return "admin/guest/guestList";
 	}
-
-	// 관리자 메뉴에서 회원 리스트 보여주기.
-	@GetMapping("/member/MemberList")
-	public String memberListGet(Model model, PageVO vo,
-			@RequestParam(name = "level", defaultValue = "100", required = false) int level) {
-		vo.setSection("member");
-		vo = pagination.pagination(vo);
-		
-		List<MemberVO> vos = null;
-		// flag가 공백이면 전체 리스트를 vos에 담는다. flag가 공백이 아니면 최근 7일의 리스트를 vos에 담는다.
-		if(vo.getFlag().equals("")) vos = memberService.getMemberList(vo.getStartIndexNo(), vo.getPageSize(), level);
-		else vos = memberService.getNewMemberList(vo.getFlag());
-		
-		model.addAttribute("vos", vos);
-		model.addAttribute("mVO", vo);
-		
-		return "admin/member/memberList";
-	}
-	// 회원 리스트에서 회원의 등급 변경.
-	@ResponseBody
-	@PostMapping("/member/MemberLevelChange")
-	public int memberLevelChangePost(int idx, int level) {
-		return memberService.setMemberLevelUp(idx, level);
-	}
-	// 회원 리스트에서 선택한 회원의 등급 변경.
-	@ResponseBody
-	@PostMapping("/member/MemberLevelSelectChange")
-	public int memberLevelSelectChangePost(String idxCheckedArray, int levelSelect) {
-		return adminService.setMemberLevelSelectChange(idxCheckedArray, levelSelect);
-	}
-	// 회원 리스트에서 탈퇴신청 중이며 마지막 접속일에서 30일 이상 경과한 회원 삭제.
-	@ResponseBody
-	@PostMapping("/member/MemberDelete")
-	public int memberDeletePost(int idx) {
-		return adminService.memberDeleteGet(idx);
-	}
 	
-	// 관리자 메뉴에서 게시판 보여주기.
+	//관리자 메뉴에서 게시판 보여주기.
 	@GetMapping("/board/BoardList")
 	public String boardListGet(Model model, PageVO vo) {
 		vo.setSection("board");
@@ -150,14 +117,13 @@ public class AdminController {
 		
 		return "admin/board/BoardList";
 	}
-	
-	// 신고글 목록.
+	//신고글 목록.
 	@GetMapping("/complaint/ComplaintList")
 	public String complaintListGet(Model model, PageVO pVO, ComplaintVO vo) {
 		pVO.setSection("admin");
 		pVO = pagination.pagination(pVO);
 		
-		List<ComplaintVO> vos = adminService.getComplaintList(pVO.getStartIndexNo(), pVO.getPageSize());
+		List<ComplaintVO> vos = adminService.getComplaintList(pVO.getStartIndexNo(), pVO.getPageSize(), vo.getFlag());
 		
 		model.addAttribute("vos", vos);
 		model.addAttribute("pVO", pVO);
@@ -209,4 +175,58 @@ public class AdminController {
 		
 		return res;
 	}
+	
+	// 자료 관리.
+	@GetMapping("/folder/FileManagement")
+	public String fileManagementGet(HttpServletRequest request, Model model, PageVO pVO) {
+		pVO.setSection("fileManagement");
+		pVO = pagination.pagination(pVO);
+		
+		String realPath = "";
+		if(pVO.getPart().equals("전체")) realPath = request.getSession().getServletContext().getRealPath("/resources/data");
+		else realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+pVO.getPart());
+		String[] files = new File(realPath).list();
+		
+		model.addAttribute("pVO", pVO);
+		model.addAttribute("files", files);
+		
+		return "admin/folder/fileManagement";
+	}
+
+	// 관리자 메뉴에서 회원 리스트 보여주기.
+	@GetMapping("/member/MemberList")
+	public String memberListGet(Model model, PageVO vo,
+			@RequestParam(name = "level", defaultValue = "100", required = false) int level) {
+		vo.setSection("member");
+		vo = pagination.pagination(vo);
+		
+		List<MemberVO> vos = null;
+		// flag가 공백이면 전체 리스트를 vos에 담는다. flag가 공백이 아니면 최근 7일의 리스트를 vos에 담는다.
+		if(vo.getFlag().equals("")) vos = memberService.getMemberList(vo.getStartIndexNo(), vo.getPageSize(), level);
+		else vos = memberService.getNewMemberList(vo.getFlag());
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("mVO", vo);
+		
+		return "admin/member/memberList";
+	}
+	// 회원 리스트에서 회원의 등급 변경.
+	@ResponseBody
+	@PostMapping("/member/MemberLevelChange")
+	public int memberLevelChangePost(int idx, int level) {
+		return memberService.setMemberLevelUp(idx, level);
+	}
+	// 회원 리스트에서 선택한 회원의 등급 변경.
+	@ResponseBody
+	@PostMapping("/member/MemberLevelSelectChange")
+	public int memberLevelSelectChangePost(String idxCheckedArray, int levelSelect) {
+		return adminService.setMemberLevelSelectChange(idxCheckedArray, levelSelect);
+	}
+	// 회원 리스트에서 탈퇴신청 중이며 마지막 접속일에서 30일 이상 경과한 회원 삭제.
+	@ResponseBody
+	@PostMapping("/member/MemberDelete")
+	public int memberDeletePost(int idx) {
+		return adminService.memberDeleteGet(idx);
+	}
+	
 }

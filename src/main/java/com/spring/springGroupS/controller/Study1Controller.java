@@ -1,5 +1,6 @@
 package com.spring.springGroupS.controller;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.spring.springGroupS.common.ARIAUtil;
@@ -527,7 +529,13 @@ public class Study1Controller {
 	
 	// 파일 업로드 연습용 폼 이동.
 	@GetMapping("/fileUpload/FileUploadForm")
-	public String fileUploadFormGet() {
+	public String fileUploadFormGet(HttpServletRequest request, Model model) {
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/fileUpload");
+		String[] files = new File(realPath).list();
+		
+		model.addAttribute("files", files);
+		model.addAttribute("fileCount", files.length);
+		
 		return "study1/fileUpload/fileUploadForm";
 	}
 	@PostMapping("/fileUpload/FileUploadForm")
@@ -535,5 +543,68 @@ public class Study1Controller {
 		int res = studyService.setFileUpload(fName, mid);
 		if(res != 0) return "redirect:/Message/fileUploadOk"; 
 		else return "redirect:/Message/fileUploadNo";
+	}
+	// 파일 삭제.
+	@ResponseBody
+	@PostMapping("/fileUpload/FileDelete")
+	public int fileDeletePost(HttpServletRequest request, String file) {
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/fileUpload/");
+		File fName = new File(realPath+file);
+		int res = 0;
+		if(fName.exists()) {
+			fName.delete();
+			res = 1;
+		}
+		return res;
+	}
+	// 파일 전체삭제.
+	@ResponseBody
+	@PostMapping("/fileUpload/FileAllDelete")
+	public int fileAllDeletePost(HttpServletRequest request) {
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/fileUpload/");
+		File folder = new File(realPath);
+		int res = 0;
+		
+		if(!folder.exists()) return res;
+		
+		File[] files = folder.listFiles();
+		if(files.length != 0) {
+			for(File file : files) {
+				if(!file.isDirectory()) file.delete();
+			}
+			res = 1;
+		}
+		return res;
+	}
+	// 멀티 파일 업로드 연습용 폼 이동.
+	@GetMapping("/fileUpload/MultiFileUploadForm")
+	public String multiFileUploadFormGet(HttpServletRequest request, Model model) {
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/fileUpload");
+		String[] files = new File(realPath).list();
+		
+		model.addAttribute("files", files);
+		model.addAttribute("fileCount", files.length);
+		
+		return "study1/fileUpload/multiFileUploadForm";
+	}
+	// 멀티 파일 업로드 처리.
+	@PostMapping("/fileUpload/MultiFileUploadForm")
+	public String multiFileUploadFormPost(HttpServletRequest request, Model model, 
+			MultipartHttpServletRequest mFile, String mid) {
+		int res = studyService.setMultiFileUpload(mFile, mid);
+		
+		if(res != 0) return "redirect:/Message/multiFileUploadOk"; 
+		else return "redirect:/Message/multiFileUploadNo";
+	}
+	
+	// 스윗 얼럿 연습용 폼 이동.
+	@GetMapping("/sweetAlert/SweetAlertForm")
+	public String sweetAlertFormGet() {
+		return "study1/sweetAlert/sweetAlertForm";
+	}
+	@ResponseBody
+	@PostMapping("/sweetAlert/ajax")
+	public int swwetAlertAjaxPost(int idx) {
+		return idx+100;
 	}
 }

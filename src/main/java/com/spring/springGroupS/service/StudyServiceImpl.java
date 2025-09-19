@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.spring.springGroupS.dao.StudyDAO;
 import com.spring.springGroupS.vo.UserVO;
@@ -109,6 +110,36 @@ public class StudyServiceImpl implements StudyService {
 		}
 		fos.flush();
 		fos.close();
+	}
+
+	@Override
+	public int setMultiFileUpload(MultipartHttpServletRequest mFile, String mid) {
+		int res = 0;
+		String oFileNames = "";
+		String sFileNames = "";
+		String fileSize = "";
+		
+		try {
+			List<MultipartFile> fileList = mFile.getFiles("fName");
+			for(MultipartFile file : fileList) {
+				String oFileName = file.getOriginalFilename();
+				String sFileName = mid+"_"+UUID.randomUUID().toString().substring(0,4)+"_"+oFileName;
+				
+				writeFile(file, sFileName);
+				
+				oFileNames += oFileName + "/";
+				sFileNames += sFileName + "/";
+				fileSize += file.getSize() + "/";
+			}
+			oFileNames = oFileNames.substring(0, oFileNames.length()-1);
+			sFileNames = sFileNames.substring(0, sFileNames.length()-1);
+			fileSize = fileSize.substring(0, fileSize.length()-1);
+			
+			res = 1;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return res;
 	}
 	
 }

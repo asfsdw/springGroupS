@@ -29,15 +29,15 @@
 			</tr>
 			<tr>
 				<th>신고글 새글</th>
-				<td><a href="${ctp}/admin/board/BoardList?flag=new"><font color="blue">${complaintNewCount}</font></a>건</td>
+				<td><a href="${ctp}/admin/complaint/ComplaintList?flag=new"><font color="blue">${complaintNewCount}</font></a>건</td>
 			</tr>
 			<tr>
 				<th>신규회원</th>
-				<td><a href="${ctp}/admin/member/MemberList?flag=new"><font color="blue">${memberNewCount}</font></a>건</td>
+				<td><a href="${ctp}/admin/complaint/MemberList?flag=new"><font color="blue">${memberNewCount}</font></a>건</td>
 			</tr>
 			<tr>
 				<th>탈퇴신청회원</th>
-				<td><a href="${ctp}/admin/member/MemberList?level=999"><font color="blue">${cancelMember}</font></a>건</td>
+				<td><a href="${ctp}/admin/complaint/MemberList?level=999"><font color="blue">${cancelMember}</font></a>건</td>
 			</tr>
 		</table>
 		<p><br/></p>

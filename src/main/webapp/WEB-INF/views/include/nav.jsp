@@ -37,7 +37,7 @@
 			<a href="${ctp}/board/BoardList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">게시판</a>
 		</c:if>
 		<c:if test="${sLevel < 3}">
-			<a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">자료실</a>
+			<a href="${ctp}/pds/PDSList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">자료실</a>
 			
 			<div class="w3-dropdown-hover w3-hide-small">
 				<button class="w3-padding-large w3-button" title="More">Study1 <i class="fa fa-caret-down"></i></button>     
@@ -54,6 +54,7 @@
 					<a href="${ctp}/study1/password/PasswordForm" class="w3-bar-item w3-button">SSC 연습</a>
 					<a href="${ctp}/study1/mail/MailForm" class="w3-bar-item w3-button">메일 인증 연습</a>
 					<a href="${ctp}/study1/fileUpload/FileUploadForm" class="w3-bar-item w3-button">파일 업로드 연습</a>
+					<a href="${ctp}/study1/sweetAlert/SweetAlertForm" class="w3-bar-item w3-button">스윗 얼럿 연습</a>
 				</div>
 			</div>
 		</c:if>

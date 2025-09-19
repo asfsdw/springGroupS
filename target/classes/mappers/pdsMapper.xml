@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS.dao.PDSDAO">
+	<select id="getPDSList" resultType="com.spring.springGroupS.vo.PDSVO">
+		SELECT * FROM pds <if test="part != '전체' || search != ''">WHERE </if>
+		<if test="part != '전체'">part = #{part}</if>
+		<if test="search != ''">${search} LIKE concat("%"#{searchStr}"%")</if>
+		LIMIT #{startIndexNo}, #{pageSize};
+	</select>
+	<select id="getTotRecCnt" resultType="int">
+		SELECT count(idx) FROM pds <if test="flag != '' || part != '전체' || search != ''">WHERE </if>
+			<if test="flag == 'new'">fDate >= date_add(now(), interval -7 day)</if>
+			<if test="part != '전체'">part = #{part}</if>
+			<if test="search != ''">${search} LIKE concat("%"#{searchStr}"%")</if>;
+	</select>
+</mapper>

@@ -294,10 +294,10 @@
 	<div class="input-group justify-content-center">
 		<div class="pagination">
 			<!-- pag와 pageSize를 BoardList에 보내준다. -->
-			<c:if test="${pag > 1}"><a href="${ctp}/admin/member/MemberLost?pag=1&pageSize=${pVO.pageSize}" 
+			<c:if test="${pVO.pag > 1}"><a href="${ctp}/admin/member/MemberList?pag=1&pageSize=${pVO.pageSize}" 
 				class="page-item page-link text-dark">첫 페이지</a></c:if>
 				<c:if test="${pVO.curBlock > 0}">
-					<a href="${ctp}/admin/member/MemberLost?pag=${(pVO.curBlock - 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}" 
+					<a href="${ctp}/admin/member/MemberList?pag=${(pVO.curBlock - 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}" 
 						class="page-item page-link text-dark">이전 블록</a>
 				</c:if>
 				<c:forEach var="i" begin="${(pVO.curBlock * pVO.blockSize) + 1}" end="${(pVO.curBlock * pVO.blockSize) + pVO.blockSize}" varStatus="st">
@@ -305,15 +305,15 @@
 						<span class="page-item active page-link bg-secondary border-secondary">${i}</span>
 					</c:if>
 					<c:if test="${i <= pVO.totPage && i != pVO.pag}">
-						<a href="${ctp}/admin/member/MemberLost?pag=${i}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">${i}</a>
+						<a href="${ctp}/admin/member/MemberList?pag=${i}&pageSize=${pVO.pageSize}" class="page-item page-link text-dark">${i}</a>
 					</c:if>
 				</c:forEach>
 				<c:if test="${pVO.curBlock < pVO.lastBlock}">
-					<a href="${ctp}/admin/member/MemberLost?pag=${(pVO.curBlock + 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}" 
+					<a href="${ctp}/admin/member/MemberList?pag=${(pVO.curBlock + 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}" 
 						class="page-item page-link text-dark">다음 블록</a>
 				</c:if>
 					<c:if test="${pVO.pag < pVO.totPage}">
-				<a href="${ctp}/admin/member/MemberLost?pag=${pVO.totPage}&pageSize=${pVO.pageSize}&pageSize=${pVO.pageSize}" 
+				<a href="${ctp}/admin/member/MemberList?pag=${pVO.totPage}&pageSize=${pVO.pageSize}&pageSize=${pVO.pageSize}" 
 					class="page-item page-link text-dark">마지막 페이지</a>
 			</c:if>
 		</div>

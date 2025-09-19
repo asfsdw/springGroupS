@@ -18,8 +18,11 @@
 		<resources mapping="/member/**" location="/resources/data/member/" />
 		<resources mapping="/js/**" location="/resources/js/" />
 		<resources mapping="/css/**" location="/resources/css/" />
-		<resources mapping="/ckeditor/**" location="/resources/ckeditor/" />
+		<resources mapping="/ckeditor/**" location="/resources/data/ckeditor/" />
 		<resources mapping="/data/**" location="/resources/data/" />
+		<resources mapping="/fileUpload/**" location="/resources/data/fileUpload/" />
+		<resources mapping="/pds/**" location="/resources/data/pds/" />
+		<resources mapping="/board/**" location="/resources/data/board/" />
 		
 		<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 		<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -44,7 +47,7 @@
 		
 		<!-- file upload -->
 		<beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-			<beans:property name="maxUploadSize" value="20971520" />
+			<beans:property name="maxUploadSize" value="31457280" />
 			<beans:property name="defaultEncoding" value="utf-8" />
 		</beans:bean>
 		

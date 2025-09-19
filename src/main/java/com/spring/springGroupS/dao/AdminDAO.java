@@ -15,7 +15,7 @@ public interface AdminDAO {
 
 	void setBoardTableComplaintOk(@Param("partIdx") int partIdx);
 
-	List<ComplaintVO> getComplaintList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize);
+	List<ComplaintVO> getComplaintList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("flag") String flag);
 
 	ComplaintVO getComplaintContent(@Param("partIdx") int partIdx);
 
@@ -26,4 +26,6 @@ public interface AdminDAO {
 	int setComplaintPrgress(@Param("part") String part, @Param("partIdx") int partIdx, @Param("flag") String flag);
 
 	void setComplaintProgressOk(@Param("idx") int idx, @Param("flag") String flag);
+
+	int getTotRecCnt(@Param("flag") String flag, @Param("search") String search, @Param("searchStr") String searchStr);
 }

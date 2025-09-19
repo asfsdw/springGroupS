@@ -3,11 +3,13 @@
 <mapper namespace="com.spring.springGroupS.dao.AdminDAO">
 	<select id="getComplaintList" resultType="com.spring.springGroupS.vo.ComplaintVO">
 		SELECT c.*, b.title AS title, b.nickName AS nickName, b.mid AS mid, b.content AS content, b.complaint AS complaint 
-		FROM complaint c LEFT JOIN board b ON c.partIdx = b.idx ORDER BY c.idx DESC LIMIT #{startIndexNo}, #{pageSize}
+			FROM complaint c LEFT JOIN board b ON c.partIdx = b.idx 
+			<if test="flag == 'new'">WHERE cpDate >= date_add(now(), interval -7 day)</if> 
+			ORDER BY c.idx DESC LIMIT #{startIndexNo}, #{pageSize}
 	</select>
 	<select id="getComplaintContent" resultType="com.spring.springGroupS.vo.ComplaintVO">
 		SELECT c.*, b.title AS title, b.nickName AS nickName, b.mid AS mid, b.content AS content, b.complaint AS complaint 
-		FROM complaint c LEFT JOIN board b ON c.partIdx = b.idx WHERE b.idx = #{partIdx};
+		FROM complaint c LEFT JOIN board b ON c.partIdx = b.idx WHERE b.idx = #{partIdx} LIMIT 1;
 	</select>
 	<select id="getNewBoardList" resultType="com.spring.springGroupS.vo.ComplaintVO">
 		SELECT *, 
@@ -16,6 +18,11 @@
 			WHERE cpDate >= date_add(now(), interval -7 day) 
 			ORDER BY idx DESC 
 			<if test="flag == ''">LIMIT 1</if>;
+	</select>
+	<select id="getTotRecCnt" resultType="int">
+		SELECT count(idx) FROM complaint <if test="flag != '' || search != ''">WHERE </if>
+			<if test="flag == 'new'">cpDate >= date_add(now(), interval -7 day)</if>
+			<if test="search != ''">${search} LIKE concat("%"#{searchStr}"%")</if>;
 	</select>
 
 

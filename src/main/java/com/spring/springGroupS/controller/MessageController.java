@@ -189,6 +189,14 @@ public class MessageController {
 			if(pVO.getSearch() != null) model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize()+"&search="+pVO.getSearch()+"&searchStr="+pVO.getSearchStr());
 			else model.addAttribute("url", "/board/BoardContent?idx="+idx+"&pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
 		}
+		else if(msgFlag.equals("multiFileUploadOk")) {
+			model.addAttribute("message", "파일이 업로드되었습니다.");
+			model.addAttribute("url", "/study1/fileUpload/MultiFileUploadForm");
+		}
+		else if(msgFlag.equals("multiFileUploadNo")) {
+			model.addAttribute("message", "파일 업로드에 실패했습니다.");
+			model.addAttribute("url", "/study1/fileUpload/MultiFileUploadForm");
+		}
 		return "include/message";
 	}
 }

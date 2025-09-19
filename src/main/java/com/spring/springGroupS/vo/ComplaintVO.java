@@ -20,4 +20,5 @@ public class ComplaintVO {
 	private String complaintSW;	// S(신고각하), H(신고허용), D(글삭제).
 	
 	private int newCount;
+	private String flag;
 }
