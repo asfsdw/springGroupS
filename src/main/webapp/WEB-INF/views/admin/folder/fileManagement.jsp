@@ -12,8 +12,61 @@
 	<script>
 		'use strict';
 		
+		// 폴더이동.
 		function selectFolder(extName) {
 			location.href = "${ctp}/admin/folder/FileManagement?part="+extName;
+		}
+		
+		// 전체선택.
+		function allCheck() {
+			for(let i=0; i<document.getElementsByName("fileCheck").length; i++) {
+				document.getElementsByName("fileCheck")[i].checked = true;
+			}
+		}
+		// 전체해제.
+		function allReset() {
+			for(let i=0; i<document.getElementsByName("fileCheck").length; i++) {
+				document.getElementsByName("fileCheck")[i].checked = false;
+			}
+		}
+		//선택삭제.
+		function fileDelete(part, file) {
+			swal.fire({
+				title: "선택한 파일을 삭제하시겠습니까?",
+				icon : "warning",
+				showCancelButton: true
+			}).then((res) => {
+				if(res.isConfirmed) {
+					let fName = "";
+					if(document.getElementsByName("fileCheck") != null) {
+						for(let i=0; i<document.getElementsByName("fileCheck").length; i++) {
+							if(document.getElementsByName("fileCheck")[i].checked) fName += document.getElementsByName("fileCheck")[i].value+"/";
+						}
+						fName = fName.substring(0, fName.length-1);
+					}
+					
+					let qurey = {
+							"part" : part,
+							"fNames" : fName,
+							"fileName" : file
+					}
+					$.ajax({
+						url : "${ctp}/admin/folder/FileManagement",
+						type: "post",
+						data: qurey,
+						success : (res) => {
+							if(res != 0) {
+								swal.fire({
+									title: "파일이 삭제되었습니다.",
+									icon : "success"
+								}).then(() => location.reload());
+							}
+							else swal.fire("파일 삭제에 실패했습니다.","","error");
+						},
+						error : () => alert("전송오류")
+					});
+				}
+			});
 		}
 	</script>
 </head>
@@ -21,6 +74,19 @@
 	<div class="container text-center">
 		<h2>파일 관리자입니다.</h2>
 		<hr/>
+		<div class="row mb-2">
+			<div class="col text-start">
+				<c:if test="${pVO.part != '전체'}">
+					<input type="button" value="최상위폴더로" onclick="location.href = '${ctp}/admin/folder/FileManagement'" class="btn btn-warning btn-sm" />
+				</c:if>
+			</div>
+			<div class="col"><font size="5">폴더, 파일 ${pVO.totRecCnt}건</font></div>
+			<div class="col text-end">
+				<input type="button" value="전체선택" onclick="allCheck()" class="btn btn-success btn-sm" />
+				<input type="button" value="선택해제" onclick="allReset()" class="btn btn-primary btn-sm" />
+				<input type="button" value="선택삭제" onclick="fileDelete('${pVO.part}','')" class="btn btn-danger btn-sm" />
+			</div>
+		</div>
 		<table class="table table-hover">
 			<tr class="table-secondary">
 				<th>번호</th>
@@ -31,32 +97,66 @@
 			<c:forEach var="file" items="${files}" varStatus="st">
 			<c:set var="ext" value="${fn:split(file,'.')}"></c:set>
 			<c:set var="extName" value="${ext[fn:length(ext)-1]}"></c:set>
-				<tr>
-					<td>${st.count}</td>
-					<td>${file}</td>
-					<td>
-						<c:if test="${extName == ext[0]}">폴더</c:if>
-						<c:if test="${extName != ext[0]}">
-							<c:if test="${extName == 'zip'}">압축파일</c:if>
-							<c:if test="${extName == 'hwp'}">한글문서파일</c:if>
-							<c:if test="${extName == 'doc'}">word파일</c:if>
-							<c:if test="${extName == 'ppt' || extName == 'pptx'}">파워포인트파일</c:if>
-							<c:if test="${extName == 'pdf'}">pdf파일</c:if>
-							<c:if test="${extName == 'txt'}">텍스트파일</c:if>
-							<c:if test="${extName == 'mp4'}">동영상파일</c:if>
-							<c:if test="${extName == 'jpg' || extName == 'gif' || extName == 'png'}">
-								<img src="${ctp}/${pVO.part}/${file}" width="150px" />
+				<!-- files는 pageSize만큼만 채우고 남은 공간은 비어있기 때문에 null이 아닐때만 출력하게 한다. -->
+				<c:if test="${file != null}">
+					<tr>
+						<td>
+							${st.count}
+							<c:if test="${extName != ext[0]}">
+								<input type="checkbox" name="fileCheck" value="${file}" />
 							</c:if>
-						</c:if>
-					</td>
-					<td>
-						<c:if test="${extName == ext[0]}"><input type="button" value="선택" onclick="selectFolder('${extName}')" class="btn btn-success" /></c:if>
-						<c:if test="${extName != ext[0]}"><input type="button" value="삭제" onclick="" class="btn btn-danger" /></c:if>
-					</td>
-				</tr>
+						</td>
+						<td>${file}</td>
+						<td>
+							<c:if test="${extName == ext[0]}">폴더</c:if>
+							<c:if test="${extName != ext[0]}">
+								<c:if test="${extName == 'zip'}">압축파일</c:if>
+								<c:if test="${extName == 'hwp'}">한글문서파일</c:if>
+								<c:if test="${extName == 'doc'}">word파일</c:if>
+								<c:if test="${extName == 'ppt' || extName == 'pptx'}">파워포인트파일</c:if>
+								<c:if test="${extName == 'pdf'}">pdf파일</c:if>
+								<c:if test="${extName == 'txt'}">텍스트파일</c:if>
+								<c:if test="${extName == 'mp4'}">동영상파일</c:if>
+								<c:if test="${extName == 'jpg' || extName == 'gif' || extName == 'png'}">
+									<!-- 폴더 경로 설정(ckeditor의 경로가 겹치기 때문에 servlet-context.xml에서 경로 바꿔주는 게 쉬움). -->
+									<img src="${ctp}/${pVO.part}/${file}" width="150px" />
+								</c:if>
+							</c:if>
+						</td>
+						<td>
+							<c:if test="${extName == ext[0]}"><input type="button" value="선택" onclick="selectFolder('${extName}')" class="btn btn-success" /></c:if>
+							<c:if test="${extName != ext[0]}"><input type="button" value="삭제" onclick="fileDelete('${pVO.part}','${file}')" class="btn btn-danger" /></c:if>
+						</td>
+					</tr>
+				</c:if>
 			</c:forEach>
 		</table>
 		<p><br/></p>
 	</div>
+	<!-- 블록페이지 시작 -->
+	<div class="input-group justify-content-center">
+		<div class="pagination">
+			<c:if test="${pVO.pag > 1}"><a href="${ctp}/admin/folder/FileManagement?pag=1&pageSize=${pVO.pageSize}&part=${pVO.part}" class="page-item page-link text-dark">첫 페이지</a></c:if>
+			<c:if test="${pVO.curBlock > 0}">
+				<a href="${ctp}/admin/folder/FileManagement?pag=${(pVO.curBlock - 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}&part=${pVO.part}" class="page-item page-link text-dark">이전 블록</a>
+			</c:if>
+			<c:forEach var="i" begin="${(pVO.curBlock * pVO.blockSize) + 1}" end="${(pVO.curBlock * pVO.blockSize) + pVO.blockSize}" varStatus="st">
+				<c:if test="${i <= pVO.totPage && i == pVO.pag}">
+					<span class="page-item active page-link bg-secondary border-secondary">${i}</span>
+				</c:if>
+				<c:if test="${i <= pVO.totPage && i != pVO.pag}">
+					<a href="${ctp}/admin/folder/FileManagement?pag=${i}&pageSize=${pVO.pageSize}&part=${pVO.part}"  class="page-item page-link text-dark">${i}</a>
+				</c:if>
+			</c:forEach>
+			<c:if test="${pVO.curBlock < pVO.lastBlock}">
+				<a href="${ctp}/admin/folder/FileManagement?pag=${(pVO.curBlock + 1) * pVO.blockSize + 1}&pageSize=${pVO.pageSize}&part=${pVO.part}" class="page-item page-link text-dark">다음 블록</a>
+			</c:if>
+			<c:if test="${pVO.pag < pVO.totPage}">
+				<a href="${ctp}/admin/folder/FileManagement?pag=${pVO.totPage}&pageSize=${pVO.pageSize}&part=${pVO.part}" class="page-item page-link text-dark">마지막 페이지</a>
+			</c:if>
+		</div>
+	</div>
+	<p></p>
+	<!-- 블록페이지 끝 -->
 </body>
 </html>

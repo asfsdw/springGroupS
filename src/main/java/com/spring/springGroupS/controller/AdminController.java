@@ -176,21 +176,78 @@ public class AdminController {
 		return res;
 	}
 	
-	// 자료 관리.
+	// 자료 관리 폼.
 	@GetMapping("/folder/FileManagement")
 	public String fileManagementGet(HttpServletRequest request, Model model, PageVO pVO) {
-		pVO.setSection("fileManagement");
+		// part를 넣기위해 설정.
 		pVO = pagination.pagination(pVO);
 		
 		String realPath = "";
 		if(pVO.getPart().equals("전체")) realPath = request.getSession().getServletContext().getRealPath("/resources/data");
 		else realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+pVO.getPart());
+		
 		String[] files = new File(realPath).list();
 		
+		// 파일의 총 수.
+		pVO.setTotRecCnt(files.length);
+		// totPage를 구하기 위해 다시 설정.
+		pVO = pagination.pagination(pVO);
+		
+		// 페이징 처리.
+		// 한 페이지에 보여줄 파일 정보를 담을 배열 생성(크기는 전체 파일 갯수만큼).
+		String[] file = new String[files.length];
+		// startIndexNo(pag-1 * pageSize)부터 startIndexNo+pageSize만큼 반복문을 돌린다.
+		// pag=1, pageSize=10일 경우(0~9까지. pag=2일 경우 10~20까지.)
+		for(int i=pVO.getStartIndexNo(); i<pVO.getStartIndexNo()+pVO.getPageSize(); i++) {
+			// i가 전체 파일 갯수보다 작을 때까지만 돌려야한다(배열의 인덱스는 0부터 시작하고 length는 1부터 시작하니까).
+			if(i < files.length) file[i] = files[i];
+			// i가 전체 파일 갯수보다 크면 반복문 탈출.
+			else break;
+		}
+		
 		model.addAttribute("pVO", pVO);
-		model.addAttribute("files", files);
+		model.addAttribute("files", file);
 		
 		return "admin/folder/fileManagement";
+	}
+	@ResponseBody
+	@PostMapping("/folder/FileManagement")
+	public int fileManagementPost(HttpServletRequest request, Model model, PageVO pVO, String fileName, String fNames) {
+		// fileName = 삭제버튼으로 파일을 삭제할 경우의 파일이름. fNames = 선택삭제로 파일을 삭제할 경우의 파일이름.
+		int res = 0;
+		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+pVO.getPart()+"/");
+		String[] fName = null;
+		// 삭제할 파일이 여러개일 때.
+		if(fNames.contains("/")) {
+			fName = fNames.split("/");
+		}
+		
+		// 삭제 버튼으로 삭제했을 때.
+		if(fileName != "") {
+			File file = new File(realPath+fileName);
+			if(!file.isDirectory()) file.delete();
+			res = 1;
+		}
+		// 여러 파일 삭제.
+		else if(fName != null) {
+			for(int i=0; i<fName.length; i++) {
+				File file = new File(realPath+fName[i]);
+				if(!file.isDirectory()) file.delete();
+			}
+			res = 1;
+		}
+		// 선택을 하나만 했을 경우.
+		else {
+			if(!fNames.contains("/")) {
+				File file = new File(realPath+fNames);
+				if(!file.isDirectory()) file.delete();
+			}
+			res = 1;
+		}
+		
+		model.addAttribute("pVO", pVO);
+		
+		return res;
 	}
 
 	// 관리자 메뉴에서 회원 리스트 보여주기.

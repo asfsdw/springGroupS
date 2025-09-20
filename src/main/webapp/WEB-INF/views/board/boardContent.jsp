@@ -306,10 +306,10 @@
 					</c:if>
 				</td>
 				<td class="text-end">
-					<c:if test="${vo.mid == sMid && vo.complaint != 'NO'}">
+					<c:if test="${vo.mid == sMid && vo.complaint != 'OK'}">
 						<input type="button" value="수정" onclick="location.href='${ctp}/board/BoardUpdate?idx=${vo.idx}&pag=${pVO.pag}&pageSize=${pVO.pageSize}&search=${pVO.search}&searchStr=${pVO.searchStr}';" class="btn btn-warning" />
 					</c:if>
-					<c:if test="${vo.mid == sMid || sLevel == 0 && vo.complaint != 'NO'}">
+					<c:if test="${vo.mid == sMid || sLevel == 0 && vo.complaint != 'OK'}">
 						<input type="button" value="삭제" onclick="deleteCheck()" class="btn btn-danger" />
 					</c:if>
 					<c:if test="${vo.complaint != 'OK'}">

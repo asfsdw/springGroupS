@@ -24,7 +24,7 @@ public class Pagination {
 	AdminService adminService;
 	
 	public PageVO pagination(PageVO vo) {
-		vo.setSection(vo.getSection());
+		vo.setSection(vo.getSection() == null ? "" : vo.getSection());
 		vo.setPart(vo.getPart() == null ? "전체" : vo.getPart());
 		vo.setSearch(vo.getSearch());
 		vo.setSearchStr(vo.getSearchStr());
@@ -37,8 +37,9 @@ public class Pagination {
 		}
 		
 		// 아무 값도 안 줬을 때 기본값이 0이기 때문에 삼항연산자의 조건을 0으로 준다.
-		vo.setPag((Integer)vo.getPag()==0 ? 1 : vo.getPag());
-		vo.setPageSize((Integer)vo.getPageSize()==0 ? 10 : vo.getPageSize());
+		vo.setPag(vo.getPag()==0 ? 1 : vo.getPag());
+		vo.setPageSize(vo.getPageSize()==0 ? 10 : vo.getPageSize());
+		vo.setTotRecCnt(vo.getTotRecCnt() == 0 ? 1 : vo.getTotRecCnt());
 		
 		if(vo.getSection().equals("member")) vo.setTotRecCnt(memberService.getTotRecCnt(vo.getFlag()));
 		else if(vo.getSection().equals("guest")) {

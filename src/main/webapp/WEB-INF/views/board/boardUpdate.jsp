@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
-		<script src="${ctp}/ckeditor/ckeditor.js"></script>
+		<script src="${ctp}/resources/ckeditor/ckeditor.js"></script>
 		<title>게시글 수정</title>
 	</head>
 <body>
