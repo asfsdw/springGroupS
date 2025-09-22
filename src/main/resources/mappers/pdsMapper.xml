@@ -5,6 +5,7 @@
 		SELECT * FROM pds <if test="part != '전체' || search != ''">WHERE </if>
 		<if test="part != '전체'">part = #{part}</if>
 		<if test="search != ''">${search} LIKE concat("%"#{searchStr}"%")</if>
+		ORDER BY idx DESC 
 		LIMIT #{startIndexNo}, #{pageSize};
 	</select>
 	<select id="getTotRecCnt" resultType="int">
@@ -13,4 +14,26 @@
 			<if test="part != '전체'">part = #{part}</if>
 			<if test="search != ''">${search} LIKE concat("%"#{searchStr}"%")</if>;
 	</select>
+	<select id="getPDSContent" resultType="com.spring.springGroupS.vo.PDSVO">
+		SELECT * FROM pds WHERE idx = #{idx};
+	</select>
+	
+	
+	
+	<insert id="setPDSInput">
+		INSERT INTO pds VALUES(DEFAULT,#{vo.mid},#{vo.nickName},#{vo.fName},#{vo.fsName},#{vo.fSize},#{vo.part},
+			#{vo.title},#{vo.content},#{vo.openSW},#{vo.pwd},#{vo.hostIP},DEFAULT,DEFAULT);
+	</insert>
+	
+	
+	
+	<update id="setDownNumCheck">
+		UPDATE pds SET downNum = downNum + 1 WHERE idx = #{idx};
+	</update>
+	
+	
+	
+	<delete id="setDeleteCheck">
+		DELETE FROM pds WHERE idx = #{idx};
+	</delete>
 </mapper>

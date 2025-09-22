@@ -33,11 +33,11 @@
 				<td class="text-start"><a href="${ctp}/board/BoardInput" class="btn btn-success btn-sm">글쓰기</a></td>
 				<td class="text-end">한 페이지에 최대:&nbsp;&nbsp;
 					<select name="viewPageCnt" id="viewPageCnt" onchange="viewPageCheck()">
-						<option value="5" ${pageSize==5 ? 'selected' : ''}>5개씩 보기</option>
-						<option value="10"<c:if test="${pageSize == 10}">selected</c:if>>10개씩 보기</option>
-						<option value="15"<c:if test="${pageSize == 15}">selected</c:if>>15개씩 보기</option>
-						<option value="20"<c:if test="${pageSize == 20}">selected</c:if>>20개씩 보기</option>
-						<option value="30"<c:if test="${pageSize == 30}">selected</c:if>>30개씩 보기</option>
+						<option value="5" ${pVO.pageSize==5 ? 'selected' : ''}>5개씩 보기</option>
+						<option value="10"<c:if test="${pVO.pageSize == 10}">selected</c:if>>10개씩 보기</option>
+						<option value="15"<c:if test="${pVO.pageSize == 15}">selected</c:if>>15개씩 보기</option>
+						<option value="20"<c:if test="${pVO.pageSize == 20}">selected</c:if>>20개씩 보기</option>
+						<option value="30"<c:if test="${pVO.pageSize == 30}">selected</c:if>>30개씩 보기</option>
 					</select>
 				</td>
 			</tr>

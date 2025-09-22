@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.spring.springGroupS.vo.PDSVO;
 import com.spring.springGroupS.vo.PageVO;
 
 @Controller()
 public class MessageController {
 	@RequestMapping(value = "/Message/{msgFlag}", method = RequestMethod.GET)
-	public String MessageGet(Model model, HttpSession session, PageVO pVO,
+	public String MessageGet(Model model, HttpSession session, PageVO pVO, PDSVO pdsVO,
 			@PathVariable String msgFlag,
 			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
 			@RequestParam(name="idx", defaultValue = "0", required = false) int idx) throws UnsupportedEncodingException {
@@ -196,6 +197,14 @@ public class MessageController {
 		else if(msgFlag.equals("multiFileUploadNo")) {
 			model.addAttribute("message", "파일 업로드에 실패했습니다.");
 			model.addAttribute("url", "/study1/fileUpload/MultiFileUploadForm");
+		}
+		else if(msgFlag.equals("pdsInputOk")) {
+			model.addAttribute("message", "자료글이 등록되었습니다.");
+			model.addAttribute("url", "/pds/PDSList");
+		}
+		else if(msgFlag.equals("pdsInputNo")) {
+			model.addAttribute("message", "자료글 등록에 실패했습니다.");
+			model.addAttribute("url", "/pds/PDSInput?pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
 		}
 		return "include/message";
 	}

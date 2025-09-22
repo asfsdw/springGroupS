@@ -122,7 +122,7 @@
 						<c:if test="${extName == 'ppt' || extName == 'pptx'}">파워포인트파일</c:if>
 						<c:if test="${extName == 'pdf'}">pdf파일</c:if>
 						<c:if test="${extName == 'txt'}">텍스트파일</c:if>
-						<c:if test="${extName == 'jpg' || extName == 'gif' || extName == 'png'}">
+						<c:if test="${extName == 'jpg' || extName == 'gif' || extName == 'png' || extName == 'mp4'}">
 							<img src="${ctp}/fileUpload/${file}" width="150px" />
 						</c:if>
 					</td>

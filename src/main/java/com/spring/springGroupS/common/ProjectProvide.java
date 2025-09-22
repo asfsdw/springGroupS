@@ -3,6 +3,8 @@ package com.spring.springGroupS.common;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
@@ -67,7 +69,7 @@ public class ProjectProvide {
 		return sFileName;
 	}
 	// 파일 업로드.
-	private void writeFile(MultipartFile fName, String sFileName, String part) throws IOException {
+	public void writeFile(MultipartFile fName, String sFileName, String part) throws IOException {
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		String realPath = request.getSession().getServletContext().getRealPath("/resources/data/"+part+"/");
 		FileOutputStream fos = new FileOutputStream(realPath + sFileName);
@@ -86,4 +88,11 @@ public class ProjectProvide {
 		// 파일이 존재하면, 삭제.
 		if(file.exists()) file.delete();
 	}
+	// 파일 이름 변경.
+	public String saveFileName(String oFileName) {
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyMMddHHmmss");
+		return sdf.format(date)+"_"+oFileName;
+	}
+	
 }
