@@ -18,6 +18,11 @@
 		SELECT * FROM pds WHERE idx = #{idx};
 	</select>
 	
+	<select id="getReviewList" resultType="com.spring.springGroupS.vo.ReviewVO">
+		SELECT * FROM (SELECT * FROM review WHERE partIdx = #{idx}) v LEFT JOIN reviewReply r 
+			ON part = #{part} AND v.partIdx = #{idx} AND v.idx = r.reviewIdx;
+	</select>	
+	
 	
 	
 	<insert id="setPDSInput">

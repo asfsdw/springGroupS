@@ -23,6 +23,7 @@ import com.spring.springGroupS.common.Pagination;
 import com.spring.springGroupS.service.PDSService;
 import com.spring.springGroupS.vo.PDSVO;
 import com.spring.springGroupS.vo.PageVO;
+import com.spring.springGroupS.vo.ReviewVO;
 
 @SuppressWarnings("deprecation")
 @Controller
@@ -75,8 +76,21 @@ public class PDSController {
 		
 		PDSVO vo = pdsService.getPDSContent(idx);
 		
+		// 등록된 리뷰도 불러와서 함께 content로 보내기.
+		List<ReviewVO> reviewVOS = pdsService.getReviewList(idx, "pds");
+		
+		// 리뷰 별점 평균 구하기.
+		int reviewTot = 0;
+		for(ReviewVO r : reviewVOS) {
+			reviewTot += r.getStar();
+		}
+		double reviewAVG = 0.0;
+		if(reviewVOS.size() != 0) reviewAVG = (double) reviewTot / reviewVOS.size();
+		
 		model.addAttribute("vo", vo);
 		model.addAttribute("pVO", pVO);
+		model.addAttribute("reviewVOS", reviewVOS);
+		model.addAttribute("reviewAVG", reviewAVG);
 		
 		return "pds/pdsContent";
 	}

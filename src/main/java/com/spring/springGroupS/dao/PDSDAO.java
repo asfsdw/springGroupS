@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.springGroupS.vo.PDSVO;
+import com.spring.springGroupS.vo.ReviewVO;
 
 public interface PDSDAO {
 
@@ -19,5 +20,7 @@ public interface PDSDAO {
 	int setDownNumCheck(@Param("idx") int idx);
 
 	int setDeleteCheck(@Param("idx") int idx);
+
+	List<ReviewVO> getReviewList(@Param("idx") int idx, @Param("part") String part);
 
 }

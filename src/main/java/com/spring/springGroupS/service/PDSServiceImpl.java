@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import com.spring.springGroupS.common.ProjectProvide;
 import com.spring.springGroupS.dao.PDSDAO;
 import com.spring.springGroupS.vo.PDSVO;
+import com.spring.springGroupS.vo.ReviewVO;
 
 @Service
 public class PDSServiceImpl implements PDSService {
@@ -84,5 +85,10 @@ public class PDSServiceImpl implements PDSService {
 			if(!file.isDirectory()) file.delete();
 		}
 		return pdsDAO.setDeleteCheck(idx);
+	}
+
+	@Override
+	public List<ReviewVO> getReviewList(int idx, String part) {
+		return pdsDAO.getReviewList(idx, part);
 	}
 }

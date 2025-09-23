@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS.dao.ReviewDAO">
+
+
+
+	<insert id="setReviewInputOk">
+		INSERT INTO review VALUES(DEFAULT,#{vo.part},#{vo.partIdx},#{vo.mid},#{vo.nickName},#{vo.star},#{vo.content},DEFAULT);
+	</insert>
+	<insert id="setReviewReplyInputOk">
+		INSERT INTO reviewReply VALUES(DEFAULT,#{vo.reviewIdx},#{vo.replyMid},#{vo.replyNickName},#{vo.replyContent},DEFAULT);
+	</insert>
+	
+	
+	<delete id="setReviewDelete">
+		DELETE FROM review WHERE idx = #{idx};
+	</delete>
+	<delete id="setReviewReplyDelete">
+		DELETE FROM reviewReply WHERE replyIdx = #{replyIdx};
+	</delete>
+	
+</mapper>
