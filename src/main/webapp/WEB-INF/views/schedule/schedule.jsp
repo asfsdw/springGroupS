@@ -64,8 +64,9 @@
 								${st.count}<br/>
 								<c:forEach var="vo" items="${vos}">
 									<c:if test="${fn:substring(vo.SDate, 8, 10)==st.count}">
-									-<c:if test="${vo.part=='공지'}"><font color="red"> ${vo.part}</font>(${vo.partCnt})<br/></c:if>
-									<c:if test="${vo.part!='공지'}"><font color="black">${vo.part}(${vo.partCnt})<br/></font></c:if>
+									<font color="black">-</font>
+									<c:if test="${vo.part=='공지'}"><font color="red"> ${vo.part}</font>(${vo.partCnt})<br/></c:if>
+									<c:if test="${vo.part!='공지'}"><font color="black"> ${vo.part}(${vo.partCnt})<br/></font></c:if>
 									</c:if>
 								</c:forEach>
 							</a>

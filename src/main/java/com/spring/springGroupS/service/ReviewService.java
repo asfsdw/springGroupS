@@ -12,4 +12,6 @@ public interface ReviewService {
 
 	int setReviewReplyDelete(int replyIdx);
 
+	void setReviewPointGain(String mid);
+
 }

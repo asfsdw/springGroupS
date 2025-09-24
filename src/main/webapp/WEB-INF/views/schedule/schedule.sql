@@ -10,17 +10,17 @@ CREATE TABLE schedule (
 	FOREIGN KEY(mid) REFERENCES member(mid) ON DELETE CASCADE
 );
 
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-09-14', '학습', '프로젝트 설계서 제안.');
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-09-24', '학습', 'DB설계서 완성하기');
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-09-24', '학습', '리뷰 포인트 숙제');
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-09-24', '학습', '스케쥴에 관리자 공지 모두 보이기');
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-09-26', '학습', '프로젝트 계획서 제출');
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-09-29', '학습', '프로젝트 시작~~');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-09-14', '학습', '프로젝트 설계서 제안.');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-09-24', '학습', 'DB설계서 완성하기');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-09-24', '학습', '리뷰 포인트 숙제');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-09-24', '학습', '스케쥴에 관리자 공지 모두 보이기');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-09-26', '학습', '프로젝트 계획서 제출');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-09-29', '학습', '프로젝트 시작~~');
 INSERT INTO schedule VALUES(DEFAULT, 'admin','2025-09-29', '공지', '시스템 점검일');
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-09-29', '업무', '업무일지 정리');
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-09-30', '학습', '프로젝트 중간점검');
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-10-06', '학습', '프로젝트 발표, 장소:그린컴퓨터 402호, 시간:10시~18시');
-INSERT INTO schedule VALUES(DEFAULT, 'ohn1234','2025-12-26', '학습', '그린컴퓨터 수료식');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-09-29', '업무', '업무일지 정리');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-09-30', '학습', '프로젝트 중간점검');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-10-06', '학습', '프로젝트 발표, 장소:그린컴퓨터 402호, 시간:10시~18시');
+INSERT INTO schedule VALUES(DEFAULT, 'hkd1234','2025-12-26', '학습', '그린컴퓨터 수료식');
 
 SELECT * FROM schedule WHERE mid = 'ohn1234' ORDER BY sDate;
 SELECT * FROM schedule WHERE mid = 'ohn1234' AND sDate = '2025-09' ORDER BY sDate; /*에러*/

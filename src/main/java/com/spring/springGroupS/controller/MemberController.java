@@ -1,6 +1,8 @@
 package com.spring.springGroupS.controller;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.springGroupS.common.ProjectProvide;
 import com.spring.springGroupS.service.GuestService;
 import com.spring.springGroupS.service.MemberService;
+import com.spring.springGroupS.service.ScheduleService;
 import com.spring.springGroupS.vo.MemberVO;
+import com.spring.springGroupS.vo.ScheduleVO;
 
 @Controller
 @RequestMapping("/member")
@@ -40,6 +44,8 @@ public class MemberController {
 	BCryptPasswordEncoder passwordEncoder;
 	@Autowired
 	GuestService guestService;
+	@Autowired
+	ScheduleService scheduleService;
 	
 	// 회원가입 폼 이동.
 	@GetMapping("/MemberJoin")
@@ -310,7 +316,7 @@ public class MemberController {
 	
 	// 멤버 전용방.
 	@GetMapping("/MemberMain")
-	public String memberMainGet(Model model, HttpSession session) {
+	public String memberMainGet(Model model, HttpSession session, ScheduleVO vo) {
 		String mid = (String)session.getAttribute("sMid");
 		String nickName = (String)session.getAttribute("sNickName");
 		String strLevel = (String)session.getAttribute("sStrLevel");
@@ -319,9 +325,18 @@ public class MemberController {
 		// 방명록에 올린 글의 수.
 		int guestCnt = guestService.getMemberGuestCnt(mid, nickName, mVO.getName());
 		
+		// 오늘 일정.
+		Date now = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String date = sdf.format(now);
+		List<ScheduleVO> vos = scheduleService.getScheduleMenu(mid, date);
+		
 		model.addAttribute("strLevel", strLevel);
 		model.addAttribute("guestCnt", guestCnt);
 		model.addAttribute("mVO", mVO);
+		
+		model.addAttribute("date", date);
+		model.addAttribute("vos", vos);
 		
 		return "member/memberMain";
 	}

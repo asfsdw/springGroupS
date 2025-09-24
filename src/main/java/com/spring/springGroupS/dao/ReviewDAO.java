@@ -14,4 +14,6 @@ public interface ReviewDAO {
 
 	int setReviewReplyDelete(@Param("replyIdx") int replyIdx);
 
+	void setReviewPointGain(@Param("mid") String mid);
+
 }

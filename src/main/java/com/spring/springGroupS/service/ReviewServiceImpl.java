@@ -30,4 +30,9 @@ public class ReviewServiceImpl implements ReviewService {
 	public int setReviewReplyDelete(int replyIdx) {
 		return reviewDAO.setReviewReplyDelete(replyIdx);
 	}
+
+	@Override
+	public void setReviewPointGain(String mid) {
+		reviewDAO.setReviewPointGain(mid);
+	}
 }

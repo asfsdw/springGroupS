@@ -12,6 +12,13 @@
 	</insert>
 	
 	
+	
+	<update id="setReviewPointGain">
+		UPDATE member SET point = point + 100 WHERE mid = #{mid};
+	</update>
+	
+	
+	
 	<delete id="setReviewDelete">
 		DELETE FROM review WHERE idx = #{idx};
 	</delete>
