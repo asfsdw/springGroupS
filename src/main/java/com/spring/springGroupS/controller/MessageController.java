@@ -206,6 +206,14 @@ public class MessageController {
 			model.addAttribute("message", "자료글 등록에 실패했습니다.");
 			model.addAttribute("url", "/pds/PDSInput?pag="+pVO.getPag()+"&pageSize="+pVO.getPageSize());
 		}
+		else if(msgFlag.equals("TransactionUserInputOk")) {
+			model.addAttribute("message", "회원등록되었습니다.");
+			model.addAttribute("url", "/study2/transaction/TransactionForm");
+		}
+		else if(msgFlag.equals("TransactionUserInputNo")) {
+			model.addAttribute("message", "회원등록 실패했습니다.");
+			model.addAttribute("url", "/study2/transaction/TransactionForm");
+		}
 		return "include/message";
 	}
 }

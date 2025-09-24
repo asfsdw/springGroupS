@@ -1,4 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.springGroupS.dao.Study2DAO">
+	<select id="getUserList" resultType="com.spring.springGroupS.vo.TransactionVO">
+		SELECT * FROM user;
+	</select>
+	<select id="getTransactionList" resultType="com.spring.springGroupS.vo.TransactionVO">
+		SELECT * FROM user;
+	</select>
+	<select id="getTransactionList2" resultType="com.spring.springGroupS.vo.TransactionVO">
+		SELECT * FROM user2;
+	</select>
+	
+	
+	
+	<insert id="setValidatorOk">
+		INSERT INTO user VALUES(DEFAULT,#{vo.mid},#{vo.name},#{vo.age},#{vo.address});
+	</insert>
+	<insert id="setTransactionUser1Input">
+		INSERT INTO user VALUES(DEFAULT,#{vo.mid},#{vo.name},#{vo.age},#{vo.address});
+	</insert>
+	<insert id="setTransactionUser2Input">
+		INSERT INTO user2 VALUES(#{vo.mid},#{vo.job});
+	</insert>
+	<insert id="setTransactionUserTotalInput">
+		INSERT INTO user VALUES(DEFAULT,#{vo.mid},#{vo.name},#{vo.age},#{vo.address});
+		INSERT INTO user2 VALUES(#{vo.mid},#{vo.job});
+	</insert>
+	
+	
+	
+	<delete id="setValidatorDeleteOk">
+		DELETE FROM user WHERE idx = #{idx};
+	</delete>
 </mapper>

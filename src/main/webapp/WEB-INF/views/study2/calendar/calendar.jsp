@@ -8,6 +8,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<title>Calendar</title>
+	<style>
+		td.today {
+			background-color: pink;
+			color: #fff;
+			font-weight: bolder;
+		}
+	</style>
 </head>
 <body>
 	<div class="container text-center">
@@ -39,12 +46,15 @@
 						<c:set var="cnt" value="${cnt+1}" />
 					</c:forEach>
 					<c:forEach begin="1" end="${lastDay}" varStatus="st">
-						<!-- 일요일의 cnt는 1, 8, 15... 이기 때문에 7로 나눈 나머지가 1이면 빨간색으로 출력한다. -->
-						<c:if test="${cnt%7==1}"><td><font color="red">${st.count}</font></td></c:if>
-						<!-- 토요일의 cnt는 7, 14, 21... 이기 때문에 7로 나눈 나머지가 0이면 파란색으로 출력한다. -->
-						<c:if test="${cnt%7==0}"><td><font color="blue">${st.count}</font></td></c:if>
-						<!-- 일요일, 토요일이 아니면 그냥 출력한다. -->
-						<c:if test="${cnt%7!=0 && cnt%7!=1}"><td>${st.count}</td></c:if>
+						<c:set var="toDaySW" value="${yy==toYear && mm==toMonth && st.count==toDay?1:0}" />
+						<td ${toDaySW==1?'class="today"':''}>
+							<!-- 일요일의 cnt는 1, 8, 15... 이기 때문에 7로 나눈 나머지가 1이면 빨간색으로 출력한다. -->
+							<c:if test="${cnt%7==1}"><font color="red">${st.count}</font></c:if>
+							<!-- 토요일의 cnt는 7, 14, 21... 이기 때문에 7로 나눈 나머지가 0이면 파란색으로 출력한다. -->
+							<c:if test="${cnt%7==0}"><font color="blue">${st.count}</font></c:if>
+							<!-- 일요일, 토요일이 아니면 그냥 출력한다. -->
+							<c:if test="${cnt%7!=0 && cnt%7!=1}">${st.count}</c:if>
+						</td>
 						<c:if test="${cnt%7==0}"></tr><tr></c:if>
 						<c:set var="cnt" value="${cnt+1}" />
 					</c:forEach>

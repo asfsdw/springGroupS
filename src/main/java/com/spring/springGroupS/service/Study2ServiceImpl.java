@@ -1,6 +1,7 @@
 package com.spring.springGroupS.service;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -10,6 +11,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.spring.springGroupS.dao.Study2DAO;
+import com.spring.springGroupS.vo.TransactionVO;
 
 @Service
 public class Study2ServiceImpl implements Study2Service {
@@ -72,5 +74,45 @@ public class Study2ServiceImpl implements Study2Service {
 		request.setAttribute("nextStartWeek", nextStartWeek);
 		request.setAttribute("mm", mm);
 		request.setAttribute("yy", yy);
+	}
+
+	@Override
+	public List<TransactionVO> getUserList() {
+		return study2DAO.getUserList();
+	}
+
+	@Override
+	public int setValidatorOk(TransactionVO vo) {
+		return study2DAO.setValidatorOk(vo);
+	}
+
+	@Override
+	public int setValidatorDeleteOk(int idx) {
+		return study2DAO.setValidatorDeleteOk(idx);
+	}
+
+	@Override
+	public List<TransactionVO> getTransactionList() {
+		return study2DAO.getTransactionList();
+	}
+
+	@Override
+	public List<TransactionVO> getTransactionList2() {
+		return study2DAO.getTransactionList2();
+	}
+
+	@Override
+	public void setTransactionUser1Input(TransactionVO vo) {
+		study2DAO.setTransactionUser1Input(vo);
+	}
+
+	@Override
+	public void setTransactionUser2Input(TransactionVO vo) {
+		study2DAO.setTransactionUser2Input(vo);
+	}
+
+	@Override
+	public int setTransactionUserTotalInput(TransactionVO vo) {
+		return study2DAO.setTransactionUserTotalInput(vo);
 	}
 }

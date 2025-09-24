@@ -62,6 +62,8 @@
 				<div class="w3-dropdown-content w3-bar-block w3-card-4">
 					<a href="${ctp}/study2/random/RandomForm" class="w3-bar-item w3-button">랜덤 출력 연습</a>
 					<a href="${ctp}/study2/calendar/Calendar" class="w3-bar-item w3-button">달력 출력 연습</a>
+					<a href="${ctp}/study2/validator/Validator" class="w3-bar-item w3-button">백앤드 체크 연습</a>
+					<a href="${ctp}/study2/transaction/TransactionForm" class="w3-bar-item w3-button">트랜잭션 연습</a>
 				</div>
 			</div>
 		</c:if>
@@ -74,7 +76,7 @@
 					<a href="${ctp}/member/MemberPwdCheck/p" class="w3-bar-item w3-button">비밀번호 변경</a>
 					<a href="javascript:userDeleteCheck()" class="w3-bar-item w3-button">회원탈퇴</a>
 					<c:if test="${sLevel < 3}">
-						<a href="#" class="w3-bar-item w3-button">일정관리</a>
+						<a href="${ctp}/schedule/Schedule" class="w3-bar-item w3-button">일정관리</a>
 						<a href="#" class="w3-bar-item w3-button">웹메시지</a>
 						<a href="#" class="w3-bar-item w3-button">사진첩</a>
 					</c:if>

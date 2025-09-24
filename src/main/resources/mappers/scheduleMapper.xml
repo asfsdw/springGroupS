@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS.dao.ScheduleDAO">
+	<select id="getScheduleList" resultType="com.spring.springGroupS.vo.ScheduleVO">
+		SELECT *, count(part) AS partCnt FROM schedule 
+			WHERE (mid = #{mid} OR part = '공지') AND substring(sDate, 1, 7) = #{ym} 
+			GROUP BY sDate, part ORDER BY sDate;
+	</select>
+	<select id="getScheduleMenu" resultType="com.spring.springGroupS.vo.ScheduleVO">
+		<!-- SELECT * FROM schedule WHERE mid = #{mid} OR part = '공지' ORDER BY part; -->
+		SELECT * FROM schedule WHERE (mid = #{mid} OR part = '공지') AND date_format(sDate, '%Y-%m-%d') = #{ymd} ORDER BY part;
+	</select>
+	
+	
+	
+	<insert id="setScheduleInputOk">
+		insert into schedule values (default, #{vo.mid}, #{vo.ymd}, #{vo.part}, #{vo.content});
+	</insert>
+	
+	
+	
+	<delete id="setDelCheck">
+		DELETE FROM schedule WHERE idx = #{idx};
+	</delete>
+</mapper>
