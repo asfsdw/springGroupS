@@ -11,6 +11,15 @@
 		SELECT * FROM user2;
 	</select>
 	
+	<select id="getLoadCrimeCheck" resultType="com.spring.springGroupS.vo.CrimeVO">
+		SELECT * FROM crime WHERE year = #{year};
+	</select>
+	<select id="getPoliceCheck" resultType="com.spring.springGroupS.vo.CrimeVO">
+		SELECT year, police, sum(robbery) AS totRobbery, sum(theft) AS totTheft, sum(murder) AS totMurder, sum(violence) AS totViolence,
+			avg(robbery) AS avgRobbery, avg(theft) AS avgTheft, avg(murder) AS avgMurder, avg(violence) AS avgViolence
+			FROM crime WHERE year = #{year} AND police LIKE concat(#{police}"%") ORDER BY year, police;
+	</select>
+	
 	
 	
 	<insert id="setValidatorOk">
@@ -27,9 +36,16 @@
 		INSERT INTO user2 VALUES(#{vo.mid},#{vo.job});
 	</insert>
 	
+	<insert id="setSaveCrimeCheck">
+		INSERT INTO crime VALUES(DEFAULT,#{vo.year},#{vo.police},#{vo.robbery},#{vo.theft},#{vo.murder},#{vo.violence});
+	</insert>
 	
 	
 	<delete id="setValidatorDeleteOk">
 		DELETE FROM user WHERE idx = #{idx};
+	</delete>
+	
+	<delete id="setDeleteCrimeCheck">
+		DELETE FROM crime WHERE year = #{year};
 	</delete>
 </mapper>

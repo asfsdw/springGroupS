@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.springGroupS.service.Study2Service;
+import com.spring.springGroupS.vo.ChartVO;
+import com.spring.springGroupS.vo.CrimeVO;
 import com.spring.springGroupS.vo.TransactionVO;
 
 @Controller
@@ -124,5 +127,47 @@ public class Study2Controller {
 		}
 		
 		return study2Service.setTransactionUserTotalInput(vo) + "";
+	}
+	
+	// 공공데이터(API) 연습 폼.
+	@GetMapping("dataAPI/DataAPIForm")
+	public String dataAPIForm() {
+		return "study2/dataAPI/dataAPIForm";
+	}
+	@ResponseBody
+	@PostMapping("/dataAPI/SaveCrimeCheck")
+	public void saveCrimeCheckPost(CrimeVO vo) {
+		study2Service.setSaveCrimeCheck(vo);
+	}
+	@ResponseBody
+	@PostMapping("/dataAPI/DeleteCrimeCheck")
+	public int deleteCrimeCheckPost(int year) {
+		return study2Service.setDeleteCrimeCheck(year);
+	}
+	@ResponseBody
+	@PostMapping("/dataAPI/LoadCrimeCheck")
+	public List<CrimeVO> loadCrimeCheckPost(int year) {
+		return study2Service.getLoadCrimeCheck(year);
+	}
+	@ResponseBody
+	@PostMapping("/dataAPI/PoliceCheck")
+	public CrimeVO policeCheckPost(Model model, int year, String police) {
+		return study2Service.getPoliceCheck(year, police);
+	}
+	
+	//차트연습폼 보기
+	@GetMapping("/chart/ChartForm")
+	public String chartFormGet(Model model, ChartVO vo,
+			@RequestParam(name="part", defaultValue = "barVChart", required = false) String part){
+		model.addAttribute("part", part);
+		model.addAttribute("vo", vo);
+		return "study2/chart/chartForm";
+	}
+	@PostMapping("/chart/googleChart1")
+	public String googleChart1Post(Model model, ChartVO vo,
+			@RequestParam(name="part", defaultValue = "barVChart", required = false) String part){
+		model.addAttribute("part", part);
+		model.addAttribute("vo", vo);
+		return "study2/chart/chartForm";
 	}
 }

@@ -51,6 +51,7 @@
 			scheduleInput += '<table class="table table-bordered">';
 			scheduleInput += '<tr><th>일정분류</th><td>';
 			scheduleInput += '<select name="part" id="part'+idx+'" class="form-control">';
+			scheduleInput += '<c:if test="${sLevel == 0}"><option value="공지">공지</option></c:if>';
 			scheduleInput += '<option value="모임">모임</option>';
 			scheduleInput += '<option value="업무">업무</option>';
 			scheduleInput += '<option value="학습">학습</option>';
@@ -95,7 +96,7 @@
 						location.reload();
 					}
 					else alert("일정 삭제에 실패했습니다.");
-				}
+				},
 				error : () => alert("전송오류")
 			});
 		}
@@ -166,6 +167,7 @@
 								<th>일정분류</th>
 								<td>
 									<select name="part" id="part" class="form-select">
+										<c:if test="${sLevel == 0}"><option value="공지">공지</option></c:if>
 										<option>모임</option>
 										<option>업무</option>
 										<option>학습</option>

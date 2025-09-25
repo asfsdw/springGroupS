@@ -32,6 +32,7 @@
 		</interceptor>
 		<interceptor>
 			<mapping path="/pds/PDSList"/>
+			<mapping path="/pds/PDSContent"/>
 			<mapping path="/pds/PDSDownload"/>
 			<mapping path="/board/**"/>
 			<mapping path="/study1/**"/>
@@ -44,6 +45,7 @@
 		<interceptor>
 			<mapping path="/pds/**" />
 			<exclude-mapping path="/pds/PDSList"/>
+			<exclude-mapping path="/pds/PDSContent"/>
 			<exclude-mapping path="/pds/PDSDownload"/>
 			<beans:ref bean="level1Interceptor" />
 		</interceptor>

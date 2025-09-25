@@ -32,10 +32,10 @@ public class ScheduleController {
 	@GetMapping("/ScheduleMenu")
 	public String scheduleGet(Model model, HttpSession session, String ymd) {
 		String mid = session.getAttribute("sMid").toString();
+		String mm = "", dd = "";
+		String[] ymdArr = ymd.split("-");
 		
 		if(ymd.length() != 10) {
-			String mm = "", dd = "";
-			String[] ymdArr = ymd.split("-");
 			
 			if(ymdArr[1].length() == 1) mm = "0"+ymdArr[1];
 			else mm=ymdArr[1];
@@ -50,6 +50,8 @@ public class ScheduleController {
 		model.addAttribute("vos", vos);
 		model.addAttribute("scheduleCnt", vos.size());
 		model.addAttribute("ymd", ymd);
+		model.addAttribute("yy", ymdArr[0]);
+		model.addAttribute("mm", mm);
 		
 		return "schedule/scheduleMenu";
 	}

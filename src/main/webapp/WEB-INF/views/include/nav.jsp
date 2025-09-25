@@ -64,6 +64,8 @@
 					<a href="${ctp}/study2/calendar/Calendar" class="w3-bar-item w3-button">달력 출력 연습</a>
 					<a href="${ctp}/study2/validator/Validator" class="w3-bar-item w3-button">백앤드 체크 연습</a>
 					<a href="${ctp}/study2/transaction/TransactionForm" class="w3-bar-item w3-button">트랜잭션 연습</a>
+					<a href="${ctp}/study2/dataAPI/DataAPIForm" class="w3-bar-item w3-button">공공데이터(API) 연습</a>
+					<a href="${ctp}/study2/chart/ChartForm" class="w3-bar-item w3-button">차트 연습</a>
 				</div>
 			</div>
 		</c:if>
