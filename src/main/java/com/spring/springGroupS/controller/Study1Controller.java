@@ -422,6 +422,7 @@ public class Study1Controller {
 		ArrayList<String> vos = studyService.getCityArrayList(dodo);
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		map.put("city", vos);
+		System.out.println(map);
 		return map;
 	}
 	// mid 검색해서 보내주기.

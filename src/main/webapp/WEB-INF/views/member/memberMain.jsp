@@ -10,6 +10,76 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<jsp:include page="/WEB-INF/views/include/bs5.jsp" />
 	<title>Member Main</title>
+	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	<script type="text/javascript">
+		if(${sLevel == 0}) {
+			google.charts.load('current', {'packages':['bar']});
+			google.charts.setOnLoadCallback(drawChart1);
+			
+			function drawChart1() {
+				let str = [];
+				let statNickNames = "${statNickName}".split("/");
+				let statVisitCnts = "${statVisitCnt}".split("/");
+				let statPoints = "${statPoint}".split("/");
+				
+				for(let i=0; i<statNickNames.length; i++) {
+					str.push([statNickNames[i],Number(statVisitCnts[i]),Number(statPoints[i])]);
+				}
+				
+				var data = google.visualization.arrayToDataTable([
+					["닉네임", "총 방문일", "보유 포인트"],
+					// 전개 연산자.
+					...str
+				]);
+				
+				var options = {"chart" : {"title" : "최다방문자(1개월), 포인트"}};
+				
+				var chart = new google.charts.Bar(document.getElementById("chartView"));
+				
+				chart.draw(data, google.charts.Bar.convertOptions(options));
+			}
+		}
+
+    // chart 변경.
+    function chartView(flag) {
+    	if (flag == 1) {
+  			$("#chart1").hide();
+    		$("#chart2").show();
+  			
+    		drawChart1();
+    	}
+  		if (flag == 2) {
+  			$("#chart2").hide();
+  			$("#chart1").show();
+  			
+				google.charts.load('current', {'packages':['corechart']});
+				google.charts.setOnLoadCallback(drawChart2);
+				
+				function drawChart2() {
+					let str = [];
+		    	let statNickNames = "${statNickName}".split("/");
+		    	let statVisitCnts = "${statVisitCnt}".split("/");
+		    	let statPoints = "${statPoint}".split("/");
+		    	
+		    	for(let i=0; i<statNickNames.length; i++) {
+		    		str.push([statNickNames[i],Number(statVisitCnts[i]),Number(statPoints[i])]);
+		    	}
+		    	
+		    	var data = google.visualization.arrayToDataTable([
+						["닉네임", "총 방문일", "보유 포인트"],
+						// 전개 연산자.
+						...str
+					]);
+					
+		    	var options = {"title" : "최다방문자(1개월)"};
+					
+					var chart = new google.visualization.PieChart(document.getElementById("chartView"));
+					
+					chart.draw(data, options);
+				}
+  		}
+  	}
+  </script>
 </head>
 <body>
 	<div class="container text-center">
@@ -48,6 +118,18 @@
 				<div class="text-center"><a href="${ctp}/schedule/Schedule" class="btn btn-info btn-sm">전체 일정 보기</a></div>
 			</div>
 		</div>
+		<c:if test="${sLevel == 0}">
+			<hr/>
+			<div class="row">
+				<div class="col">
+					<div id="chartView" style="width: 400px; height: 200px;"></div>
+					<div class="text-start mt-2">
+						<input type="button" value="그래프보기" id="chart1" onclick="chartView(1)" class="btn btn-primary btn-sm" style="width: 100px; margin-left: 100px; display: none;" />
+						<input type="button" value="비율보기" id="chart2" onclick="chartView(2)" class="btn btn-primary btn-sm" style="width: 100px; margin-left: 100px;"/>
+					</div>
+				</div>
+			</div>
+		</c:if>
 		<hr/>
 		<div>
 			방명록에 올린 글 수 : ${guestCnt}<br/>

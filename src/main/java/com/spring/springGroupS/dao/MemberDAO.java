@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.springGroupS.vo.MemberLoginStatVO;
 import com.spring.springGroupS.vo.MemberVO;
 
 public interface MemberDAO {
@@ -39,5 +40,7 @@ public interface MemberDAO {
 	int getTotRecCnt(@Param("flag") String flag);
 
 	List<MemberVO> getNewMemberList(@Param("flag") String flag);
+
+	List<MemberLoginStatVO> getMemberStatList();
 
 }

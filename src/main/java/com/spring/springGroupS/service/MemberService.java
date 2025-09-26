@@ -2,6 +2,7 @@ package com.spring.springGroupS.service;
 
 import java.util.List;
 
+import com.spring.springGroupS.vo.MemberLoginStatVO;
 import com.spring.springGroupS.vo.MemberVO;
 
 public interface MemberService {
@@ -37,5 +38,7 @@ public interface MemberService {
 	int getTotRecCnt(String flag);
 
 	List<MemberVO> getNewMemberList(String flag);
+
+	List<MemberLoginStatVO> getMemberStatList();
 
 }

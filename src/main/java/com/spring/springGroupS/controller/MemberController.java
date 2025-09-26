@@ -30,7 +30,9 @@ import com.spring.springGroupS.common.ProjectProvide;
 import com.spring.springGroupS.service.GuestService;
 import com.spring.springGroupS.service.MemberService;
 import com.spring.springGroupS.service.ScheduleService;
+import com.spring.springGroupS.vo.MemberLoginStatVO;
 import com.spring.springGroupS.vo.MemberVO;
+import com.spring.springGroupS.vo.PageVO;
 import com.spring.springGroupS.vo.ScheduleVO;
 
 @Controller
@@ -316,7 +318,7 @@ public class MemberController {
 	
 	// 멤버 전용방.
 	@GetMapping("/MemberMain")
-	public String memberMainGet(Model model, HttpSession session, ScheduleVO vo) {
+	public String memberMainGet(Model model, HttpSession session, ScheduleVO vo, MemberLoginStatVO statVO) {
 		String mid = (String)session.getAttribute("sMid");
 		String nickName = (String)session.getAttribute("sNickName");
 		String strLevel = (String)session.getAttribute("sStrLevel");
@@ -331,12 +333,31 @@ public class MemberController {
 		String date = sdf.format(now);
 		List<ScheduleVO> vos = scheduleService.getScheduleMenu(mid, date);
 		
+		// 1개월간 가장 많이 출석한 회원(최대 5명).
+		List<MemberLoginStatVO> statVOS = memberService.getMemberStatList();
+		String statNickName = "";
+		String statVisitCnt = "";
+		String statPoint = "";
+		
+		for(MemberLoginStatVO stat : statVOS) {
+			statNickName += stat.getNickName()+"/";
+			statVisitCnt += stat.getVisitCnt()+"/";
+			statPoint += stat.getPoint()+"/";
+		}
+		statNickName = statNickName.substring(0,statNickName.lastIndexOf("/"));
+		statVisitCnt = statVisitCnt.substring(0,statVisitCnt.lastIndexOf("/"));
+		statPoint = statPoint.substring(0,statPoint.lastIndexOf("/"));
+		
 		model.addAttribute("strLevel", strLevel);
 		model.addAttribute("guestCnt", guestCnt);
 		model.addAttribute("mVO", mVO);
 		
 		model.addAttribute("date", date);
 		model.addAttribute("vos", vos);
+		
+		model.addAttribute("statNickName", statNickName);
+		model.addAttribute("statVisitCnt", statVisitCnt);
+		model.addAttribute("statPoint", statPoint);
 		
 		return "member/memberMain";
 	}
@@ -402,5 +423,28 @@ public class MemberController {
 		session.removeAttribute("sLastDate");
 		session.removeAttribute("sEmailKey");
 		return "redirect:/Message/memberLogoutOk?mid="+mid;
+	}
+	
+	// 통계 연습
+	@GetMapping("/chart/BarVChart")
+	public String varVChartGet(Model model, PageVO pVO) {
+		List<MemberLoginStatVO> vos = memberService.getMemberStatList();
+		String nickName = "";
+		String visitCnt = "";
+		String point = "";
+		
+		for(MemberLoginStatVO vo : vos) {
+			nickName += vo.getNickName()+"/";
+			visitCnt += vo.getVisitCnt()+"/";
+			point += vo.getPoint()+"/";
+		}
+		nickName = nickName.substring(0,nickName.lastIndexOf("/"));
+		visitCnt = visitCnt.substring(0,visitCnt.lastIndexOf("/"));
+		point = point.substring(0,point.lastIndexOf("/"));
+		
+		model.addAttribute("nickName", nickName);
+		model.addAttribute("visitCnt", visitCnt);
+		model.addAttribute("point", point);
+		return "member/chart/barVChart";
 	}
 }

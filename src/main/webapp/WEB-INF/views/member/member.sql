@@ -46,3 +46,5 @@ SELECT *,
 SELECT *, to_days(now()) - to_days(lastDate) AS cancelDate FROM member ORDER BY mid;
 
 SELECT *, concat(year(startDate),'-',month(startDate),'-',day(startDate)) AS 가입일, concat(year(now()),'-',month(now()),'-',day(now())-7) AS 오늘날짜 FROM member;
+SELECT mid, visitCnt, point FROM member ORDER BY visitCnt DESC LIMIT 5;
+SELECT nickName, visitCnt, point FROM member WHERE lastDate >= date_add(now(), interval -1 month) ORDER BY visitCnt DESC LIMIT 5;

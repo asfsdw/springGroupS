@@ -29,6 +29,10 @@
 		<if test="flag == 'new'">WHERE startDate >= date_add(now(), interval -7 day)</if>;
 	</select>
 	
+	<select id="getMemberStatList" resultType="com.spring.springGroupS.vo.MemberLoginStatVO">
+		SELECT nickName, visitCnt, point FROM member WHERE lastDate >= date_add(now(), interval -1 month) AND visitCnt > 0 ORDER BY visitCnt DESC LIMIT 5;
+	</select>
+	
 	
 	
 	<insert id="setMemberJoin">

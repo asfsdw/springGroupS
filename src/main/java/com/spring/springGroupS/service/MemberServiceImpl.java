@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS.dao.MemberDAO;
+import com.spring.springGroupS.vo.MemberLoginStatVO;
 import com.spring.springGroupS.vo.MemberVO;
 
 @Service
@@ -91,6 +92,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MemberVO> getNewMemberList(String flag) {
 		return memberDAO.getNewMemberList(flag);
+	}
+
+	@Override
+	public List<MemberLoginStatVO> getMemberStatList() {
+		return memberDAO.getMemberStatList();
 	}
 
 }
