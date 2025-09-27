@@ -61,14 +61,13 @@
 					let str = [];
 					let statNickNames = "${statNickName}".split("/");
 					let statVisitCnts = "${statVisitCnt}".split("/");
-					let statPoints = "${statPoint}".split("/");
 					
 					for(let i=0; i<statNickNames.length; i++) {
-						str.push([statNickNames[i],Number(statVisitCnts[i]),Number(statPoints[i])]);
+						str.push([statNickNames[i],Number(statVisitCnts[i])]);
 					}
 					
 					var data = google.visualization.arrayToDataTable([
-						["닉네임", "총 방문일", "보유 포인트"],
+						["닉네임", "총 방문일"],
 						// 전개 연산자.
 						...str
 					]);
