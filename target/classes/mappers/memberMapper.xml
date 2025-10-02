@@ -33,12 +33,20 @@
 		SELECT nickName, visitCnt, point FROM member WHERE lastDate >= date_add(now(), interval -1 month) AND visitCnt > 0 ORDER BY visitCnt DESC LIMIT 5;
 	</select>
 	
+	<select id="getMemberNickNameEmailCheck" resultType="com.spring.springGroupS.vo.MemberVO">
+		select * from member where nickName = #{nickName} and email = #{email} limit 1;
+	</select>
+	
 	
 	
 	<insert id="setMemberJoin">
 		INSERT INTO member VALUES(DEFAULT,#{vo.mid},#{vo.pwd},#{vo.nickName},#{vo.name},#{vo.email},
 			#{vo.gender},#{vo.birthday},#{vo.tel},#{vo.address},#{vo.homePage},#{vo.job},#{vo.hobby},#{vo.photo},
 			#{vo.content},#{vo.userInfor},DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT,DEFAULT);
+	</insert>
+	
+	<insert id="setKakaoMemberInput">
+		insert into member (mid, pwd, nickName, email, name, level) values (#{mid}, #{pwd}, #{nickName}, #{email}, #{nickName}, 2);
 	</insert>
 	
 	

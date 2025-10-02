@@ -27,7 +27,7 @@ import com.spring.springGroupS.vo.PageVO;
 @RequestMapping("/board")
 public class BoardController {
 	@Autowired
-	Pagination paginatino;
+	Pagination pagination;
 	@Autowired
 	BoardService boardService;
 	@Autowired
@@ -37,7 +37,7 @@ public class BoardController {
 	@GetMapping("/BoardList")
 	public String boardListGet(Model model, PageVO pVO) {
 		pVO.setSection("board");
-		pVO = paginatino.pagination(pVO);
+		pVO = pagination.pagination(pVO);
 		
 		List<BoardVO> vos = boardService.getBoardList(pVO.getStartIndexNo(), pVO.getPageSize(), "", "");
 		
@@ -51,7 +51,7 @@ public class BoardController {
 	@GetMapping("/BoardSearchList")
 	public String boardSearchListPost(Model model, PageVO pVO) {
 		pVO.setSection("board");
-		pVO = paginatino.pagination(pVO);
+		pVO = pagination.pagination(pVO);
 		
 		List<BoardVO> vos = boardService.getBoardList(pVO.getStartIndexNo(), pVO.getPageSize(), pVO.getSearch(), pVO.getSearchStr());
 		
@@ -92,7 +92,7 @@ public class BoardController {
 	@GetMapping("/BoardContent")
 	public String boardContentGet(HttpSession session, Model model, PageVO pVO, int idx) {
 		pVO.setSection("board");
-		pVO = paginatino.pagination(pVO);
+		pVO = pagination.pagination(pVO);
 		
 		// 조회수 증가.
 		List<String> contentReadNum = (List<String>)session.getAttribute("sContentIdx");
@@ -187,7 +187,7 @@ public class BoardController {
 	@GetMapping("/BoardUpdate")
 	public String boardUpdateGet(Model model, PageVO pVO, int idx) {
 		pVO.setSection("board");
-		pVO = paginatino.pagination(pVO);
+		pVO = pagination.pagination(pVO);
 		
 		BoardVO vo = boardService.getBoardContent(idx);
 		// 원본 글의 이미지 파일 복사(board => ckeditor).
@@ -202,7 +202,7 @@ public class BoardController {
 	@PostMapping("/BoardUpdate")
 	public String boardUpdatePost(Model model, PageVO pVO, BoardVO vo) {
 		pVO.setSection("board");
-		pVO = paginatino.pagination(pVO);
+		pVO = pagination.pagination(pVO);
 		
 		String title = vo.getTitle();
 		title = title.replace("<", "&lt");

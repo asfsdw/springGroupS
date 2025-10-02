@@ -41,4 +41,8 @@ public interface MemberService {
 
 	List<MemberLoginStatVO> getMemberStatList();
 
+	MemberVO getMemberNickNameEmailCheck(String nickName, String email);
+
+	void setKakaoMemberInput(String mid, String pwd, String nickName, String email);
+
 }

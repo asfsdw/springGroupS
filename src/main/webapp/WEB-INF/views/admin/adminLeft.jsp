@@ -73,10 +73,10 @@
 			<hr/>
 			<div class="main ms-3 mb-2"><b>상품관리</b></div>
 			<div class="sub">
-				<p><a href="${ctp}/admin/guest/GuestList">상품분류등록</a></p>
-				<p><a href="${ctp}/admin/board/BoardList">상품등록관리</a></p>
-				<p><a href="${ctp}/admin/board/BoardList">상품등록조회</a></p>
-				<p><a href="${ctp}/admin/board/BoardList">옵션등록관리</a></p>
+				<p><a href="${ctp}/dbShop/dbCategory">상품분류등록</a></p>
+				<p><a href="${ctp}/dbShop/dbProduct">상품등록관리</a></p>
+				<p><a href="${ctp}/dbShop/dbShopList">상품등록조회</a></p>
+				<p><a href="${ctp}/dbShop/dbOption">옵션등록관리</a></p>
 				<p><a href="${ctp}/admin/board/BoardList">주문관리</a></p>
 				<p><a href="${ctp}/admin/board/BoardList">반품관리</a></p>
 				<p><a href="${ctp}/admin/board/BoardList">1:1문의</a></p>

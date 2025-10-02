@@ -54,16 +54,17 @@ public class AdminController {
 		int boardNewCount = 0;
 		int complaintNewCount = 0;
 		
-		guestNewCount = gVOS.get(0).getNewCount();
 		// gVOS의 검색결과가 있으면 건 수 갱신.
-		if(!gVOS.isEmpty()) guestNewCount = mVOS.get(0).getNewCount();
+		if(!gVOS.isEmpty()) guestNewCount = gVOS.get(0).getNewCount();
 		// mVOS의 검색결과가 있으면 건 수 갱신.
 		if(!mVOS.isEmpty()) {
 			memberNewCount = mVOS.get(0).getNewCount();
 			// 탈퇴대기중인 회원 건 수.
 			cancelMember = mVOS.get(0).getCancelMember();
 		}
+		// bVOS의 검색결과가 있으면 건 수 갱신.
 		if(!bVOS.isEmpty()) boardNewCount = bVOS.get(0).getNewCount();
+		// cVOS의 검색결과가 있으면 건 수 갱신.
 		if(!cVOS.isEmpty()) complaintNewCount = cVOS.get(0).getNewCount();
 		
 		model.addAttribute("guestNewCount", guestNewCount);

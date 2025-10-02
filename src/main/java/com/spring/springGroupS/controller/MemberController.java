@@ -1,5 +1,7 @@
 package com.spring.springGroupS.controller;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -137,7 +139,7 @@ public class MemberController {
 		}
 		return "member/memberLogin";
 	}
-	// 로그인.
+	// 일반 로그인.
 	@PostMapping("/MemberLogin")
 	public String memberLoginPost(HttpSession session, HttpServletResponse response,
 			@RequestParam(name="mid", defaultValue = "admin", required = false) String mid,
@@ -226,6 +228,102 @@ public class MemberController {
 		}
 		else return "redirect:/Message/memberLoginNo";
 		return "redirect:/Message/memberLoginOk?mid="+vo.getMid();
+	}
+	//카카오로그인 처리하기(Get매핑처리)
+	@GetMapping("/KakaoLogin")
+	public String kakaoLoginPost(String nickName, String email, String accessToken,
+		HttpSession session, HttpServletRequest request, HttpServletResponse response) throws MessagingException {
+		session.setAttribute("sAccessToken", accessToken);
+		//System.out.println("accessToken : " + accessToken);
+		session.setAttribute("sLogin", "kakao");
+		
+		MemberVO vo = memberService.getMemberNickNameEmailCheck(nickName, email);
+		
+		String newMember = "NO";	// 신규회원인지에 대한 정의(신규회원:OK, 기존회원:NO)
+		
+		if(vo == null) {
+			String mid = email.substring(0, email.indexOf("@"));
+			
+			MemberVO vo2 = memberService.getMemberIdSerach(mid);
+			if(vo2 != null) return "redirect:/Message/midSameSearch";
+			
+			// 비밀번호(임시비밀번호 발급처리)
+			UUID uid = UUID.randomUUID();
+			String pwd = uid.toString().substring(0,8);
+			
+			// 새로 발급된 비밀번호를 암호화 시켜서 db에 저장처리한다.(카카오 로그인한 신입회원은 바로 정회원으로 등업 시켜준다.)
+			memberService.setKakaoMemberInput(mid, passwordEncoder.encode(pwd), nickName, email);
+			
+			// 새로 발급받은 임시비밀번호를 메일로 전송한다.
+			projectProvide.mailSend(email, "임시 비밀번호를 발급하였습니다.", pwd);
+			
+			// 새로 가입처리된 회원의 정보를 다시 vo에 담아준다.
+			vo = memberService.getMemberIdSerach(mid);
+			
+			// 비밀번호를 새로 발급처리했을때 sLogin세션을 발생시켜주고, memberMain창에 비밀번호 변경메세지를 지속적으로 뿌려준다.
+			session.setAttribute("sLoginNew", "OK");
+			
+			newMember = "OK";
+		}
+		
+		String strLevel = "";
+		if(vo.getLevel() == 0) strLevel = "관리자";
+		else if(vo.getLevel() == 1) strLevel = "우수회원";
+		else if(vo.getLevel() == 2) strLevel = "정회원";
+		else if(vo.getLevel() == 3) strLevel = "준회원";
+
+		// 로그인 세션처리.
+		session.setAttribute("sMid", vo.getMid());
+		session.setAttribute("sNickName", vo.getNickName());
+		session.setAttribute("sLevel", vo.getLevel());
+		session.setAttribute("sStrLevel", strLevel);
+		
+		// 마지막 방문일 처리.
+		session.setAttribute("sLastDate", vo.getLastDate());
+		memberService.setLastDateUpdate(vo.getMid());
+		
+		// 오늘 날짜 세션 없으면 생성.
+		if(session.getAttribute("sToday"+vo.getMid()) == null) session.setAttribute("sToday"+vo.getMid(), LocalDate.now().toString());
+		// 첫 방문시 총 방문 횟수+1.
+		if(vo.getVisitCnt() == 0) memberService.setVisitCnt(vo.getMid(), 1);
+		
+		int cnt = session.getAttribute("sCnt"+vo.getMid())== null ? 1 : (Integer)session.getAttribute("sCnt"+vo.getMid());
+		
+		// 준회원의 오늘 방문일 처리 하루 5회 제한.
+		if((Integer)session.getAttribute("sLevel") == 3 && cnt < 6) {
+			memberService.setTodayCnt(vo.getMid(), 1);
+			cnt++;
+		}
+		
+		// 최대 포인트 제한을 위한 cnt세션.
+		// 오늘 날짜와 마지막 로그인 날짜가 다르면.
+		if(!session.getAttribute("sToday"+vo.getMid()).equals(session.getAttribute("sLastDate").toString().substring(0, 10))) {
+			// cnt세션 삭제.
+			session.removeAttribute("sCnt"+vo.getMid());
+			// 오늘 처음 방문시 총 방문 횟수+1.
+			memberService.setVisitCnt(vo.getMid(), 1);
+			// 오늘 날짜 세션 업데이트.
+			session.setAttribute("sToday"+vo.getMid(), LocalDate.now().toString());
+			// 오늘 방문 횟수 초기화.
+			memberService.setTodayClear(vo.getMid(), 0);
+		}
+		
+		// 정회원 이상 로그인 포인트 처리.
+		if((Integer)session.getAttribute("sLevel") < 3) {
+			// cnt가 6보다 작으면.
+			if(cnt < 6) {
+				// 포인트 10 적립, 오늘 방문 횟수+1.
+				memberService.setPoint(vo.getMid(), 10);
+				memberService.setTodayCnt(vo.getMid(), 1);
+				cnt++;
+			}
+		}
+		// 세션+mid로 세션에 cnt 저장.
+		session.setAttribute("sCnt"+vo.getMid(), cnt);
+		
+		// 로그인 완료후 모든 처리가 끝나면 필요한 메세지처리후 memberMain으로 보낸다.
+		if(newMember.equals("NO")) return "redirect:/Message/memberLoginOk?mid="+vo.getMid();
+		else return "redirect:/Message/memberLoginNewOk?mid="+vo.getMid();
 	}
 	
 	// 멤버 등급 업.
@@ -399,7 +497,6 @@ public class MemberController {
 	public String memberDeletePost(HttpSession session) {
 		String mid = session.getAttribute("sMid").toString();
 		int res = memberService.setMemberDelete(mid);
-		System.out.println(res);
 		if(res != 0) {
 			session.removeAttribute("sMid");
 			session.removeAttribute("sNickName");
@@ -413,7 +510,7 @@ public class MemberController {
 		}
 		else return "0";
 	}
-	// 로그아웃.
+	// 일반 로그아웃.
 	@GetMapping("/MemberLogout")
 	public String memberLogoutGet(HttpSession session) {
 		String mid = (String)session.getAttribute("sMid");
@@ -425,6 +522,35 @@ public class MemberController {
 		session.removeAttribute("sLastDate");
 		session.removeAttribute("sEmailKey");
 		return "redirect:/Message/memberLogoutOk?mid="+mid;
+	}
+	//kakao 로그아웃(카카오개발자에서 '고급'탭에 Logout Redirect URI 등록시켜둬야한다.)
+	@GetMapping("/KakaoLogout")
+	public String kakaoLogoutGet(HttpSession session) {
+		String mid = (String) session.getAttribute("sMid");
+		String accessToken = (String) session.getAttribute("sAccessToken");
+		String reqURL = "https://kapi.kakao.com/v1/user/unlink";
+		
+		try {
+			URL url = new URL(reqURL);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+			
+			// 카카오에서 정상적으로 처리 되었다면 200번이 돌아온다.
+			int responseCode = conn.getResponseCode();
+			System.out.println("responseCode : " + responseCode);
+		} catch (Exception e) {e.printStackTrace();}
+		
+		session.removeAttribute("sMid");
+		session.removeAttribute("sNickName");
+		session.removeAttribute("sLevel");
+		session.removeAttribute("sStrLevel");
+		session.removeAttribute("sLastDate");
+		session.removeAttribute("sEmailKey");
+		session.removeAttribute("sToday"+mid);
+		session.removeAttribute("sCnt"+mid);
+		
+		return "redirect:/Message/kakaoLogout?mid="+mid;
 	}
 	
 	// 통계 연습

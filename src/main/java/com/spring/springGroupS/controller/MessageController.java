@@ -20,7 +20,8 @@ public class MessageController {
 	public String MessageGet(Model model, HttpSession session, PageVO pVO, PDSVO pdsVO,
 			@PathVariable String msgFlag,
 			@RequestParam(name="mid", defaultValue = "", required = false) String mid,
-			@RequestParam(name="idx", defaultValue = "0", required = false) int idx) throws UnsupportedEncodingException {
+			@RequestParam(name="idx", defaultValue = "0", required = false) int idx,
+			@RequestParam(name="tempFlag", defaultValue = "", required = false) String tempFlag) throws UnsupportedEncodingException {
 		if(msgFlag.equals("hoewonInputOk")) {
 			model.addAttribute("message", mid+"님 회원가입되었습니다.");
 			model.addAttribute("url", "study1/mapping/Test35?mid="+mid);
@@ -121,12 +122,20 @@ public class MessageController {
 			model.addAttribute("message", mid+"님 로그인 되었습니다.");
 			model.addAttribute("url", "/member/MemberMain");
 		}
+		else if(msgFlag.equals("memberLoginNewOk")) {
+			model.addAttribute("message", mid+"님 로그인 되셨습니다.\\n신규 비밀번호가 발급되었습니다. 점검후 회원정보를 변경해주세요.");
+			model.addAttribute("url", "/member/MemberMain");
+		}
 		else if(msgFlag.equals("memberLoginNo")) {
 			model.addAttribute("message", "로그인에 실패했습니다.");
 			model.addAttribute("url", "/member/MemberLogin");
 		}
 		else if(msgFlag.equals("memberLogoutOk")) {
 			model.addAttribute("message", mid+"님 로그아웃 되었습니다.");
+			model.addAttribute("url", "/member/MemberLogin");
+		}
+		else if(msgFlag.equals("kakaoLogout")) {
+			model.addAttribute("message", mid + "님 로그아웃 되셨습니다.(kakao)");
 			model.addAttribute("url", "/member/MemberLogin");
 		}
 		else if(msgFlag.equals("adminNo")) {
@@ -213,6 +222,26 @@ public class MessageController {
 		else if(msgFlag.equals("TransactionUserInputNo")) {
 			model.addAttribute("message", "회원등록 실패했습니다.");
 			model.addAttribute("url", "/study2/transaction/TransactionForm");
+		}
+		else if(msgFlag.equals("midSameSearch")) {
+			model.addAttribute("message", "같은 아이디가 존재합니다.(카카오로그인불가)");
+			model.addAttribute("url", "/member/KakaoLogout");
+		}
+		else if(msgFlag.equals("dbProductInputOk")) {
+			model.addAttribute("message", "상품이 등록되었습니다.");
+			model.addAttribute("url", "/dbShop/dbShopList");
+		}
+		else if(msgFlag.equals("dbProductInputNo")) {
+			model.addAttribute("message", "상품 등록 실패~~");
+			model.addAttribute("url", "/dbShop/dbProduct");
+		}
+		else if(msgFlag.equals("dbOptionInputOk")) {
+			model.addAttribute("message", "옵션항목이 등록되었습니다.");
+			model.addAttribute("url", "/dbShop/dbOption?productName="+tempFlag);
+		}
+		else if(msgFlag.equals("dbOptionInputNo")) {
+			model.addAttribute("message", "옵션항목 등록 실패~~");
+			model.addAttribute("url", "/dbShop/dbOption?productName="+tempFlag);
 		}
 		return "include/message";
 	}

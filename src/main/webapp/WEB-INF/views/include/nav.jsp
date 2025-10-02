@@ -55,6 +55,7 @@
 					<a href="${ctp}/study1/mail/MailForm" class="w3-bar-item w3-button">메일 인증 연습</a>
 					<a href="${ctp}/study1/fileUpload/FileUploadForm" class="w3-bar-item w3-button">파일 업로드 연습</a>
 					<a href="${ctp}/study1/sweetAlert/SweetAlertForm" class="w3-bar-item w3-button">스윗 얼럿 연습</a>
+					<a href="${ctp}/study1/rangeSlider/RangeSlider" class="w3-bar-item w3-button">레인지 슬라이더 연습</a>
 				</div>
 			</div>
 			<div class="w3-dropdown-hover w3-hide-small">
@@ -66,7 +67,11 @@
 					<a href="${ctp}/study2/transaction/TransactionForm" class="w3-bar-item w3-button">트랜잭션 연습</a>
 					<a href="${ctp}/study2/dataAPI/DataAPIForm" class="w3-bar-item w3-button">공공데이터(API) 연습</a>
 					<a href="${ctp}/study2/chart/ChartForm" class="w3-bar-item w3-button">차트 연습</a>
-					<a href="${ctp}/member/chart/BarVChart" class="w3-bar-item w3-button">통계 연습</a>
+					<a href="${ctp}/study2/chart/BarVChart" class="w3-bar-item w3-button">통계 연습</a>
+					<a href="${ctp}/study2/kakao/KakaoMapForm" class="w3-bar-item w3-button">카카오맵 연습</a>
+					<a href="${ctp}/study2/weather/WeatherForm" class="w3-bar-item w3-button">날씨정보</a>
+					<a href="${ctp}/study2/qrCode/QrCodeForm" class="w3-bar-item w3-button">QR코드</a>
+					<a href="${ctp}/study2/thumbnail/ThumbnailForm" class="w3-bar-item w3-button">썸네일연습</a>
 				</div>
 			</div>
 		</c:if>
@@ -94,7 +99,13 @@
 			<a href="${ctp}/member/MemberJoin" class="w3-bar-item w3-button w3-padding-large w3-hide-small">회원가입</a>
 		</c:if>
 		<c:if test="${!empty sLevel}">
-			<a href="${ctp}/member/MemberLogout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">로그아웃</a>
+			<div class="w3-dropdown-hover w3-hide-small">
+				<button onclick="location.href='${ctp}/member/MemberLogout'" class="w3-padding-large w3-button" title="More">Logout <i class="fa fa-caret-down"></i></button>     
+				<div class="w3-dropdown-content w3-bar-block w3-card-4">
+					<a href="${ctp}/member/MemberLogout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">일반Logout</a>
+					<a href="${ctp}/member/KakaoLogout" class="w3-bar-item w3-button w3-padding-large w3-hide-small">KakaoLogout</a>
+				</div>
+			</div>
 		</c:if>
 		<a href="javascript:void(0)" class="w3-padding-large w3-hover-red w3-hide-small w3-right"><i class="fa fa-search"></i></a>
 	</div>

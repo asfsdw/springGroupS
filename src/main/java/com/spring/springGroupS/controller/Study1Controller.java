@@ -608,4 +608,14 @@ public class Study1Controller {
 	public int swwetAlertAjaxPost(int idx) {
 		return idx+100;
 	}
+	
+	//레인지 슬라이더 버튼 연습
+	@GetMapping("/rangeSlider/RangeSlider")
+	public String rangeSliderGet(Model model,
+			@RequestParam(name="price", defaultValue = "500000", required=false) int price
+		) {
+		model.addAttribute("price", price);
+		
+		return "study1/rangeSlider/rangeSlider";
+	}
 }

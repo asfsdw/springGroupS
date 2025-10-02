@@ -10,7 +10,6 @@
 	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="${ctp}/js/postCode.js"></script>
 	<title>loginJoin.jsp</title>
-	
 	<script>
 		'use strict';
 		// 정규식을 이용한 유효성검사처리.

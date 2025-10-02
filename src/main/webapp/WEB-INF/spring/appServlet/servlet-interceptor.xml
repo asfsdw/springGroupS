@@ -18,7 +18,6 @@
 			<mapping path="/board/BoardSearch"/>
 			<mapping path="/board/BoardContent"/>
 			<mapping path="/member/**"/>
-			<exclude-mapping path="/member/MemberLogin"/>
 			<exclude-mapping path="/member/MemberJoin"/>
 			<exclude-mapping path="/member/MemberIdCheck"/>
 			<exclude-mapping path="/member/MemberNickNameCheck"/>
@@ -26,6 +25,8 @@
 			<exclude-mapping path="/member/MemberEmailCheckOk"/>
 			<exclude-mapping path="/member/MemberEmailCheckNo"/>
 			<exclude-mapping path="/member/MemberIdFind"/>
+			<exclude-mapping path="/member/MemberLogin"/>
+			<exclude-mapping path="/member/KakaoLogin"/>
 			<exclude-mapping path="/member/MemberTempPwd"/>
 			<exclude-mapping path="/member/MemberDelete"/>
 			<beans:ref bean="level3Interceptor" />

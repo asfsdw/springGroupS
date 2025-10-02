@@ -7,6 +7,7 @@
   <meta charset="UTF-8">
   <jsp:include page="/WEB-INF/views/include/bs5.jsp" />
   <title>memberLogin.jsp</title>
+  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
   <script>
   	'use strict';
  		let str = "";
@@ -158,6 +159,28 @@
 				error : () => alert("전송오류")
 			});
 		}
+		
+		// 카카오 로그인(자바스크립트 앱키 등록)
+		window.Kakao.init("b31c5739833facf97baf5266a0f695d7");
+		function kakaoLogin() {
+			window.Kakao.Auth.login({
+				scope: 'profile_nickname, account_email',
+				success:function(autoObj) {
+					//console.log(Kakao.Auth.getAccessToken(), "정상 토큰 발급됨...");
+					
+					window.Kakao.API.request({
+						url : '/v2/user/me',
+						success:function(res) {
+							const kakao_account = res.kakao_account;
+							//console.log(kakao_account);
+							
+							location.href = "${ctp}/member/KakaoLogin?nickName="+kakao_account.profile.nickname+
+									"&email="+kakao_account.email+"&accessToken="+Kakao.Auth.getAccessToken();
+						}
+					});
+				}
+			});
+		}
   </script>
 </head>
 <body>
@@ -181,7 +204,8 @@
 					<div class="mb-2">
 						<input type="submit" value="로그인" class="btn btn-success me-2"/>
 						<input type="reset" value="다시입력" class="btn btn-warning me-2"/>
-						<input type="button" value="회원가입" onclick="location.href='${ctp}/member/MemberJoin';" class="btn btn-secondary"/>
+						<input type="button" value="회원가입" onclick="location.href='${ctp}/member/MemberJoin';" class="btn btn-secondary me-2"/>
+						<a href="javascript:kakaoLogin()"><img src="${ctp}/images/kakaoLogin.png" width="145px"/></a>
 					</div>
 					<div style="font-size:0.8em">
 						<input type="checkbox" name="idSave" checked /> 아이디 저장 /

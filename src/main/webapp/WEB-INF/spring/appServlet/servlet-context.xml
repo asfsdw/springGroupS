@@ -25,6 +25,10 @@
 		<resources mapping="/fileUpload/**" location="/resources/data/fileUpload/" />
 		<resources mapping="/pds/**" location="/resources/data/pds/" />
 		<resources mapping="/board/**" location="/resources/data/board/" />
+		<resources mapping="/qrCode/**" location="/resources/data/qrCode/" />
+		<resources mapping="/thumbnail/**" location="/resources/data/thumbnail/" />
+		<resources mapping="/dbShop/**" location="/resources/data/dbShop/" />
+		<resources mapping="/product/**" location="/resources/data/dbShop/product/" />
 		
 		<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 		<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
