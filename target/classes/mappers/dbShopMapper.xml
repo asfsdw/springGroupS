@@ -58,11 +58,14 @@
   
   <select id="getDbShopList" resultType="com.spring.springGroupS.vo.DbProductVO">
     <if test='part == "전체"'>
-	    select * from dbProduct order by idx desc;
+	    <!-- select * from dbProduct order by idx desc; -->
+	    select * from dbProduct <if test='mainPrice != 0'>where <![CDATA[mainPrice < #{mainPrice}]]></if> order by idx desc;
 	 	</if>
 	  <if test='part != "전체"'>     <!-- A01003 -->
+	 		<!-- select product.*, sub.categorySubName from dbProduct product, categorySub sub 
+	 		  where sub.categorySubName = #{part} and substring(product.productCode,4,3)=sub.categorySubCode order by idx desc; -->
 	 		select product.*, sub.categorySubName from dbProduct product, categorySub sub 
- 		  where sub.categorySubName = #{part} and substring(product.productCode,4,3)=sub.categorySubCode order by idx desc;
+	 		  where sub.categorySubName = #{part} and substring(product.productCode,4,3)=sub.categorySubCode <if test='mainPrice != 0'>and <![CDATA[mainPrice < #{mainPrice}]]></if> order by idx desc;
 	 	</if>
   </select>
   
@@ -108,6 +111,22 @@
     select count(*) from dbOption where productIdx=#{productIdx} and optionName=#{optionName};
   </select>
   
+  <select id="getDbCartProductOptionSearch" resultType="com.spring.springGroupS.vo.DbCartVO">
+  	select * from dbCart where productName=#{productName} and optionName=#{optionName} and mid=#{mid};
+  </select>
+  
+  <select id="getDbCartList" resultType="com.spring.springGroupS.vo.DbCartVO">
+  	select * from dbCart where mid=#{mid} order by idx;
+  </select>
+  
+  <select id="getOrderMaxIdx" resultType="com.spring.springGroupS.vo.DbOrderVO">
+  	select max(idx) as maxIdx from dbOrder;
+  </select>
+  
+  <select id="getCartIdx" resultType="com.spring.springGroupS.vo.DbCartVO">
+  	select * from dbCart where idx = #{idx};
+  </select>
+  
   
   
   <insert id="setCategoryMainInput">
@@ -130,6 +149,16 @@
     insert into dbOption values (default,#{vo.productIdx},#{vo.optionName},#{vo.optionPrice});
   </insert>
   
+  <insert id="dbShopCartInput">
+    insert into dbCart values (default,default,#{vo.mid},#{vo.productIdx},#{vo.productName},#{vo.mainPrice},#{vo.thumbImg},#{vo.optionIdx},#{vo.optionName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice});
+  </insert>
+  
+  
+  
+  <update id="dbShopCartUpdate">
+    update dbCart set optionNum=#{vo.optionNum},totalPrice=totalPrice+#{vo.totalPrice} where productName=#{vo.productName} and optionName=#{vo.optionName};
+  </update>
+  
   
   
   <delete id="setCategoryMainDelete">
@@ -147,5 +176,9 @@
 	<delete id="setOptionDelete">
 		delete from dboption where idx = #{idx};
 	</delete>
+	
+	<delete id="dbCartDelete">
+  	delete from dbCart where idx = #{idx};
+  </delete>
 
 </mapper>

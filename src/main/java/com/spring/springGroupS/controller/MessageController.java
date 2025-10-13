@@ -243,6 +243,10 @@ public class MessageController {
 			model.addAttribute("message", "옵션항목 등록 실패~~");
 			model.addAttribute("url", "/dbShop/dbOption?productName="+tempFlag);
 		}
+		else if(msgFlag.equals("cartEmpty")) {
+			model.addAttribute("message", "장바구니가 비어있습니다.");
+			model.addAttribute("url", "/dbShop/dbProductList");
+		}
 		return "include/message";
 	}
 }
