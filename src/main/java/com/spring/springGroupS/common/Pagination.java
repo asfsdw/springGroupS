@@ -3,6 +3,7 @@ package com.spring.springGroupS.common;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.springGroupS.dao.DbShopDAO;
 import com.spring.springGroupS.service.AdminService;
 import com.spring.springGroupS.service.BoardService;
 import com.spring.springGroupS.service.GuestService;
@@ -22,6 +23,8 @@ public class Pagination {
 	PDSService pdsService;
 	@Autowired
 	AdminService adminService;
+	@Autowired
+	DbShopDAO dbShopDAO;
 	
 	public PageVO pagination(PageVO vo) {
 		vo.setSection(vo.getSection() == null ? "" : vo.getSection());
@@ -57,6 +60,10 @@ public class Pagination {
 		else if(vo.getSection().equals("admin")) {
 			if(vo.getSearch() == null) vo.setTotRecCnt(adminService.getTotRecCnt(vo.getFlag(), "", ""));
 			else vo.setTotRecCnt(adminService.getTotRecCnt(vo.getFlag(), vo.getSearch(), vo.getSearchStr()));
+		}
+		else if(vo.getSection().equals("dbMyOrder")) {
+			String mid = vo.getPart();
+			vo.setTotRecCnt(dbShopDAO.getTotRecCnt(mid));
 		}
 		
 		vo.setTotPage((int)Math.ceil((double)vo.getTotRecCnt()/vo.getPageSize()));

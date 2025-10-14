@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.spring.springGroupS.vo.DbBaesongVO;
 import com.spring.springGroupS.vo.DbCartVO;
 import com.spring.springGroupS.vo.DbOptionVO;
 import com.spring.springGroupS.vo.DbOrderVO;
@@ -82,5 +83,21 @@ public interface DbShopDAO {
 	DbOrderVO getOrderMaxIdx();
 
 	DbCartVO getCartIdx(@Param("idx") int idx);
+
+	void setDbOrder(@Param("vo") DbOrderVO vo);
+
+	void setDbCartDeleteAll(@Param("cartIdx") int cartIdx);
+
+	void setDbBaesong(@Param("baesongVO") DbBaesongVO baesongVO);
+
+	void setMemberPointPlus(@Param("point") int point, @Param("mid") String mid);
+
+	int getTotalBaesongOrder(@Param("orderIdx") String orderIdx);
+
+	List<DbBaesongVO> getOrderBaesong(@Param("orderIdx") String orderIdx);
+
+	int getTotRecCnt(@Param("mid") String mid);
+
+	List<DbBaesongVO> getMyOrderList(@Param("startIndexNo") int startIndexNo, @Param("pageSize") int pageSize, @Param("mid") String mid);
 
 }

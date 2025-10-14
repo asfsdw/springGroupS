@@ -127,6 +127,22 @@
   	select * from dbCart where idx = #{idx};
   </select>
   
+  <select id="getTotalBaesongOrder" resultType="int">
+    select orderTotalPrice from dbBaesong where orderIdx = #{orderIdx};
+  </select>
+  
+  <select id="getOrderBaesong" resultType="com.spring.springGroupS.vo.DbBaesongVO">
+    select * from dbBaesong where orderIdx = #{orderIdx};
+  </select>
+  
+  <select id="getTotRecCnt" resultType="int">
+    select count(*) from dbOrder o join dbBaesong b using(orderIdx) <if test="mid != '전체'"> where b.mid=#{mid} </if>
+  </select>
+  
+  <select id="getMyOrderList" resultType="com.spring.springGroupS.vo.DbBaesongVO">
+    select o.*,b.* from dbOrder o join dbBaesong b using(orderIdx) <if test="mid != '전체'"> where b.mid=#{mid} </if> order by b.idx desc limit #{startIndexNo},#{pageSize}; 
+  </select>
+  
   
   
   <insert id="setCategoryMainInput">
@@ -153,10 +169,22 @@
     insert into dbCart values (default,default,#{vo.mid},#{vo.productIdx},#{vo.productName},#{vo.mainPrice},#{vo.thumbImg},#{vo.optionIdx},#{vo.optionName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice});
   </insert>
   
+  <insert id="setDbOrder">
+    insert into dbOrder values (default,#{vo.orderIdx},#{vo.mid},#{vo.productIdx},default,#{vo.productName},#{vo.mainPrice},#{vo.thumbImg},#{vo.optionName},#{vo.optionPrice},#{vo.optionNum},#{vo.totalPrice});
+  </insert>
+  
+  <insert id="setDbBaesong">
+    insert into dbBaesong values (default,#{baesongVO.oIdx},#{baesongVO.orderIdx},#{baesongVO.orderTotalPrice},#{baesongVO.mid},#{baesongVO.name},#{baesongVO.address},#{baesongVO.tel},#{baesongVO.message},#{baesongVO.payment},#{baesongVO.payMethod},default);
+  </insert>
+  
   
   
   <update id="dbShopCartUpdate">
     update dbCart set optionNum=#{vo.optionNum},totalPrice=totalPrice+#{vo.totalPrice} where productName=#{vo.productName} and optionName=#{vo.optionName};
+  </update>
+  
+  <update id="setMemberPointPlus">
+    update member set point = point + #{point} where mid = #{mid};
   </update>
   
   
@@ -179,6 +207,10 @@
 	
 	<delete id="dbCartDelete">
   	delete from dbCart where idx = #{idx};
+  </delete>
+  
+  <delete id="setDbCartDeleteAll">
+    delete from dbCart where idx = #{cartIdx};
   </delete>
 
 </mapper>

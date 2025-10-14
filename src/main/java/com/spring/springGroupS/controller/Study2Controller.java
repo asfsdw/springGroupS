@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.springGroupS.service.Study2Service;
 import com.spring.springGroupS.vo.ChartVO;
 import com.spring.springGroupS.vo.CrimeVO;
+import com.spring.springGroupS.vo.DbPayMentVO;
 import com.spring.springGroupS.vo.KakaoAddressVO;
 import com.spring.springGroupS.vo.QrCodeVO;
 import com.spring.springGroupS.vo.TransactionVO;
@@ -361,5 +362,28 @@ public class Study2Controller {
 			res = 1;
 		}
 		return res;
+	}
+	
+	// 결제처리 연습하기 폼.
+ @RequestMapping(value = "/payment/payment", method = RequestMethod.GET)
+ public String paymentGet() {
+ 	return "study2/payment/payment";
+ }
+ 
+ // 결제처리 연습하기 폼처리.
+ @RequestMapping(value = "/payment/payment", method = RequestMethod.POST)
+ public String paymentPost(Model model, HttpSession session, DbPayMentVO vo) {
+ 	session.setAttribute("sPayMentVO", vo);
+ 	model.addAttribute("vo", vo);
+ 	return "study2/payment/sample";
+ }
+ 
+	// 결제처리완료후 확인하는 폼...
+	@RequestMapping(value = "/payment/paymentOk", method = RequestMethod.GET)
+	public String paymentOkGet(Model model, HttpSession session) {
+		DbPayMentVO vo = (DbPayMentVO) session.getAttribute("sPayMentVO");
+		model.addAttribute("vo", vo);
+		session.removeAttribute("sPayMentVO");
+		return "study2/payment/paymentOk";
 	}
 }

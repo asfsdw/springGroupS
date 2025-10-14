@@ -18,6 +18,40 @@
         var y = $(event.relatedTarget).text();  // previous tab
       });
     });
+    
+		// 결재하기
+    function order() {
+      var paymentCard = document.getElementById("paymentCard").value;
+      var payMethodCard = document.getElementById("payMethodCard").value;
+      var paymentBank = document.getElementById("paymentBank").value;
+      var payMethodBank = document.getElementById("payMethodBank").value;
+      if(paymentCard == "" && paymentBank == "") {
+        alert("결제방식과 결제번호를 입력하세요.");
+        return false;
+      }
+      if(paymentCard != "" && payMethodCard == "") {
+        alert("카드번호를 입력하세요.");
+        document.getElementById("payMethodCard").focus();
+        return false;
+      }
+      else if(paymentBank != "" && payMethodBank == "") {
+        alert("입금자명을 입력하세요.");
+        return false;
+      }
+      var ans = confirm("결재하시겠습니까?");
+      if(ans) {
+        if(paymentCard != "" && payMethodCard != "") {
+          document.getElementById("payment").value = "C"+paymentCard;
+          document.getElementById("payMethod").value = payMethodCard;
+        }
+        else {
+          document.getElementById("payment").value = "B"+paymentBank;
+          document.getElementById("payMethod").value = payMethodBank;
+        }
+        myform.action = "${ctp}/dbShop/payment";
+        myform.submit();
+      }
+    }
   </script>
   <style>
     td, th {padding: 5px}
