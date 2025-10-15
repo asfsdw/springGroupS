@@ -251,6 +251,38 @@ public class MessageController {
 			model.addAttribute("message", "결재가 성공적으로 완료되었습니다.");
 			model.addAttribute("url", "/dbShop/paymentResultOk");
 		}
+		else if(msgFlag.equals("inquiryInputOk")) {
+			model.addAttribute("message", "1:1 문의가 등록되었습니다.");
+			model.addAttribute("url", "/inquiry/inquiryList");
+		}
+		else if(msgFlag.equals("inquiryUpdateOk")) {
+			model.addAttribute("message", "1:1 문의 수정완료");
+			model.addAttribute("url", "/inquiry/inquiryList");
+		}
+		else if(msgFlag.equals("inquiryUpdateNo")) {
+			model.addAttribute("message", "1:1 문의 수정실패~~");
+			model.addAttribute("url", "/inquiry/inquiryUpdate?idx="+idx);
+		}
+		else if(msgFlag.equals("inquiryDeleteOk")) {
+			model.addAttribute("message", "1:1 문의 삭제완료");
+			model.addAttribute("url", "/inquiry/inquiryList");
+		}
+		else if(msgFlag.equals("inquiryDeleteNo")) {
+			model.addAttribute("message", "1:1 문의 삭제실패~~");
+			model.addAttribute("url", "/admin/inquiry/inquiryView?idx="+idx);
+		}
+		else if(msgFlag.equals("adInpuiryReplyUpdateOk")) {
+			model.addAttribute("message", "1:1 문의 답변글이 수정되었습니다.");
+			model.addAttribute("url", "/admin/inquiry/adInquiryReply?idx="+idx);
+		}
+		else if(msgFlag.equals("adInpuiryReplyUpdateNo")) {
+			model.addAttribute("message", "1:1 문의 답변글이 수정 실패~~");
+			model.addAttribute("url", "/admin/inquiry/adInquiryReply?idx="+idx);
+		}
+		else if(msgFlag.equals("adInquiryDeleteOk")) {
+			model.addAttribute("message", "1:1 문의 원본글(+답변글)이 삭제 되었습니다.");
+			model.addAttribute("url", "/admin/inquiry/adInquiryList");
+		}
 		return "include/message";
 	}
 }

@@ -86,6 +86,7 @@
 			<div class="main ms-3 mb-2"><b>기타관리</b></div>
 			<div class="sub">
 				<p><a href="${ctp}/admin/guest/GuestList">공지사항관리</a></p>
+				<p><a href="${ctp}/admin/inquiry/adInquiryList" class="a-bg" target="adminContent">1:1문의</a></p>
 				<p><a href="${ctp}/admin/board/BoardList">FAQ관리</a></p>
 				<p><a href="${ctp}/admin/board/BoardList">QNA관리</a></p>
 				<p><a href="${ctp}/admin/board/BoardList">쿠폰관리</a></p>

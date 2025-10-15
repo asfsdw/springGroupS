@@ -24,12 +24,32 @@
 			<if test="flag == 'new'">cpDate >= date_add(now(), interval -7 day)</if>
 			<if test="search != ''">${search} LIKE concat("%"#{searchStr}"%")</if>;
 	</select>
+	
+	<select id="getInquiryListAdmin" resultType="com.spring.springGroupS.vo.InquiryVO">
+    select * from inquiry <if test="part != '전체'"> where reply = #{part} </if> order by idx desc limit #{startIndexNo},#{pageSize};
+  </select>
+  
+  <select id="getInquiryContent" resultType="com.spring.springGroupS.vo.InquiryVO">
+    select * from inquiry where idx = #{idx};
+  </select>
+  
+  <select id="getInquiryReplyContent" resultType="com.spring.springGroupS.vo.InquiryReplyVO">
+    select * from inquiryReply where inquiryIdx = #{idx};
+  </select>
+  
+  <select id="getInquiryReplySearch" resultType="com.spring.springGroupS.vo.InquiryReplyVO">
+    select * from inquiryReply where reIdx = #{reIdx};
+  </select>
 
 
 
 	<insert id="setBoardComplaintInput">
 		INSERT INTO complaint VALUES(DEFAULT,#{vo.part},#{vo.partIdx},#{vo.cpMid},#{vo.cpContent},DEFAULT,DEFAULT);
 	</insert>
+	
+	<insert id="setInquiryInputAdmin">
+    insert into inquiryReply values (default,#{vo.inquiryIdx},default,#{vo.reContent});
+  </insert>
 
 
 
@@ -45,6 +65,18 @@
 	<update id="setComplaintProgressOk">
 		UPDATE complaint SET progress = #{flag} WHERE idx = #{idx};
 	</update>
+	
+	<update id="setInquiryUpdateAdmin">
+    update inquiry set reply = '답변완료' where idx = #{inquiryIdx};
+  </update>
+  
+  <update id="setInquiryReplyUpdate">
+    update inquiryReply set reContent = #{reVO.reContent} where reIdx = #{reVO.reIdx};
+  </update>
+  
+  <update id="setInquiryReplyStatusUpdate">
+    update inquiry set reply = '답변대기중' where idx = #{inquiryIdx};
+  </update>
 
 
 
@@ -54,4 +86,13 @@
 	<delete id="setComplaintDelete">
 		DELETE FROM ${part} WHERE idx = #{partIdx};
 	</delete>
+	
+	<delete id="setAdInquiryReplyDelete">
+    delete from inquiryReply where reIdx = #{reIdx};
+  </delete>
+  
+  <delete id="setAdInquiryDelete">
+    delete from inquiryReply where reIdx = #{reIdx};
+    delete from inquiry where idx = #{idx};
+  </delete>
 </mapper>

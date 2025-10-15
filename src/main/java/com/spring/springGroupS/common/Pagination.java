@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS.dao.DbShopDAO;
+import com.spring.springGroupS.dao.InquiryDAO;
 import com.spring.springGroupS.service.AdminService;
 import com.spring.springGroupS.service.BoardService;
 import com.spring.springGroupS.service.GuestService;
@@ -25,6 +26,8 @@ public class Pagination {
 	AdminService adminService;
 	@Autowired
 	DbShopDAO dbShopDAO;
+	@Autowired
+	InquiryDAO inquiryDAO;
 	
 	public PageVO pagination(PageVO vo) {
 		vo.setSection(vo.getSection() == null ? "" : vo.getSection());
@@ -65,6 +68,13 @@ public class Pagination {
 			String mid = vo.getPart();
 			vo.setTotRecCnt(dbShopDAO.getTotRecCnt(mid));
 		}
+		else if(vo.getSection().equals("inquiry")) {
+	  	String mid = vo.getSearchStr();
+	  	vo.setTotRecCnt(inquiryDAO.getTotRecCnt(vo.getPart(), mid));
+	  }
+	  else if(vo.getSection().equals("adminInquiry")) {
+	  	vo.setTotRecCnt(inquiryDAO.getTotRecCntAdmin(vo.getPart()));
+	  }
 		
 		vo.setTotPage((int)Math.ceil((double)vo.getTotRecCnt()/vo.getPageSize()));
 		vo.setStartIndexNo((vo.getPag()-1) * vo.getPageSize());

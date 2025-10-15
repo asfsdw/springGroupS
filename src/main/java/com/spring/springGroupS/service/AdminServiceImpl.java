@@ -1,5 +1,6 @@
 package com.spring.springGroupS.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.spring.springGroupS.dao.AdminDAO;
 import com.spring.springGroupS.vo.ComplaintVO;
+import com.spring.springGroupS.vo.InquiryReplyVO;
+import com.spring.springGroupS.vo.InquiryVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -72,5 +75,50 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int getTotRecCnt(String flag, String search, String searchStr) {
 		return adminDAO.getTotRecCnt(flag, search, searchStr);
+	}
+	
+	@Override
+	public ArrayList<InquiryVO> getInquiryListAdmin(int startIndexNo, int pageSize, String part) {
+		return adminDAO.getInquiryListAdmin(startIndexNo, pageSize, part);
+	}
+
+	@Override
+	public InquiryVO getInquiryContent(int idx) {
+		return adminDAO.getInquiryContent(idx);
+	}
+
+	@Override
+	public InquiryReplyVO getInquiryReplyContent(int idx) {
+		return adminDAO.getInquiryReplyContent(idx);
+	}
+
+	@Override
+	public int setInquiryInputAdmin(InquiryReplyVO vo) {
+		return adminDAO.setInquiryInputAdmin(vo);
+	}
+
+	@Override
+	public void setInquiryUpdateAdmin(int inquiryIdx) {
+		adminDAO.setInquiryUpdateAdmin(inquiryIdx);
+	}
+	
+	@Override
+	public int setInquiryReplyUpdate(InquiryReplyVO reVO) {
+		return adminDAO.setInquiryReplyUpdate(reVO);
+	}
+
+	@Override
+	public int setAdInquiryReplyDelete(int reIdx) {
+		return adminDAO.setAdInquiryReplyDelete(reIdx);
+	}
+
+	@Override
+	public void setAdInquiryDelete(int idx, String fSName, int reIdx) {
+		adminDAO.setAdInquiryDelete(idx, fSName, reIdx);
+	}
+
+	@Override
+	public int setInquiryReplyStatusUpdate(int inquiryIdx) {
+		return adminDAO.setInquiryReplyStatusUpdate(inquiryIdx);
 	}
 }

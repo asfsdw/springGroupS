@@ -37,7 +37,10 @@
 			<mapping path="/pds/PDSDownload"/>
 			<mapping path="/board/**"/>
 			<mapping path="/study1/**"/>
+			<mapping path="/study2/**"/>
 			<mapping path="/review/**"/>
+			<mapping path="/dbShop/**"/>
+	    <mapping path="/inquiry/**"/>
 			<exclude-mapping path="/board/BoardList"/>
 			<exclude-mapping path="/board/BoardSearch"/>
 			<exclude-mapping path="/board/BoardContent"/>
