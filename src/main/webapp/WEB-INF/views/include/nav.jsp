@@ -98,7 +98,7 @@
 					<c:if test="${sLevel < 3}">
 						<a href="${ctp}/schedule/Schedule" class="w3-bar-item w3-button">일정관리</a>
 						<a href="#" class="w3-bar-item w3-button">웹메시지</a>
-						<a href="#" class="w3-bar-item w3-button">사진첩</a>
+						<a href="${ctp}/photoGallery/photoGalleryList" class="w3-bar-item w3-button">사진첩</a>
 					</c:if>
 					<c:if test="${sLevel == 0}">
 						<a href="${ctp}/admin/AdminMain" class="w3-bar-item w3-button">관리자 메뉴</a>

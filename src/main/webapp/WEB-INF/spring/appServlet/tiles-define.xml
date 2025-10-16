@@ -14,7 +14,7 @@
 		<put-attribute name="body" value="/WEB-INF/views/home.jsp" />
 	</definition>
 	
-	<!-- 관리자 메뉴 -->
+	<!-- tiles 미적용 -->
 	<definition name="adminMainLayout" template="/WEB-INF/views/admin/adminMainLayout.jsp">
 		<put-attribute name="adminLeft" value="/WEB-INF/views/admin/adminLeft.jsp" />
 	</definition>
@@ -24,6 +24,14 @@
 	</definition>
 	<definition name="admin/*/*" extends="adminMainLayout">
 		<put-attribute name="adminContent" value="/WEB-INF/views/admin/{1}/{2}.jsp" />
+	</definition>
+	
+	<definition name="phtoGalleryLayout" template="/WEB-INF/views/photoGallery/photoGalleryLayout.jsp">
+		<put-attribute name="nav" value="/WEB-INF/views/include/nav.jsp" />
+	</definition>
+	
+	<definition name="photoGallery/*" extends="phtoGalleryLayout">
+		<put-attribute name="photoContent" value="/WEB-INF/views/photoGallery/{1}.jsp" />
 	</definition>
 	
 	<!-- 그 외(작은 슬라이드) -->

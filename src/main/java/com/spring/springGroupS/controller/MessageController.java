@@ -283,6 +283,27 @@ public class MessageController {
 			model.addAttribute("message", "1:1 문의 원본글(+답변글)이 삭제 되었습니다.");
 			model.addAttribute("url", "/admin/inquiry/adInquiryList");
 		}
+		else if(msgFlag.equals("photoGalleryInputOk")) {
+			model.addAttribute("message", "포토갤러리에 등록되었습니다.");
+			model.addAttribute("url", "/photoGallery/photoGalleryList");
+		}
+		else if(msgFlag.equals("photoGalleryInputNo")) {
+			model.addAttribute("message", "포토갤러리에 등록 실패~~");
+			model.addAttribute("url", "/photoGallery/photoGalleryInput");
+		}
+		else if(msgFlag.equals("photoGalleryUpdateOk")) {
+			model.addAttribute("message", "포토갤러리 수정 완료");
+			model.addAttribute("url", "/photoGallery/photoGalleryList");
+		}
+		else if(msgFlag.equals("photoGalleryUpdateNo")) {
+			model.addAttribute("message", "포토갤러리 수정 실패~~");
+			model.addAttribute("url", "/photoGallery/photoGalleryUpdate?idx="+idx);
+		}
+		else if(msgFlag.equals("photoGalleryDeleteOk")) {
+			model.addAttribute("message", "포토갤러리에서 자료를 삭제하였습니다.");
+			model.addAttribute("url", "/photoGallery/photoGalleryList");
+		}
+
 		return "include/message";
 	}
 }

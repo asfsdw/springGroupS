@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.springGroupS.dao.PhotoGalleryDAO">
+	<select id="getPhotoGalleryList" resultType="com.spring.springGroupS.vo.PhotoGalleryVO">
+    select *,(select count(*) from photoReply where photoIdx = p.idx) as replyCnt from photoGallery p <if test='part !="전체"'> where part = #{part}</if> order by ${choice} desc limit #{startIndexNo},#{pageSize};
+	</select>
+	
+	<select id="getPhotoGalleryIdxSearch" resultType="com.spring.springGroupS.vo.PhotoGalleryVO">
+	  <!-- select * from photoGallery where idx = #{idx}; -->
+	  select pg.*,(select count(*) from photoReply where photoIdx = #{idx}) as replyCnt from photoGallery pg where idx = #{idx};
+	</select>
+	
+	<select id="getPhotoGalleryReply" resultType="com.spring.springGroupS.vo.PhotoGalleryVO">
+	  select *,idx as replyIdx from photoReply where photoIdx = #{idx} order by idx desc;
+	</select>
+	
+	<select id="getPhotoGalleryIdxList" resultType="int">
+	  select idx from photoGallery order by idx desc limit #{startIndexNo},#{pageSize};
+	</select>
+	
+	<select id="setPhotoGallerySingle" resultType="com.spring.springGroupS.vo.PhotoGalleryVO">
+	  select *,(select count(*) from photoReply where photoIdx = p.idx) as replyCnt from photoGallery p where idx = #{idx} order by idx desc;
+	</select>
+	
+	
+	<insert id="setPhotoGalleryInput">
+	  insert into photoGallery values (default,#{vo.mid},#{vo.part},#{vo.title},#{vo.content},#{vo.thumbnail},#{vo.photoCount},#{vo.hostIp},default,default,default);
+	</insert>
+	
+	<insert id="setPhotoGalleryReplyInput">
+	  insert into photoReply values (default,#{vo.mid},#{vo.photoIdx},#{vo.content},default)
+	</insert>
+	
+	
+	<update id="setPhotoGalleryReadNumPlus">
+	  update photoGallery set readNum = readNum + 1 where idx = #{idx};
+	</update>
+	
+	<update id="setPhotoGalleryGoodPlus">
+	  update photoGallery set goodCount = goodCount + 1 where idx = #{idx};
+	</update>
+	
+	<update id="setPhotoGalleryUpdate">
+	  update photoGallery set part=#{vo.part},title=#{vo.title},content=#{vo.content},thumbnail=#{vo.thumbnail},photoCount=#{vo.photoCount},hostIp=#{vo.hostIp},pDate=now() where idx=#{vo.idx}
+	</update>
+	
+	
+	
+	<delete id="setPhotoGalleryReplyDelete">
+	  delete from photoReply where idx = #{idx};
+	</delete>
+	
+	<delete id="setPhotoGalleryDelete">
+	  delete from photoReply where photoIdx = #{idx};
+	  delete from photoGallery where idx = #{idx};
+	</delete>
+	
+</mapper>

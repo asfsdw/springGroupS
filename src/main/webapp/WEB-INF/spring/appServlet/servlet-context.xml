@@ -30,6 +30,7 @@
 		<resources mapping="/dbShop/**" location="/resources/data/dbShop/" />
 		<resources mapping="/product/**" location="/resources/data/dbShop/product/" />
 		<resources mapping="/inquiry/**" location="/resources/data/inquiry/" />
+		<resources mapping="/photoGallery/**" location="/resources/data/photoGallery/" />
 		
 		<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 		<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
