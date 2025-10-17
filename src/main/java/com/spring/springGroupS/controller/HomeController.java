@@ -116,4 +116,10 @@ public class HomeController {
 			downFile.delete();
 		}
 	}
+	
+	// 웹소켓 채팅폼 띄우기
+	@RequestMapping(value = "/webSocket/webSocket", method = RequestMethod.GET)
+	public String webSocketGet() {
+		return "webSocket/webSocket";
+	}
 }
