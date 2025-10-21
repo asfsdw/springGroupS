@@ -30,6 +30,7 @@ import com.spring.springGroupS.vo.DbPayMentVO;
 import com.spring.springGroupS.vo.KakaoAddressVO;
 import com.spring.springGroupS.vo.QrCodeVO;
 import com.spring.springGroupS.vo.TransactionVO;
+import com.spring.springGroupS.vo.UserVO;
 
 @Controller
 @RequestMapping("/study2")
@@ -385,5 +386,73 @@ public class Study2Controller {
 		model.addAttribute("vo", vo);
 		session.removeAttribute("sPayMentVO");
 		return "study2/payment/paymentOk";
+	}
+	
+	// 에러페이지 연습.
+	@GetMapping("/error/ErrorForm")
+	public String errorFormGet() {
+		return "study2/error/errorForm";
+	}
+	@GetMapping("/error/ErrorMessage")
+	public String errorMessageGet() {
+		return "study2/error/errorMessage";
+	}
+	@GetMapping("/error/Error400")
+	public String error400Get() {
+		return "study2/error/error400";
+	}
+	@GetMapping("/error/Error404")
+	public String error404Get() {
+		return "study2/error/error404";
+	}
+	@GetMapping("/error/Error405")
+	public String error405Post() {
+		return "study2/error/error405";
+	}
+	@GetMapping("/error/Error500")
+	public String error500Post() {
+		return "study2/error/error500";
+	}
+	@GetMapping("/error/ErrorJSP")
+	public String errorJSPGet() {
+		return "study2/error/errorJSP";
+	}
+	@GetMapping("/error/ErrorArithmetic")
+	public String errorArithmeticGet() {
+		return "study2/error/errorArithmetic";
+	}
+	@GetMapping("/error/ErrorNullPoint")
+	public String errorNullPointGet() {
+		return "study2/error/errorNullPoint";
+	}
+	@GetMapping("/error/ErrorNumberFormat")
+	public String errorNumberFormatGet() {
+		return "study2/error/errorNumberFormat";
+	}
+	@GetMapping("/error/ErrorTest400")
+	public String errorTest400Get(UserVO vo) {
+		int idx = vo.getIdx();
+		System.out.println(idx);
+		return "study2/error/errorForm";
+	}
+	@PostMapping("/error/ErrorTest405")
+	public String errorTest400Post() {
+		return "study2/error/errorForm";
+	}
+	@GetMapping("/error/ErrorTest500")
+	public String errorTest500Post(UserVO vo) {
+		//String su = "010";
+		String su = "O1O";
+		int intSu = Integer.parseInt(su);
+		System.out.println(intSu);
+		/*
+		int su = 100;
+		System.out.println(su/0);
+		*/
+		/*
+		int midLength = vo.getMid().length();
+		System.out.println(midLength);
+		*/
+		return "study2/error/errorForm";
 	}
 }
