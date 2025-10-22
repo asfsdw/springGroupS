@@ -23,11 +23,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
 import com.spring.springGroupS.service.Study2Service;
 import com.spring.springGroupS.vo.ChartVO;
 import com.spring.springGroupS.vo.CrimeVO;
 import com.spring.springGroupS.vo.DbPayMentVO;
 import com.spring.springGroupS.vo.KakaoAddressVO;
+import com.spring.springGroupS.vo.KakaoPlaceVO;
 import com.spring.springGroupS.vo.QrCodeVO;
 import com.spring.springGroupS.vo.TransactionVO;
 import com.spring.springGroupS.vo.UserVO;
@@ -221,6 +223,53 @@ public class Study2Controller {
 			@RequestParam(name = "address",defaultValue = "", required = false) String address) {
 		model.addAttribute("address", address);
 		return "study2/kakao/kakaoMap3";
+	}
+	// 카카오맵 MyDB에 저장된 지명 주변지역 검색하여 좌표 보여주기
+	@GetMapping("/kakao/kakaoEx5")
+	public String kakaoEx5Get(Model model,
+			@RequestParam(name="address", defaultValue = "", required = false) String address
+		) {
+		// System.out.println("address : " + address);
+		KakaoAddressVO vo = new KakaoAddressVO();
+		
+		List<KakaoAddressVO> addressVos = study2Service.getKakaoAddressList();
+		System.out.println("addressVos : " + addressVos);
+		if(address.equals("")) {
+			vo.setAddress("청주그린컴퓨터");
+			vo.setLatitude(36.63508163115122);
+			vo.setLongitude(127.45948750459904);
+			vo.setIdx(2);
+		}
+		else {
+			vo = study2Service.getKakaoAddressSearch(address);
+		}
+		model.addAttribute("addressVos", addressVos);
+		model.addAttribute("vo", vo);
+		
+		return "study2/kakao/kakaoEx5";
+	}
+	// 카카오맵에서 선택한 지역을 MyDB에 저장
+	@ResponseBody
+	@PostMapping("/kakao/kakaoEx5")
+	public int kakaoEx5Post(KakaoPlaceVO vo) {
+		return study2Service.setKakaoPlaceInput(vo);
+	}
+	// Kakaomap(KakaoDB에 저장된 장소와 주변 표시)
+	@GetMapping("/kakao/kakaoEx6")
+	public String kakaoEx6Get(Model model,
+			@RequestParam(name="idx", defaultValue = "2", required = false) int idx		// '청주그린컴퓨터'가 db에 'idx=14'번이다.
+		) {
+		KakaoAddressVO centerVO = study2Service.getKakaoAddressSearchIdx(idx);	// 중심좌표
+		List<KakaoAddressVO> addressVos = study2Service.getKakaoAddressList();	// 콤보상사에 출력될 지역들
+		
+		List<KakaoPlaceVO> vo = study2Service.getKakaoAddressPlaceSearch(idx);	// 지도에 표시될 주변관광지
+		String json = new Gson().toJson(vo);	// JSON 객체로 바꿔서 넘겨준다.
+		
+		model.addAttribute("addressVos", addressVos);
+		model.addAttribute("voJson", json);
+		model.addAttribute("centerVO", centerVO);
+		model.addAttribute("idx", idx);
+		return "study2/kakao/kakaoEx6";
 	}
 
 	// 날씨 API.

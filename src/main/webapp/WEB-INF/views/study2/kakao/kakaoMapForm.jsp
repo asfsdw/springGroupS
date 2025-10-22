@@ -44,6 +44,9 @@
 		<a href="KakaoMap2" class="btn btn-info">카카오맵 검색 연습1</a>
 		<a href="KakaoMap3" class="btn btn-info">카카오맵 검색 연습2</a>
 		<p><br/></p>
+		<a href="kakaoEx5" class="btn btn-outline-success">저장된 지명의 주변지역 저장</a>
+		<a href="kakaoEx6" class="btn btn-outline-primary">저장된 지명과 주변지역 함께검색</a>
+		<p><br/></p>
 	</div>
 	<h6 id="topBtn" class="text-end me-3"><img src="${ctp}/images/arrowTop.gif" title="위로이동"/></h6>
 </body>

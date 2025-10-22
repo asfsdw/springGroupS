@@ -26,6 +26,12 @@
 	<select id="getKakaoAddressSearch" resultType="com.spring.springGroupS.vo.KakaoAddressVO">
 		SELECT * FROM kakaoAddress WHERE address = #{address};
 	</select>
+	<select id="getKakaoAddressSearchIdx" resultType="com.spring.springGroupS.vo.KakaoAddressVO">
+		select * from kakaoAddress where idx = #{idx};
+	</select>
+	<select id="getKakaoAddressPlaceSearch"  resultType="com.spring.springGroupS.vo.KakaoPlaceVO">
+	  select *,(select address from kakaoAddress where idx=k.addressIdx) as address from kakaoPlace k where addressIdx = #{idx};
+	</select>
 	
 	<select id="getQrCodeSearch" resultType="com.spring.springGroupS.vo.QrCodeVO">
 		select * from qrCode where qrCodeName = #{qrCode};
@@ -53,6 +59,9 @@
 	
 	<insert id="setKakaoAddressInput">
 		INSERT INTO kakaoAddress VALUES(DEFAULT, #{vo.address}, #{vo.latitude}, #{vo.longitude});
+	</insert>
+	<insert id="setKakaoPlaceInput">
+	  insert into kakaoPlace values (default,#{vo.addressIdx},#{vo.latitude},#{vo.longitude},#{vo.place},#{vo.content});
 	</insert>
 	
 	<insert id="setQrCodeCreate">

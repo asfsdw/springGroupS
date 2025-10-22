@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.spring.springGroupS.vo.CrimeVO;
 import com.spring.springGroupS.vo.KakaoAddressVO;
+import com.spring.springGroupS.vo.KakaoPlaceVO;
 import com.spring.springGroupS.vo.QrCodeVO;
 import com.spring.springGroupS.vo.TransactionVO;
 
@@ -46,4 +47,10 @@ public interface Study2DAO {
 	void setQrCodeCreate(@Param("vo") QrCodeVO vo);
 
 	QrCodeVO getQrCodeSearch(@Param("qrCode") String qrCode);
+
+	int setKakaoPlaceInput(@Param("vo") KakaoPlaceVO vo);
+
+	KakaoAddressVO getKakaoAddressSearchIdx(@Param("idx") int idx);
+
+	List<KakaoPlaceVO> getKakaoAddressPlaceSearch(@Param("idx") int idx);
 }
