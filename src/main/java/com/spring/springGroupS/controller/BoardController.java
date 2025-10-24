@@ -168,7 +168,7 @@ public class BoardController {
 	  
 	  return boardService.setBoardReplyInput(replyVO);
   }
-	 
+	
 	// 댓글 삭제.
 	@ResponseBody
 	@PostMapping("/BoardReplyDelete")

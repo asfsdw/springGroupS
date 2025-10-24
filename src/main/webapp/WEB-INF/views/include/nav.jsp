@@ -94,6 +94,7 @@
 				<div class="w3-dropdown-content w3-bar-block w3-card-4">
 					<a href="${ctp}/webSocket/webSocket" class="w3-bar-item w3-button">웹소켓 채팅</a>
 					<a href="${ctp}/member/MemberList" class="w3-bar-item w3-button">회원 리스트</a>
+					<a href="#" class="w3-bar-item w3-button">스케쥴러(자동)</a>
 					<a href="${ctp}/member/MemberPwdCheck/u" class="w3-bar-item w3-button">회원정보 수정</a>
 					<a href="${ctp}/member/MemberPwdCheck/p" class="w3-bar-item w3-button">비밀번호 변경</a>
 					<a href="javascript:userDeleteCheck()" class="w3-bar-item w3-button">회원탈퇴</a>
