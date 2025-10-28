@@ -73,6 +73,7 @@
 					<a href="${ctp}/study2/qrCode/QrCodeForm" class="w3-bar-item w3-button">QR코드</a>
 					<a href="${ctp}/study2/thumbnail/ThumbnailForm" class="w3-bar-item w3-button">썸네일연습</a>
 					<a href="${ctp}/study2/error/ErrorForm" class="w3-bar-item w3-button">에러페이지 연습</a>
+					<a href="${ctp}/study2/crawling/Jsoup" class="w3-bar-item w3-button">크롤링 연습</a>
 				</div>
 			</div>
 			<div class="w3-dropdown-hover w3-hide-small">

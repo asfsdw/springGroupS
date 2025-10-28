@@ -1,6 +1,8 @@
 package com.spring.springGroupS.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.Gson;
 import com.spring.springGroupS.service.Study2Service;
 import com.spring.springGroupS.vo.ChartVO;
+import com.spring.springGroupS.vo.CrawlingVO;
 import com.spring.springGroupS.vo.CrimeVO;
 import com.spring.springGroupS.vo.DbPayMentVO;
 import com.spring.springGroupS.vo.KakaoAddressVO;
@@ -503,5 +511,72 @@ public class Study2Controller {
 		System.out.println(midLength);
 		*/
 		return "study2/error/errorForm";
+	}
+	
+	@GetMapping("/crawling/Jsoup")
+	public String jsoupGet() {
+		return "study2/crawling/jsoup";
+	}
+	@ResponseBody
+	@PostMapping("/crawling/Jsoup")
+	public ArrayList<String> jsoupPost(String url, String selector) throws IOException{
+		Connection conn = Jsoup.connect(url);
+		
+		Document document = conn.get();
+		//System.out.println(document);
+		
+		Elements selects = document.select(selector);
+		System.out.println(selects);
+		
+		ArrayList<String> vos = new ArrayList<String>();
+		int i = 1;
+		for(Element select : selects) {
+			//System.out.println(select.text());
+			vos.add(i+": "+select.html().replace("data-", ""));
+			i++;
+		}
+		
+		return vos;
+	}
+	@ResponseBody
+	@PostMapping("/crawling/Jsoup2")
+	public ArrayList<CrawlingVO> jsoup2Post(String url, CrawlingVO crawlingVO) throws IOException{
+		Connection conn = Jsoup.connect(url);
+		
+		Document document = conn.get();
+		
+		Elements selects = document.select(crawlingVO.getItem1());
+		ArrayList<String> titleVOS = new ArrayList<String>();
+		for(Element select : selects) {
+			titleVOS.add(select.html());
+		}
+		
+		selects = document.select(crawlingVO.getItem2());
+		ArrayList<String> imgVOS = new ArrayList<String>();
+		for(Element select : selects) {
+			imgVOS.add(select.html().replace("data-", ""));
+		}
+		
+		selects = document.select(crawlingVO.getItem3());
+		ArrayList<String> jonalVOS = new ArrayList<String>();
+		for(Element select : selects) {
+			jonalVOS.add(select.html());
+		}
+		System.out.println(titleVOS.size());
+		System.out.println(imgVOS.size());
+		System.out.println(jonalVOS.size());
+		
+		ArrayList<CrawlingVO> vos = new ArrayList<CrawlingVO>();
+		CrawlingVO vo = null;
+		for(int i=0; i<imgVOS.size(); i++) {
+			vo = new CrawlingVO();
+			vo.setItem1(titleVOS.get(i));
+			vo.setItem2(imgVOS.get(i));
+			vo.setItem3(jonalVOS.get(i));
+			
+			vos.add(vo);
+		}
+		System.out.println("도달함");
+		return vos;
 	}
 }
